@@ -1,4 +1,4 @@
-use crate::file_traitement::File;
+use crate::{errors::Error, file_traitement::File};
 // use crate::tokens::{Tokens, Token};
 // use std::collections::HashMap;
 // use std::io::Split;
@@ -7,6 +7,7 @@ pub struct Program {
     name: String,
     // variables: HashMap<String, >,
     lines: Vec<Vec<String>>,
+    pc: usize,
 }
 
 impl Program {
@@ -16,6 +17,14 @@ impl Program {
 
     pub fn get_lines(&self) -> &Vec<Vec<String>> {
         &self.lines
+    }
+
+    fn clone(&self) -> Program {
+        Program {
+            name: self.name.clone(),
+            lines: self.lines.clone(),
+            pc: self.pc,
+        }
     }
 }
 
@@ -49,11 +58,12 @@ fn lex_line_string(line: String) -> Vec<String> {
             in_bracket = !in_bracket;
 
             if tmp_word.len() > 0 {
-                tmp_word.push(letter);
+                // tmp_word.push(letter);
                 words.push(tmp_word);
                 tmp_word = String::new();
-                continue;
             }
+
+            continue;
         }
 
         if in_bracket {
@@ -65,7 +75,7 @@ fn lex_line_string(line: String) -> Vec<String> {
                     tmp_word = String::new();
                 }
             } else {
-                tmp_word.push(letter);
+                tmp_word.push(letter.to_ascii_uppercase());
             }
         }
     }
@@ -74,41 +84,41 @@ fn lex_line_string(line: String) -> Vec<String> {
     return words;
 }
 
-fn format_program(lines: Vec<Vec<String>>) -> Vec<Vec<String>> {
-    let mut formatted_lines: Vec<Vec<String>> = Vec::new();
+// fn format_program(lines: Vec<Vec<String>>) -> Vec<Vec<String>> {
+//     let mut formatted_lines: Vec<Vec<String>> = Vec::new();
 
-    for line in lines {
-        let tmp_line: Vec<String> = upper_line(&mut line.clone());
-        let mut formatted_line = Vec::new();
+//     for line in lines {
+//         let tmp_line: Vec<String> = upper_line(&mut line.clone());
+//         let mut formatted_line = Vec::new();
 
-        for word in tmp_line {
-            if word.len() > 0 {
-                formatted_line.push(word);
-            }
-        }
+//         for word in tmp_line {
+//             if word.len() > 0 {
+//                 formatted_line.push(word);
+//             }
+//         }
 
-        if formatted_line.len() > 0 {
-            formatted_lines.push(formatted_line);
-        }
-    }
+//         if formatted_line.len() > 0 {
+//             formatted_lines.push(formatted_line);
+//         }
+//     }
 
-    return formatted_lines;
-}
+//     return formatted_lines;
+// }
 
-fn upper_line(line: &mut Vec<String>) -> Vec<String> {
-    let mut capitalized_line: Vec<String> = Vec::new();
+// fn upper_line(line: &mut Vec<String>) -> Vec<String> {
+//     let mut capitalized_line: Vec<String> = Vec::new();
 
-    for word in line {
-        if !word.contains('\"') {
-            let tmp = word.to_uppercase();
-            capitalized_line.push(tmp);
-        } else {
-            capitalized_line.push(word.to_string());
-        }
-    }
+//     for word in line {
+//         if !word.contains('\"') {
+//             let tmp = word.to_uppercase();
+//             capitalized_line.push(tmp);
+//         } else {
+//             capitalized_line.push(word.to_string());
+//         }
+//     }
 
-    return capitalized_line;
-}
+//     return capitalized_line;
+// }
 
 #[allow(dead_code)]
 #[allow(unused_mut)]
@@ -120,18 +130,47 @@ fn check_program(mut lines: Vec<Vec<String>>) -> bool {
     return first_line[0] == "PROGRAM" && last_line[0] == "END" && last_line[1] == "PROGRAM";
 }
 
+fn analyze(program: Program) {
+    let mut pc: usize = 1;
+    let lines = program.get_lines().clone();
+
+    for line in lines {
+        if line[0] == "PRINT" {
+            if line[1] != "*," {
+                let error = Error::new(
+                    program.name.clone(),
+                    "module".to_string(),
+                    pc,
+                    6,
+                    "missing `*,` after `PRINT` statement".to_string(),
+                    2,
+                );
+                error.raise();
+            } else {
+                println!("PRINT statement found at line {}", pc);
+                println!("{}", line[2]);
+            }
+        }
+        
+        pc += 1;
+    }
+}
+
 pub fn read_program(file: File) -> Program {
     let tmp_lines = split_line(file);
 
-    let lines = format_program(tmp_lines);
+    // let lines = format_program(tmp_lines);
 
-    let name = &lines[0][1]; //.split(' ').last().unwrap().to_string();
+    let name = &tmp_lines[0][1]; //.split(' ').last().unwrap().to_string();
 
     let program = Program {
         name: name.to_lowercase(),
         // variables: HashMap::new(),
-        lines: lines,
+        lines: tmp_lines,
+        pc: 0,
     };
+
+    analyze(program.clone());
 
     return program;
 }

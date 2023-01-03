@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 
+#[allow(dead_code)]
 pub struct File {
     path: String,
     name: String,
@@ -8,6 +9,7 @@ pub struct File {
     version: String,
 }
 
+#[allow(dead_code)]
 impl File {
     pub fn get_path(&self) -> &String {
         &self.path

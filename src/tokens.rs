@@ -3,6 +3,7 @@ pub enum Tokens {
     String,
     Null,
     Operator,
+    Print,
 }
 
 pub struct Token {

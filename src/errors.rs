@@ -28,10 +28,10 @@ impl Error {
         }
     }
 
-    pub fn raise_error(&self) {
+    pub fn raise(&self) {
         println!(
-            "Error handled on {}, in {} at line {}:{}.",
-            self.function.blue(), self.filename.blue(), self.line, self.column
+            "Error handled on {}, in `{}` at line {}:{}.",
+            self.function.blue(), self.filename.yellow(), self.line, self.column
         );
         println!("Error: {}", self.value.red());
         println!("Exiting with code {}", self.code.to_string().red());
