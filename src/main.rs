@@ -1,3 +1,4 @@
+mod errors;
 mod file_traitement;
 mod parser;
 
@@ -11,5 +12,29 @@ fn main() {
 
     let program = parser::read_program(file);
     println!("Program name: {}", program.get_name());
-    println!("Program lines: {:#?}", program.get_lines());
+    println!("Program lines: [");
+    for line in program.get_lines() {
+        println!("    {:?}", line);
+    }
+    println!("]");
+
+    let error = errors::Error::new(
+        "hello-world.f90".to_string(),
+        "hello".to_string(),
+        12,
+        13,
+        "bad indentation".to_string(),
+        2,
+    );
+    error.raise_error();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }

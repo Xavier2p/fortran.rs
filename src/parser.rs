@@ -1,4 +1,5 @@
 use crate::file_traitement::File;
+// use crate::tokens::{Tokens, Token};
 // use std::collections::HashMap;
 // use std::io::Split;
 
@@ -23,14 +24,22 @@ pub fn split_line(file: File) -> Vec<Vec<String>> {
     let tmp_lines = file.get_content().split('\n');
 
     for line in tmp_lines {
-        let lexed_line = lex_line(line.to_string());
+        let lexed_line = lex_line_string(line.to_string());
         lines.push(lexed_line);
     }
 
     return lines;
 }
 
-fn lex_line(line: String) -> Vec<String> {
+// fn lex_line(line: String) -> Vec<Token> {
+//     let mut tokens: Vec<Token> = Vec::new();
+//     let mut tmp_token: Token = Token::new(Tokens::Null, String::new());
+
+//     tokens.push(tmp_token);
+//     return tokens;
+// }
+
+fn lex_line_string(line: String) -> Vec<String> {
     let mut words: Vec<String> = Vec::new();
     let mut tmp_word: String = String::new();
     let mut in_bracket: bool = false;
@@ -62,52 +71,64 @@ fn lex_line(line: String) -> Vec<String> {
     }
 
     words.push(tmp_word);
-
     return words;
 }
 
-// fn upper_line(line: Split<char>) {
-//     let mut in_bracket: bool = false;
+fn format_program(lines: Vec<Vec<String>>) -> Vec<Vec<String>> {
+    let mut formatted_lines: Vec<Vec<String>> = Vec::new();
 
-//     for word in line {
-//         for letter in word {
-//             if letter == '\"' {
-//                 in_bracket = !in_bracket;
-//             }
+    for line in lines {
+        let tmp_line: Vec<String> = upper_line(&mut line.clone());
+        let mut formatted_line = Vec::new();
 
-//             if !in_bracket {
-//                 letter.to_uppercase();
-//             }
-//         }
-//     }
-// }
+        for word in tmp_line {
+            if word.len() > 0 {
+                formatted_line.push(word);
+            }
+        }
 
-fn check_program(lines: Vec<Vec<String>>) {
-    //-> bool {
-    let first_line = &lines[0]; //.split(' ');
-    let last_line = &lines[lines.len() - 1]; //.split(' ');
+        if formatted_line.len() > 0 {
+            formatted_lines.push(formatted_line);
+        }
+    }
 
-    println!("{:#?}", first_line);
-    println!("{:?}", last_line);
+    return formatted_lines;
+}
 
-    // upper_line(first_line);
-    // upper_line(last_line);
+fn upper_line(line: &mut Vec<String>) -> Vec<String> {
+    let mut capitalized_line: Vec<String> = Vec::new();
 
-    // return first_line[0] == "PROGRAM" && last_line[0] == "END" && last_line[1] == "PROGRAM"
-    // return true;
+    for word in line {
+        if !word.contains('\"') {
+            let tmp = word.to_uppercase();
+            capitalized_line.push(tmp);
+        } else {
+            capitalized_line.push(word.to_string());
+        }
+    }
+
+    return capitalized_line;
+}
+
+#[allow(dead_code)]
+#[allow(unused_mut)]
+fn check_program(mut lines: Vec<Vec<String>>) -> bool {
+    let len = lines.len() - 1;
+    let first_line = lines[0].clone();
+    let last_line = lines[len].clone();
+
+    return first_line[0] == "PROGRAM" && last_line[0] == "END" && last_line[1] == "PROGRAM";
 }
 
 pub fn read_program(file: File) -> Program {
-    let lines = split_line(file);
+    let tmp_lines = split_line(file);
 
-    let tmp_lines = lines.clone();
+    let lines = format_program(tmp_lines);
 
-    check_program(tmp_lines);
-
-    // let name: &String = &lines[0][1]; //.split(' ').last().unwrap().to_string();
+    let name = &lines[0][1]; //.split(' ').last().unwrap().to_string();
 
     let program = Program {
-        name: "name".to_string(),
+        name: name.to_lowercase(),
         // variables: HashMap::new(),
         lines: lines,
     };
