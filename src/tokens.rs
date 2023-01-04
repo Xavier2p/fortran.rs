@@ -1,9 +1,9 @@
-#[allow(dead_code)]
-pub enum Tokens {
-    Comment,
-    String,
+#[derive(PartialEq)]
+pub enum Token {
+    Comment(String),
+    String(String),
     Null,
-    Operator,
+    Operator(String),
     Print,
     Program,
     End,
@@ -11,41 +11,43 @@ pub enum Tokens {
     If,
     Then,
     Else,
-    Identifier,
+    Identifier(String),
     Return,
-    Other,
-}
-
-pub struct Token {
-    token: Tokens,
-    value: String,
+    Other(String),
 }
 
 impl Token {
-    pub fn new(token: Tokens, value: String) -> Token {
-        Token { token, value }
+    pub fn new(token: Token) -> Self {
+        token
     }
 
-    pub fn get_token(&self) -> String {
-        match self.token {
-            Tokens::Comment => return String::from("Comment"),
-            Tokens::String => return String::from("String"),
-            Tokens::Null => return String::from("Null"),
-            Tokens::Operator => return String::from("Operator"),
-            Tokens::Print => return String::from("Print"),
-            Tokens::Program => return String::from("Program"),
-            Tokens::End => return String::from("End"),
-            Tokens::For => return String::from("For"),
-            Tokens::If => return String::from("If"),
-            Tokens::Then => return String::from("Then"),
-            Tokens::Else => return String::from("Else"),
-            Tokens::Identifier => return String::from("Identifier"),
-            Tokens::Return => return String::from("Return"),
-            Tokens::Other => return String::from("Other"),
+    pub fn get_value(&self) -> String {
+        match self {
+            Token::Identifier(string) => return string.to_string(),
+            Token::Comment(string) => return string.to_string(),
+            Token::String(string) => return string.to_string(),
+            Token::Operator(string) => return string.to_string(),
+            Token::Other(string) => return string.to_string(),
+            _ => return String::from(""),
         };
     }
 
-    pub fn get_value(&self) -> &String {
-        &self.value
+    pub fn get_name(&self) -> String {
+        match self {
+            Token::Comment(_) => return String::from("Comment"),
+            Token::String(_) => return String::from("String"),
+            Token::Null => return String::from("Null"),
+            Token::Operator(_) => return String::from("Operator"),
+            Token::Print => return String::from("Print"),
+            Token::Program => return String::from("Program"),
+            Token::End => return String::from("End"),
+            Token::For => return String::from("For"),
+            Token::If => return String::from("If"),
+            Token::Then => return String::from("Then"),
+            Token::Else => return String::from("Else"),
+            Token::Identifier(_) => return String::from("Identifier"),
+            Token::Return => return String::from("Return"),
+            Token::Other(_) => return String::from("Other"),
+        };
     }
 }

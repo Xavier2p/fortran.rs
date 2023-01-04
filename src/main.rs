@@ -3,7 +3,7 @@ mod file_traitement;
 mod parser;
 mod tokens;
 mod lexer;
-
+mod variables;
 fn main() {
     // println!("Hello, world!");
     let file = file_traitement::open_file();

@@ -1,38 +1,29 @@
-use colored::Colorize;
-
 use crate::{
-    // tokens::{Token, Tokens},
     errors::{Error, ErrorKind},
     parser::Program,
+    tokens::Token,
 };
+use colored::Colorize;
 
 pub fn lexer(program: Program) {
-    let mut stack: Vec<String> = Vec::new();
+    let mut stack: Vec<Token> = Vec::new();
 
     for pc in 0..program.get_lines().len() {
         let line = program.get_lines().get(pc).unwrap();
         for index in 0..line.len() {
             let token = line.get(index).unwrap();
-            match token.get_token().as_str() {
-                "Comment" => {
+            match token {
+                Token::Comment(_) => {
                     if program.get_verbose() {
                         println!("{}", token.get_value().dimmed());
                     }
                 }
-                // "String" => {
-                //     println!("String: {}", token.get_value());
-                // }
-                "Print" => {
-                    if line
-                        .get(index + 1)
-                        .unwrap()
-                        .get_value()
-                        == "*,"
-                    {
+                Token::Print => {
+                    if line.get(index + 1).unwrap().get_value() == "*," {
                         let mut to_print = String::new();
                         for index in index + 1..line.len() {
-                            if line.get(index).unwrap().get_token() == "String" {
-                                to_print.push_str(line.get(index).unwrap().get_value());
+                            if matches!(line.get(index).unwrap(), &Token::String(_)) {
+                                to_print.push_str(line.get(index).unwrap().get_value().as_str());
                             }
                         }
                         println!("{}", to_print);
@@ -45,26 +36,18 @@ pub fn lexer(program: Program) {
                             index,
                             format!(
                                 "Expected `PRINT *,`, got `PRINT {}`",
-                                line.get(index + 1)
-                                    .unwrap()
-                                    .get_value()
+                                line.get(index + 1).unwrap().get_value()
                             ),
                             ErrorKind::Syntax,
                         );
                         error.raise();
-                    } 
+                    }
                 }
-                "Program" => {
-                    stack.push("PROGRAM".to_string());
+                Token::Program => {
+                    stack.push(Token::Program);
                 }
-                "End" => {
-                    if *stack.last().unwrap()
-                        == line
-                            .get(index + 1)
-                            .unwrap()
-                            .get_value()
-                            .to_ascii_uppercase()
-                    {
+                Token::End => {
+                    if stack.last().unwrap() == line.get(index + 1).unwrap() {
                         stack.pop();
                     } else {
                         let error = Error::new(
@@ -74,7 +57,7 @@ pub fn lexer(program: Program) {
                             index,
                             format!(
                                 "Expected `END {}`, got `END {}`",
-                                stack.last().unwrap().to_ascii_uppercase(),
+                                stack.last().unwrap().get_name().to_ascii_uppercase(),
                                 line.get(index + 1)
                                     .unwrap()
                                     .get_value()
@@ -97,7 +80,7 @@ pub fn lexer(program: Program) {
                 // "Else" => {
                 //     println!("Else: {}", token.get_value());
                 // }
-                "Identifier" => {
+                Token::Identifier(_) => {
                     // println!("Identifier: {}", token.get_value());
                 }
                 // "Return" => {
