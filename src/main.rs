@@ -1,6 +1,7 @@
 mod errors;
 mod file_traitement;
 mod parser;
+mod tokens; 
 
 fn main() {
     // println!("Hello, world!");

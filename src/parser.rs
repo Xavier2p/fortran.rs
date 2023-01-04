@@ -1,5 +1,8 @@
-use crate::{errors::Error, file_traitement::File};
-// use crate::tokens::{Tokens, Token};
+use crate::tokens::{Token, Tokens};
+use crate::{
+    errors::{Error, ErrorKind},
+    file_traitement::File,
+};
 // use std::collections::HashMap;
 // use std::io::Split;
 
@@ -40,13 +43,61 @@ pub fn split_line(file: File) -> Vec<Vec<String>> {
     return lines;
 }
 
-// fn lex_line(line: String) -> Vec<Token> {
-//     let mut tokens: Vec<Token> = Vec::new();
-//     let mut tmp_token: Token = Token::new(Tokens::Null, String::new());
+#[allow(unused_assignments)]
+fn tokenize_line(line: Vec<String>) -> Vec<Token> {
+    let mut tokens: Vec<Token> = Vec::new();
+    let mut tmp_token: Token = Token::new(Tokens::Null, String::new());
 
-//     tokens.push(tmp_token);
-//     return tokens;
-// }
+    for index in 0..line.len() {
+        let word = line[index].clone();
+        if word.len() == 0 {
+            continue;
+        }
+
+        if word == "PRINT" {
+            tmp_token = Token::new(Tokens::Print, word);
+            tokens.push(tmp_token);
+        } else if word == "PROGRAM" {
+            tmp_token = Token::new(Tokens::Program, word);
+            tokens.push(tmp_token);
+        // } else if word == "IF" {
+        //     tmp_token = Token::new(Tokens::If, word);
+        // } else if word == "THEN" {
+        //     tmp_token = Token::new(Tokens::Then, word);
+        // } else if word == "ELSE" {
+        //     tmp_token = Token::new(Tokens::Else, word);
+        // } else if word == "ENDIF" {
+        //     tmp_token = Token::new(Tokens::Endif, word);
+        // } else if word == "FOR" {
+        //     tmp_token = Token::new(Tokens::For, word);
+        // } else if word == "RETURN" {
+        //     tmp_token = Token::new(Tokens::Return, word);
+        } else if word == "!" {
+            let mut comment: String = String::new();
+
+            for index_rest in index..line.len() {
+                let word_rest = line[index_rest].clone();
+                comment.push_str(word_rest.as_str());
+                comment.push(' ')
+            }
+
+            tmp_token = Token::new(Tokens::Comment, comment);
+            tokens.push(tmp_token);
+            break;
+        } else if word == "END" {
+            tmp_token = Token::new(Tokens::End, word);
+            tokens.push(tmp_token);
+        } else if word.chars().next().unwrap() == '\"' {
+            tmp_token = Token::new(Tokens::String, word);
+            tokens.push(tmp_token);
+        }
+        else {
+            println!("{}", word.chars().next().unwrap().to_string()); 
+        }
+    }
+
+    return tokens;
+}
 
 fn lex_line_string(line: String) -> Vec<String> {
     let mut words: Vec<String> = Vec::new();
@@ -58,12 +109,11 @@ fn lex_line_string(line: String) -> Vec<String> {
             in_bracket = !in_bracket;
 
             if tmp_word.len() > 0 {
-                // tmp_word.push(letter);
+                tmp_word.push(letter);
                 words.push(tmp_word);
                 tmp_word = String::new();
+                continue;
             }
-
-            continue;
         }
 
         if in_bracket {
@@ -130,6 +180,7 @@ fn check_program(mut lines: Vec<Vec<String>>) -> bool {
     return first_line[0] == "PROGRAM" && last_line[0] == "END" && last_line[1] == "PROGRAM";
 }
 
+#[allow(dead_code)]
 fn analyze(program: Program) {
     let mut pc: usize = 1;
     let lines = program.get_lines().clone();
@@ -143,7 +194,7 @@ fn analyze(program: Program) {
                     pc,
                     6,
                     "missing `*,` after `PRINT` statement".to_string(),
-                    2,
+                    ErrorKind::Syntax,
                 );
                 error.raise();
             } else {
@@ -151,7 +202,7 @@ fn analyze(program: Program) {
                 println!("{}", line[2]);
             }
         }
-        
+
         pc += 1;
     }
 }
@@ -170,7 +221,15 @@ pub fn read_program(file: File) -> Program {
         pc: 0,
     };
 
-    analyze(program.clone());
+    for line in program.lines.clone() {
+        let tmp_tokenized_line = tokenize_line(line);
+        for token in tmp_tokenized_line {
+            println!("{} => {}", token.get_token(), token.get_value());
+        }
+        println!("BREAK LINE");
+    }
+
+    // analyze(program.clone());
 
     return program;
 }
