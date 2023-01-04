@@ -1,11 +1,17 @@
+#[allow(dead_code)]
 pub enum Tokens {
     Comment,
     String,
     Null,
-    Operator,
+    // Operator,
     Print,
     Program,
     End,
+    For,
+    If,
+    Then,
+    Else,
+    Identifier,
 }
 
 pub struct Token {
@@ -23,10 +29,15 @@ impl Token {
             Tokens::Comment => return String::from("Comment"),
             Tokens::String => return String::from("String"),
             Tokens::Null => return String::from("Null"),
-            Tokens::Operator => return String::from("Operator"),
+            // Tokens::Operator => return String::from("Operator"),
             Tokens::Print => return String::from("Print"),
             Tokens::Program => return String::from("Program"),
             Tokens::End => return String::from("End"),
+            Tokens::For => return String::from("For"),
+            Tokens::If => return String::from("If"),
+            Tokens::Then => return String::from("Then"),
+            Tokens::Else => return String::from("Else"),
+            Tokens::Identifier => return String::from("Identifier"),
         };
     }
 

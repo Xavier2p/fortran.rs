@@ -1,16 +1,15 @@
 use colored::Colorize;
 
-
 #[allow(dead_code)]
 pub enum ErrorKind {
     Syntax,
     NotImplemented,
     FileNotFound,
     Type,
+    UnknownToken,
 }
 
-
-
+#[allow(dead_code)]
 pub struct Error {
     filename: String,
     function: String,
@@ -35,6 +34,7 @@ impl Error {
             ErrorKind::NotImplemented => 2,
             ErrorKind::FileNotFound => 1,
             ErrorKind::Type => 1,
+            ErrorKind::UnknownToken => 1,
         };
         Error {
             filename,
@@ -62,12 +62,14 @@ impl Error {
             ErrorKind::NotImplemented => "NotImplementedWarning",
             ErrorKind::FileNotFound => "FileNotFoundWarning",
             ErrorKind::Type => "TypeWarning",
+            ErrorKind::UnknownToken => "UnknownTokenWarning",
         };
 
         println!("Warning: {}", kind.yellow());
         println!("        > {}", self.value.cyan());
     }
 
+    #[allow(dead_code)]
     pub fn raise(&self) {
         println!(
             "Error handled on {}, in `{}` at line {}:{}.",
@@ -82,6 +84,7 @@ impl Error {
             ErrorKind::NotImplemented => "NotImplementedError",
             ErrorKind::FileNotFound => "FileNotFoundError",
             ErrorKind::Type => "TypeError",
+            ErrorKind::UnknownToken => "UnknownTokenError",
         };
 
         println!("Error: {}", kind.red());
