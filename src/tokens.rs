@@ -1,4 +1,5 @@
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
+#[allow(dead_code)]
 pub enum Token {
     Comment(String),
     String(String),
@@ -14,6 +15,9 @@ pub enum Token {
     Identifier(String),
     Return,
     Other(String),
+    Variable(String),
+    Type(String),
+    Assign(String),
 }
 
 impl Token {
@@ -28,6 +32,9 @@ impl Token {
             Token::String(string) => return string.to_string(),
             Token::Operator(string) => return string.to_string(),
             Token::Other(string) => return string.to_string(),
+            Token::Variable(string) => return string.to_string(),
+            Token::Type(string) => return string.to_string(),
+            Token::Assign(string) => return string.to_string(),
             _ => return String::from(""),
         };
     }
@@ -48,6 +55,9 @@ impl Token {
             Token::Identifier(_) => return String::from("Identifier"),
             Token::Return => return String::from("Return"),
             Token::Other(_) => return String::from("Other"),
+            Token::Variable(_) => return String::from("Variable"),
+            Token::Type(_) => return String::from("Type"),
+            Token::Assign(_) => return String::from("Assign"),
         };
     }
 }

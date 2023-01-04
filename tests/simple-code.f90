@@ -1,5 +1,5 @@
 program nearlyuseless
-    implicit none
+    ! implicit none
 
     real    :: temperature
     integer :: cows

@@ -4,39 +4,19 @@ mod parser;
 mod tokens;
 mod lexer;
 mod variables;
-fn main() {
-    // println!("Hello, world!");
-    let file = file_traitement::open_file();
-    // println!("File path: return ./{}", file.get_path());
-    // println!("File name: {}", file.get_name());
-    // println!("File version: {}", file.get_version());
-    // println!("File content:\n{}", file.get_content());
 
+fn main() {
+    let file = file_traitement::open_file();
     let program = parser::parser(file);
 
-    // for parsed_line in program.get_lines() {
-    //     for token in parsed_line {
-    //         print!("{} = {}, ", token.get_token(), token.get_value());
-    //     }
-    //     println!();
-    // }
-    lexer::lexer(program);
-    // println!("Program name: {}", program.get_name());
-    // println!("Program lines: [");
-    // for line in program.get_lines() {
-    // println!("    {:?}", line);
-    // }
-    // println!("]");
+    for line in program.get_lines() {
+        for token in line {
+            print!("{} ", token.get_name());
+        }
+        println!();
+    }
 
-    // let error = errors::Error::new(
-    //     "hello-world.f90".to_string(),
-    //     "hello".to_string(),
-    //     12,
-    //     13,
-    //     "bad indentation".to_string(),
-    //     2,
-    // );
-    // error.raise();
+    lexer::lexer(program);
 }
 
 // #[cfg(test)]

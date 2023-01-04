@@ -2,6 +2,7 @@ use crate::{
     errors::{Error, ErrorKind},
     parser::Program,
     tokens::Token,
+    // variables::Variable,
 };
 use colored::Colorize;
 
@@ -68,6 +69,13 @@ pub fn lexer(program: Program) {
                         error.raise();
                     }
                 }
+                // Token::Type(_) => {
+                    // if line.get(index).unwrap() == &Token::Assign("::".to_string()) {
+                        // match token.get_value().as_str() {
+                            // "INTEGER" => Variable::new_integer(, 0),
+                        // }
+                    // }
+                // }
                 // "For" => {
                 //     println!("For: {}", token.get_value());
                 // }
