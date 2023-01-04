@@ -1,6 +1,8 @@
-# Welcome to MkDocs
+# Welcome to fortran.rs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+An interpreter for the Fortran programming language written in Rust.
+This is the documentation for the fortran.rs project.
+
 
 ## Commands
 
