@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use crate::{
     errors::{Error, ErrorKind},
     file_traitement::File,
@@ -44,13 +45,20 @@ impl Program {
         }
     }
 
-    // fn clone(&self) -> Program {
-    //     Program {
-    //         name: self.name.clone(),
-    //         lines: self.lines.clone(),
-    //         pc: self.pc,
-    //     }
-    // }
+    pub fn set_variable(&mut self, name: String, value: Variable) {
+        self.variables.remove(&name);
+        self.variables.insert(name, value);
+    }
+
+    pub fn clone(&self) -> Program {
+        Program {
+            name: self.name.clone(),
+            variables: self.variables.clone(),
+            lines: self.lines.clone(),
+            pc: self.pc,
+            verbose: self.verbose,
+        }
+    }
 }
 
 pub fn split_line(file: File) -> Vec<String> {
@@ -83,7 +91,7 @@ fn tokenize(word: String) -> Token {
     };
 }
 
-fn parse_line(line: String, pc: usize) -> Vec<Token> {
+fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut tmp_word: String = String::new();
     let mut in_bracket: bool = false;
@@ -121,16 +129,16 @@ fn parse_line(line: String, pc: usize) -> Vec<Token> {
                             && tokens.last().unwrap() == &Token::Assign("::".to_string())
                         {
                             token = Token::new(Token::Variable(tmp_word.clone()));
-                        } else {
-                            let error = Error::new(
-                                "tests".to_string(),
-                                "module".to_string(),
-                                pc,
-                                index,
-                                format!("Unknown token `{}`", tmp_word),
-                                ErrorKind::UnknownToken,
-                            );
-                            error.warn();
+                        // } else {
+                        //     let error = Error::new(
+                        //         "tests.f90".to_string(),
+                        //         "module".to_string(),
+                        //         pc,
+                        //         index,
+                        //         format!("Unknown token `{}`", tmp_word),
+                        //         ErrorKind::UnknownToken,
+                        //     );
+                        //     error.warn();
                         }
                     }
                     tokens.push(token);

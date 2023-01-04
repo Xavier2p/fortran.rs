@@ -53,8 +53,8 @@ impl Error {
     pub fn warn(&self) {
         println!(
             "Warning handled on {}, in `{}` at line {}:{}.",
-            self.function.blue(),
-            self.filename.yellow(),
+            self.filename.blue(),
+            self.function.yellow(),
             self.line,
             self.column
         );
@@ -76,8 +76,8 @@ impl Error {
     pub fn raise(&self) {
         println!(
             "Error handled on {}, in `{}` at line {}:{}.",
-            self.function.blue(),
-            self.filename.yellow(),
+            self.filename.blue(),
+            self.function.yellow(),
             self.line,
             self.column
         );
@@ -93,7 +93,7 @@ impl Error {
 
         println!("Error: {}", kind.red());
         println!("      > {}", self.value.magenta());
-        println!("Exiting with code {}", self.code.to_string().red());
+        println!("Exiting with code {}", self.code.to_string().red().dimmed());
         std::process::exit(self.code);
     }
 }

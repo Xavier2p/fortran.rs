@@ -10,17 +10,8 @@ fn main() {
     let mut program = parser::parser(file);
 
     program = variables::lex_with_variables(program);
-    
-    for line in program.get_lines() {
-        for token in line {
-            print!("{} ", token.get_name());
-        }
-        println!();
-    }
 
-    println!("{:#?}", program.get_variables());
-
-    lexer::lexer(program);
+    lexer::lexer(&mut program);
 }
 
 // #[cfg(test)]

@@ -2,15 +2,17 @@ use crate::{
     errors::{Error, ErrorKind},
     parser::Program,
     tokens::Token,
+    variables::Variable,
     // variables::Variable,
 };
 use colored::Colorize;
 
-pub fn lexer(program: Program) {
+pub fn lexer(program: &mut Program) {
     let mut stack: Vec<Token> = Vec::new();
 
-    for pc in 0..program.get_lines().len() {
-        let line = program.get_lines().get(pc).unwrap();
+    for pc in 0..program.clone().get_lines().len() {
+        let tmp_program = program.clone();
+        let line = tmp_program.get_lines().get(pc).unwrap();
         for index in 0..line.len() {
             let token = line.get(index).unwrap();
             match token {
@@ -81,33 +83,68 @@ pub fn lexer(program: Program) {
                         error.raise();
                     }
                 }
-                // Token::Type(_) => {
-                // if line.get(index).unwrap() == &Token::Assign("::".to_string()) {
-                // match token.get_value().as_str() {
-                // "INTEGER" => Variable::new_integer(, 0),
-                // }
-                // }
-                // }
-                // "For" => {
-                //     println!("For: {}", token.get_value());
-                // }
-                // "If" => {
-                //     println!("If: {}", token.get_value());
-                // }
-                // "Then" => {
-                //     println!("Then: {}", token.get_value());
-                // }
-                // "Else" => {
-                //     println!("Else: {}", token.get_value());
-                // }
-                Token::Identifier(_) | Token::Type(_) | Token::Variable(_) | Token::Assign(_) => {
+                Token::Identifier(_) | Token::Assign(_) | Token::Other(_)=> {
                     // println!("Identifier: {}", token.get_value());
                 }
-                // "Return" => {
-                //     println!("Return: {}", token.get_value());
-                // }
+                Token::Type(_) => break,
+                Token::Variable(_) => {
+                    if line.get(index + 1).unwrap() == &Token::Assign("=".to_string()) {
+                        let new_variable: Variable = match program
+                            .clone()
+                            .get_variables()
+                            .get_key_value(token.get_value().as_str())
+                            .unwrap()
+                            .1
+                        {
+                            Variable::Integer(_) => {
+                                let value = line
+                                    .get(index + 2)
+                                    .unwrap()
+                                    .get_value()
+                                    .parse::<i32>()
+                                    .unwrap();
+                                Variable::Integer(value)
+                            }
+                            Variable::Real(_) => {
+                                let value = line
+                                    .get(index + 2)
+                                    .unwrap()
+                                    .get_value()
+                                    .parse::<f64>()
+                                    .unwrap();
+                                Variable::Real(value)
+                            }
+                            Variable::Character(_) => {
+                                let value = line.get(index + 2).unwrap().get_value();
+                                Variable::Character(value)
+                            }
+                            Variable::Logical(_) => {
+                                let value = line
+                                    .get(index + 2)
+                                    .unwrap()
+                                    .get_value()
+                                    .parse::<bool>()
+                                    .unwrap();
+                                Variable::Logical(value)
+                            }
+                        };
+                        program.set_variable(token.get_value(), new_variable);
+                    }
+                }
                 _ => {
-                    println!("Unknown token: {}", token.get_value());
+                    let error = Error::new(
+                        "tests.f90".to_string(),
+                        program.get_name().to_string(),
+                        pc,
+                        index,
+                        format!(
+                            "Unexpected token {} `{}`",
+                            token.get_name(),
+                            token.get_value()
+                        ),
+                        ErrorKind::UnexpectedToken,
+                    );
+                    error.warn();
                 }
             }
         }
