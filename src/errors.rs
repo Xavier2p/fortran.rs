@@ -7,6 +7,7 @@ pub enum ErrorKind {
     FileNotFound,
     Type,
     UnknownToken,
+    UnexpectedToken,
 }
 
 #[allow(dead_code)]
@@ -35,6 +36,7 @@ impl Error {
             ErrorKind::FileNotFound => 1,
             ErrorKind::Type => 1,
             ErrorKind::UnknownToken => 1,
+            ErrorKind::UnexpectedToken => 1,
         };
         Error {
             filename,
@@ -63,6 +65,7 @@ impl Error {
             ErrorKind::FileNotFound => "FileNotFoundWarning",
             ErrorKind::Type => "TypeWarning",
             ErrorKind::UnknownToken => "UnknownTokenWarning",
+            ErrorKind::UnexpectedToken => "UnexpectedTokenWarning",
         };
 
         println!("Warning: {}", kind.yellow());
@@ -85,6 +88,7 @@ impl Error {
             ErrorKind::FileNotFound => "FileNotFoundError",
             ErrorKind::Type => "TypeError",
             ErrorKind::UnknownToken => "UnknownTokenError",
+            ErrorKind::UnexpectedToken => "UnexpectedTokenError",
         };
 
         println!("Error: {}", kind.red());

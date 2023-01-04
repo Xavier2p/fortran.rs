@@ -1,25 +1,33 @@
-use crate::tokens::{Token, Tokens};
 use crate::{
     errors::{Error, ErrorKind},
     file_traitement::File,
+    tokens::{Token, Tokens},
 };
+use std::env;
 // use std::collections::HashMap;
 // use std::io::Split;
 
+#[allow(dead_code)]
 pub struct Program {
     name: String,
     // variables: HashMap<String, >,
     lines: Vec<Vec<Token>>,
     pc: usize,
+    verbose: bool,
 }
 
 impl Program {
+    #[allow(dead_code)]
     pub fn get_name(&self) -> &String {
         &self.name
     }
 
     pub fn get_lines(&self) -> &Vec<Vec<Token>> {
         &self.lines
+    }
+
+    pub fn get_verbose(&self) -> bool {
+        self.verbose
     }
 
     // fn clone(&self) -> Program {
@@ -52,8 +60,10 @@ fn tokenize(word: String) -> Token {
         "THEN" => return Token::new(Tokens::Then, word),
         "ELSE" => return Token::new(Tokens::Else, word),
         "FOR" => return Token::new(Tokens::For, word),
-        // "RETURN" => return Token::new(Tokens::Return, word),
+        "RETURN" => return Token::new(Tokens::Return, word),
         "END" => return Token::new(Tokens::End, word),
+        "+" | "-" | "*" | "/" => return Token::new(Tokens::Operator, word),
+        "*," => return Token::new(Tokens::Other, word),
         _ => return Token::new(Tokens::Null, word),
     };
 }
@@ -140,9 +150,20 @@ pub fn parser(file: File) -> Program {
 
     let name: String = lines[0][1].get_value().clone();
 
+    let verbose = if env::args().len() >= 3 {
+        let verbose: bool = match env::args().nth(2).unwrap().as_str() {
+            "-v" => true,
+            _ => false,
+        };
+        verbose
+    } else {
+        false
+    };
+
     Program {
         name: name.to_lowercase(),
         lines,
         pc: 0,
+        verbose,
     }
 }

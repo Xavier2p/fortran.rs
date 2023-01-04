@@ -2,6 +2,7 @@ mod errors;
 mod file_traitement;
 mod parser;
 mod tokens;
+mod lexer;
 
 fn main() {
     // println!("Hello, world!");
@@ -13,14 +14,13 @@ fn main() {
 
     let program = parser::parser(file);
 
-    println!("Program name: {}, ", program.get_name());
-
-    for parsed_line in program.get_lines() {
-        for token in parsed_line {
-            print!("{} = {}, ", token.get_token(), token.get_value());
-        }
-        println!();
-    }
+    // for parsed_line in program.get_lines() {
+    //     for token in parsed_line {
+    //         print!("{} = {}, ", token.get_token(), token.get_value());
+    //     }
+    //     println!();
+    // }
+    lexer::lexer(program);
     // println!("Program name: {}", program.get_name());
     // println!("Program lines: [");
     // for line in program.get_lines() {

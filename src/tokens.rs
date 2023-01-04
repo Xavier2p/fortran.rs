@@ -3,7 +3,7 @@ pub enum Tokens {
     Comment,
     String,
     Null,
-    // Operator,
+    Operator,
     Print,
     Program,
     End,
@@ -12,6 +12,8 @@ pub enum Tokens {
     Then,
     Else,
     Identifier,
+    Return,
+    Other,
 }
 
 pub struct Token {
@@ -29,7 +31,7 @@ impl Token {
             Tokens::Comment => return String::from("Comment"),
             Tokens::String => return String::from("String"),
             Tokens::Null => return String::from("Null"),
-            // Tokens::Operator => return String::from("Operator"),
+            Tokens::Operator => return String::from("Operator"),
             Tokens::Print => return String::from("Print"),
             Tokens::Program => return String::from("Program"),
             Tokens::End => return String::from("End"),
@@ -38,6 +40,8 @@ impl Token {
             Tokens::Then => return String::from("Then"),
             Tokens::Else => return String::from("Else"),
             Tokens::Identifier => return String::from("Identifier"),
+            Tokens::Return => return String::from("Return"),
+            Tokens::Other => return String::from("Other"),
         };
     }
 
