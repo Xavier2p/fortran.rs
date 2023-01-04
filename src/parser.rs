@@ -30,6 +30,20 @@ impl Program {
         self.verbose
     }
 
+    pub fn get_variables(&self) -> &HashMap<String, Variable> {
+        &self.variables
+    }
+
+    pub fn new(name: String, lines: Vec<Vec<Token>>, variables: HashMap<String, Variable>, verbose: bool) -> Program {
+        Program {
+            name,
+            variables,
+            lines,
+            pc: 0,
+            verbose,
+        }
+    }
+
     // fn clone(&self) -> Program {
     //     Program {
     //         name: self.name.clone(),
@@ -69,7 +83,7 @@ fn tokenize(word: String) -> Token {
     };
 }
 
-fn parse_line(line: String, pc: usize, vars: &HashMap<String, Variable>) -> Vec<Token> {
+fn parse_line(line: String, pc: usize) -> Vec<Token> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut tmp_word: String = String::new();
     let mut in_bracket: bool = false;
@@ -92,7 +106,7 @@ fn parse_line(line: String, pc: usize, vars: &HashMap<String, Variable>) -> Vec<
         if in_bracket {
             tmp_word.push(letter);
         } else {
-            if letter == ' ' || index == line.len() - 1 {
+            if letter == ' ' || letter == ',' || index == line.len() - 1 {
                 if index == line.len() - 1 {
                     tmp_word.push(letter);
                 }
@@ -136,11 +150,6 @@ fn parse_line(line: String, pc: usize, vars: &HashMap<String, Variable>) -> Vec<
                 tmp_word.push(letter);
             }
         }
-
-        // for tok in tokens.clone() {
-        //     print!("{}-{} ", tok.get_name(), tok.get_value());
-        // }
-        // println!();
     }
 
     return tokens;
@@ -150,11 +159,10 @@ pub fn parser(file: File) -> Program {
     let tmp_lines = split_line(file);
 
     let mut lines: Vec<Vec<Token>> = Vec::new();
-    let vars: HashMap<String, Variable> = HashMap::new();
 
     for index in 0..tmp_lines.len() {
         let line = tmp_lines[index].clone();
-        let parsed_line = parse_line(line, index + 1, &vars);
+        let parsed_line = parse_line(line, index + 1);
 
         lines.push(parsed_line);
     }
@@ -172,7 +180,7 @@ pub fn parser(file: File) -> Program {
     };
 
     Program {
-        name: name.to_lowercase(),
+        name,
         variables: HashMap::new(),
         lines,
         pc: 0,

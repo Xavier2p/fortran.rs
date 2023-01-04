@@ -20,11 +20,23 @@ pub fn lexer(program: Program) {
                     }
                 }
                 Token::Print => {
-                    if line.get(index + 1).unwrap().get_value() == "*," {
+                    if line.get(index + 1).unwrap().get_value() == "*" {
                         let mut to_print = String::new();
                         for index in index + 1..line.len() {
                             if matches!(line.get(index).unwrap(), &Token::String(_)) {
                                 to_print.push_str(line.get(index).unwrap().get_value().as_str());
+                            } else if matches!(line.get(index).unwrap(), &Token::Variable(_)) {
+                                to_print.push_str(
+                                    program
+                                        .get_variables()
+                                        .get_key_value(
+                                            line.get(index).unwrap().get_value().as_str(),
+                                        )
+                                        .unwrap()
+                                        .1
+                                        .get_value()
+                                        .as_str(),
+                                );
                             }
                         }
                         println!("{}", to_print);
@@ -70,11 +82,11 @@ pub fn lexer(program: Program) {
                     }
                 }
                 // Token::Type(_) => {
-                    // if line.get(index).unwrap() == &Token::Assign("::".to_string()) {
-                        // match token.get_value().as_str() {
-                            // "INTEGER" => Variable::new_integer(, 0),
-                        // }
-                    // }
+                // if line.get(index).unwrap() == &Token::Assign("::".to_string()) {
+                // match token.get_value().as_str() {
+                // "INTEGER" => Variable::new_integer(, 0),
+                // }
+                // }
                 // }
                 // "For" => {
                 //     println!("For: {}", token.get_value());
@@ -88,7 +100,7 @@ pub fn lexer(program: Program) {
                 // "Else" => {
                 //     println!("Else: {}", token.get_value());
                 // }
-                Token::Identifier(_) => {
+                Token::Identifier(_) | Token::Type(_) | Token::Variable(_) | Token::Assign(_) => {
                     // println!("Identifier: {}", token.get_value());
                 }
                 // "Return" => {
