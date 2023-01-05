@@ -43,8 +43,13 @@ impl Token {
         match self {
             Token::Comment(_) => return String::from("Comment"),
             Token::String(_) => return String::from("String"),
-            Token::Null => return String::from("Null"),
             Token::Operator(_) => return String::from("Operator"),
+            Token::Identifier(_) => return String::from("Identifier"),
+            Token::Other(_) => return String::from("Other"),
+            Token::Variable(_) => return String::from("Variable"),
+            Token::Type(_) => return String::from("Type"),
+            Token::Assign(_) => return String::from("Assign"),
+            Token::Null => return String::from("Null"),
             Token::Print => return String::from("Print"),
             Token::Program => return String::from("Program"),
             Token::End => return String::from("End"),
@@ -52,12 +57,7 @@ impl Token {
             Token::If => return String::from("If"),
             Token::Then => return String::from("Then"),
             Token::Else => return String::from("Else"),
-            Token::Identifier(_) => return String::from("Identifier"),
             Token::Return => return String::from("Return"),
-            Token::Other(_) => return String::from("Other"),
-            Token::Variable(_) => return String::from("Variable"),
-            Token::Type(_) => return String::from("Type"),
-            Token::Assign(_) => return String::from("Assign"),
         };
     }
 }
