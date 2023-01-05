@@ -58,7 +58,7 @@ pub fn lex_with_variables(program: Program) -> Program {
     let mut lines: Vec<Vec<Token>> = Vec::new();
 
     for pc in 0..program.get_lines().len() {
-        let line = &program.get_lines()[pc];
+        let line: &Vec<Token> = &program.get_lines()[pc];
         let mut new_line: Vec<Token> = Vec::new();
 
         if matches!(line[0], Token::Type(_)) {
@@ -66,7 +66,8 @@ pub fn lex_with_variables(program: Program) -> Program {
                 match tok {
                     Token::Assign(_) => new_line.push(Token::Assign("::".to_string())),
                     Token::Variable(name) | Token::Other(name) => {
-                        let var = match line[0].get_value().to_ascii_uppercase().as_str() {
+                        let var: Variable = match line[0].get_value().to_ascii_uppercase().as_str()
+                        {
                             "INTEGER" => Variable::new_integer(0),
                             "REAL" => Variable::new_real(0.0),
                             "CHARACTER" => Variable::new_character("".to_string()),

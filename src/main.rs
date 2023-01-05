@@ -1,8 +1,8 @@
 mod errors;
 mod file_traitement;
+mod lexer;
 mod parser;
 mod tokens;
-mod lexer;
 mod variables;
 
 fn main() {

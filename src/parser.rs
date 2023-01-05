@@ -35,7 +35,12 @@ impl Program {
         &self.variables
     }
 
-    pub fn new(name: String, lines: Vec<Vec<Token>>, variables: HashMap<String, Variable>, verbose: bool) -> Program {
+    pub fn new(
+        name: String,
+        lines: Vec<Vec<Token>>,
+        variables: HashMap<String, Variable>,
+        verbose: bool,
+    ) -> Program {
         Program {
             name,
             variables,
@@ -97,7 +102,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     let mut in_bracket: bool = false;
 
     for index in 0..line.len() {
-        let letter = line.chars().nth(index).unwrap();
+        let letter: char = line.chars().nth(index).unwrap();
 
         if letter == '\"' {
             in_bracket = !in_bracket;
@@ -129,16 +134,16 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                             && tokens.last().unwrap() == &Token::Assign("::".to_string())
                         {
                             token = Token::new(Token::Variable(tmp_word.clone()));
-                        // } else {
-                        //     let error = Error::new(
-                        //         "tests.f90".to_string(),
-                        //         "module".to_string(),
-                        //         pc,
-                        //         index,
-                        //         format!("Unknown token `{}`", tmp_word),
-                        //         ErrorKind::UnknownToken,
-                        //     );
-                        //     error.warn();
+                            // } else {
+                            //     let error = Error::new(
+                            //         "tests.f90".to_string(),
+                            //         "module".to_string(),
+                            //         pc,
+                            //         index,
+                            //         format!("Unknown token `{}`", tmp_word),
+                            //         ErrorKind::UnknownToken,
+                            //     );
+                            //     error.warn();
                         }
                     }
                     tokens.push(token);
@@ -148,7 +153,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                 let mut comment: String = String::new();
 
                 for index_rest in index..line.len() {
-                    let letter_rest = line.chars().nth(index_rest).unwrap();
+                    let letter_rest: char = line.chars().nth(index_rest).unwrap();
                     comment.push(letter_rest);
                 }
 
@@ -164,20 +169,20 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
 }
 
 pub fn parser(file: File) -> Program {
-    let tmp_lines = split_line(file);
+    let tmp_lines: Vec<String> = split_line(file);
 
     let mut lines: Vec<Vec<Token>> = Vec::new();
 
     for index in 0..tmp_lines.len() {
-        let line = tmp_lines[index].clone();
-        let parsed_line = parse_line(line, index + 1);
+        let line: String = tmp_lines[index].clone();
+        let parsed_line: Vec<Token> = parse_line(line, index + 1);
 
         lines.push(parsed_line);
     }
 
     let name: String = lines[0][1].get_value().clone();
 
-    let verbose = if env::args().len() >= 3 {
+    let verbose: bool = if env::args().len() >= 3 {
         let verbose: bool = match env::args().nth(2).unwrap().as_str() {
             "-v" => true,
             _ => false,

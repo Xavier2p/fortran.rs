@@ -30,7 +30,7 @@ impl Error {
         value: String,
         kind: ErrorKind,
     ) -> Error {
-        let code = match kind {
+        let code: i32 = match kind {
             ErrorKind::Syntax => 1,
             ErrorKind::NotImplemented => 2,
             ErrorKind::FileNotFound => 1,
@@ -59,7 +59,7 @@ impl Error {
             self.column
         );
 
-        let kind = match self.kind {
+        let kind: &str = match self.kind {
             ErrorKind::Syntax => "SyntaxWarning",
             ErrorKind::NotImplemented => "NotImplementedWarning",
             ErrorKind::FileNotFound => "FileNotFoundWarning",
@@ -82,7 +82,7 @@ impl Error {
             self.column
         );
 
-        let kind = match self.kind {
+        let kind: &str = match self.kind {
             ErrorKind::Syntax => "SyntaxError",
             ErrorKind::NotImplemented => "NotImplementedError",
             ErrorKind::FileNotFound => "FileNotFoundError",

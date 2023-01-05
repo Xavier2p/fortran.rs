@@ -11,10 +11,10 @@ pub fn lexer(program: &mut Program) {
     let mut stack: Vec<Token> = Vec::new();
 
     for pc in 0..program.clone().get_lines().len() {
-        let tmp_program = program.clone();
-        let line = tmp_program.get_lines().get(pc).unwrap();
+        let tmp_program: Program = program.clone();
+        let line: &Vec<Token> = tmp_program.get_lines().get(pc).unwrap();
         for index in 0..line.len() {
-            let token = line.get(index).unwrap();
+            let token: &Token = line.get(index).unwrap();
             match token {
                 Token::Comment(_) => {
                     if program.get_verbose() {
@@ -23,7 +23,7 @@ pub fn lexer(program: &mut Program) {
                 }
                 Token::Print => {
                     if line.get(index + 1).unwrap().get_value() == "*" {
-                        let mut to_print = String::new();
+                        let mut to_print: String = String::new();
                         for index in index + 1..line.len() {
                             if matches!(line.get(index).unwrap(), &Token::String(_)) {
                                 to_print.push_str(line.get(index).unwrap().get_value().as_str());
@@ -44,7 +44,7 @@ pub fn lexer(program: &mut Program) {
                         println!("{}", to_print);
                         break;
                     } else {
-                        let error = Error::new(
+                        let error: Error = Error::new(
                             "tests".to_string(),
                             "module".to_string(),
                             pc,
@@ -65,7 +65,7 @@ pub fn lexer(program: &mut Program) {
                     if stack.last().unwrap() == line.get(index + 1).unwrap() {
                         stack.pop();
                     } else {
-                        let error = Error::new(
+                        let error: Error = Error::new(
                             "tests".to_string(),
                             "module".to_string(),
                             pc,
@@ -83,7 +83,7 @@ pub fn lexer(program: &mut Program) {
                         error.raise();
                     }
                 }
-                Token::Identifier(_) | Token::Assign(_) | Token::Other(_)=> {
+                Token::Identifier(_) | Token::Assign(_) | Token::Other(_) => {
                     // println!("Identifier: {}", token.get_value());
                 }
                 Token::Type(_) => break,
@@ -97,7 +97,7 @@ pub fn lexer(program: &mut Program) {
                             .1
                         {
                             Variable::Integer(_) => {
-                                let value = line
+                                let value: i32 = line
                                     .get(index + 2)
                                     .unwrap()
                                     .get_value()
@@ -106,7 +106,7 @@ pub fn lexer(program: &mut Program) {
                                 Variable::Integer(value)
                             }
                             Variable::Real(_) => {
-                                let value = line
+                                let value: f64 = line
                                     .get(index + 2)
                                     .unwrap()
                                     .get_value()
@@ -115,11 +115,11 @@ pub fn lexer(program: &mut Program) {
                                 Variable::Real(value)
                             }
                             Variable::Character(_) => {
-                                let value = line.get(index + 2).unwrap().get_value();
+                                let value: String = line.get(index + 2).unwrap().get_value();
                                 Variable::Character(value)
                             }
                             Variable::Logical(_) => {
-                                let value = line
+                                let value: bool = line
                                     .get(index + 2)
                                     .unwrap()
                                     .get_value()
@@ -132,7 +132,7 @@ pub fn lexer(program: &mut Program) {
                     }
                 }
                 _ => {
-                    let error = Error::new(
+                    let error: Error = Error::new(
                         "tests.f90".to_string(),
                         program.get_name().to_string(),
                         pc,
