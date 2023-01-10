@@ -85,11 +85,11 @@ pub fn lex_with_variables(program: Program) -> Program {
             for tok in line {
                 match tok {
                     Token::Other(_) => {
-                        if variables.contains_key(tok.get_value().as_str()) {
-                            new_line.push(Token::Variable(tok.get_value().to_string()));
+                        new_line.push(if variables.contains_key(tok.get_value().as_str()) {
+                            Token::Variable(tok.get_value().to_string())
                         } else {
-                            new_line.push(tok.clone());
-                        }
+                            tok.clone()
+                        });
                     }
                     _ => new_line.push(tok.clone()),
                 }
@@ -104,5 +104,7 @@ pub fn lex_with_variables(program: Program) -> Program {
         lines,
         variables,
         program.get_verbose(),
+        *program.get_filename(),
+        *program.get_path(),
     );
 }

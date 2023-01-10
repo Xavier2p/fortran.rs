@@ -4,6 +4,8 @@ mod lexer;
 mod parser;
 mod tokens;
 mod variables;
+// mod ast;
+mod preprocess;
 
 fn main() {
     let file = file_traitement::open_file();

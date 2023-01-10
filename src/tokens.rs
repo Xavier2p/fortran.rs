@@ -18,6 +18,7 @@ pub enum Token {
     Variable(String),
     Type(String),
     Assign(String),
+    Number(i32),
 }
 
 impl Token {
@@ -26,38 +27,39 @@ impl Token {
     }
 
     pub fn get_value(&self) -> String {
-        match self {
-            Token::Identifier(string) => return string.to_string(),
-            Token::Comment(string) => return string.to_string(),
-            Token::String(string) => return string.to_string(),
-            Token::Operator(string) => return string.to_string(),
-            Token::Other(string) => return string.to_string(),
-            Token::Variable(string) => return string.to_string(),
-            Token::Type(string) => return string.to_string(),
-            Token::Assign(string) => return string.to_string(),
-            _ => return String::from(""),
+        return match self {
+            Token::Identifier(string) => string.to_string(),
+            Token::Comment(string) => string.to_string(),
+            Token::String(string) => string.to_string(),
+            Token::Operator(string) => string.to_string(),
+            Token::Other(string) => string.to_string(),
+            Token::Variable(string) => string.to_string(),
+            Token::Type(string) => string.to_string(),
+            Token::Assign(string) => string.to_string(),
+            _ => String::from(""),
         };
     }
 
     pub fn get_name(&self) -> String {
-        match self {
-            Token::Comment(_) => return String::from("Comment"),
-            Token::String(_) => return String::from("String"),
-            Token::Operator(_) => return String::from("Operator"),
-            Token::Identifier(_) => return String::from("Identifier"),
-            Token::Other(_) => return String::from("Other"),
-            Token::Variable(_) => return String::from("Variable"),
-            Token::Type(_) => return String::from("Type"),
-            Token::Assign(_) => return String::from("Assign"),
-            Token::Null => return String::from("Null"),
-            Token::Print => return String::from("Print"),
-            Token::Program => return String::from("Program"),
-            Token::End => return String::from("End"),
-            Token::For => return String::from("For"),
-            Token::If => return String::from("If"),
-            Token::Then => return String::from("Then"),
-            Token::Else => return String::from("Else"),
-            Token::Return => return String::from("Return"),
+        return match self {
+            Token::Comment(_) => String::from("Comment"),
+            Token::String(_) => String::from("String"),
+            Token::Operator(_) => String::from("Operator"),
+            Token::Identifier(_) => String::from("Identifier"),
+            Token::Other(_) => String::from("Other"),
+            Token::Variable(_) => String::from("Variable"),
+            Token::Type(_) => String::from("Type"),
+            Token::Assign(_) => String::from("Assign"),
+            Token::Number(_) => String::from("Number"),
+            Token::Null => String::from("Null"),
+            Token::Print => String::from("Print"),
+            Token::Program => String::from("Program"),
+            Token::End => String::from("End"),
+            Token::For => String::from("For"),
+            Token::If => String::from("If"),
+            Token::Then => String::from("Then"),
+            Token::Else => String::from("Else"),
+            Token::Return => String::from("Return"),
         };
     }
 }

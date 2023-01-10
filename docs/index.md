@@ -23,7 +23,6 @@ cargo build --release
 * `-Werror` - Treat warnings as errors
 * `-h` - Print help
 
-
 ## Project layout
 
 ```text
@@ -48,4 +47,3 @@ fortran-rs
     ├── hello-world.f90
     └── simple-code.f90
 ```
-

@@ -10,6 +10,8 @@ use std::env;
 
 #[allow(dead_code)]
 pub struct Program {
+    filename: String,
+    path: String,
     name: String,
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
@@ -35,13 +37,25 @@ impl Program {
         &self.variables
     }
 
+    pub fn get_filename(&self) -> &String {
+        &self.filename
+    }
+
+    pub fn get_path(&self) -> &String {
+        &self.path
+    }
+
     pub fn new(
         name: String,
         lines: Vec<Vec<Token>>,
         variables: HashMap<String, Variable>,
         verbose: bool,
+        filename: String,
+        path: String,
     ) -> Program {
         Program {
+            filename,
+            path,
             name,
             variables,
             lines,
@@ -57,6 +71,8 @@ impl Program {
 
     pub fn clone(&self) -> Program {
         Program {
+            filename: self.filename.clone(),
+            path: self.path.clone(),
             name: self.name.clone(),
             variables: self.variables.clone(),
             lines: self.lines.clone(),
@@ -108,7 +124,6 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
             in_bracket = !in_bracket;
 
             if tmp_word.len() > 0 {
-                // tmp_word.push(letter);
                 tokens.push(Token::new(Token::String(tmp_word)));
                 tmp_word = String::new();
             }
@@ -193,6 +208,8 @@ pub fn parser(file: File) -> Program {
     };
 
     Program {
+        filename: file.get_name().to_string(),
+        path: file.get_path().to_string(),
         name,
         variables: HashMap::new(),
         lines,
