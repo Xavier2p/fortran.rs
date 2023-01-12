@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 test-case = "2.2.2"
 colored = "2.0.0"
+clap = { version = "4.0.32", features = ["derive"] }

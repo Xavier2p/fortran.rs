@@ -45,8 +45,8 @@ pub fn lexer(program: &mut Program) {
                         break;
                     } else {
                         let error: Error = Error::new(
-                            *program.get_filename(),
-                            *program.get_name(),
+                            program.get_filename().to_string(),
+                            program.get_name().to_string(),
                             pc,
                             index,
                             format!(
@@ -66,8 +66,8 @@ pub fn lexer(program: &mut Program) {
                         stack.pop();
                     } else {
                         let error: Error = Error::new(
-                            *program.get_filename(),
-                            *program.get_name(),
+                            program.get_filename().to_string(),
+                            program.get_name().to_string(),
                             pc,
                             index,
                             format!(
@@ -133,8 +133,8 @@ pub fn lexer(program: &mut Program) {
                 }
                 _ => {
                     let error: Error = Error::new(
-                        *program.get_filename(),
-                        *program.get_name(),
+                        program.get_filename().to_string(),
+                        program.get_name().to_string(),
                         pc,
                         index,
                         format!(

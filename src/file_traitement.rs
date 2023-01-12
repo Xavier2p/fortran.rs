@@ -10,7 +10,7 @@ pub struct File {
     version: String,
 }
 
-// #[allow(dead_code)]
+#[allow(dead_code)]
 impl File {
     pub fn get_path(&self) -> &String {
         &self.path

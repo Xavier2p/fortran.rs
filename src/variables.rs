@@ -104,7 +104,7 @@ pub fn lex_with_variables(program: Program) -> Program {
         lines,
         variables,
         program.get_verbose(),
-        *program.get_filename(),
-        *program.get_path(),
+        program.get_filename().to_string(),
+        program.get_path().to_string(),
     );
 }

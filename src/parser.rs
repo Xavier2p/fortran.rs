@@ -184,7 +184,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
 }
 
 pub fn parser(file: File) -> Program {
-    let tmp_lines: Vec<String> = split_line(file);
+    let tmp_lines: Vec<String> = split_line(file.clone());
 
     let mut lines: Vec<Vec<Token>> = Vec::new();
 

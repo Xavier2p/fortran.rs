@@ -1,26 +1,38 @@
-use std::{env, process};
-// use crate::file_traitement::File;
+use clap::Parser;
+use colored::Colorize;
+use std::process;
 
-fn help() {
-    println!("fortran.rs, an open-source fortran interpreter.");
-    println!("TODO");
+#[derive(Parser, Default, Debug)]
+#[command(author = "Xavier2p", version, about)]
+/// fortran-rs: An open-source Fortran interpreter, written in Rust
+struct Args {
+    /// Path to the file to threat
+    path: String,
+
+    #[arg(short, long)]
+    /// Print the comment during the execution of the program
+    verbose: bool,
+    
+    #[arg(long)]
+    /// Threat `Warning` as `Error`
+    werror: bool,
 }
 
-fn exit(reason: &str) {
-    println!("CriticalError: {}", reason);
-    help();
+fn exit() {
+    println!(
+        "{} The following required arguments were not provided:\n  {}",
+        "error:".red(),
+        "<PATH>".green()
+    );
+    println!("\n{} fortran-rs <PATH>", "Usage:".underline());
+    println!("\nFor more information try '--help'");
     process::exit(2);
 }
 
-fn split_args(args: Vec<String>) {
-    // do stuff with all args
-}
-
 pub fn process_args() {
-    let args: Vec<String> = env::args().collect();
-    match args.len() {
-        0 => exit("No Args..."),
-        1 => exit("No filename provided"),
-        _ => split_args(args),
+    let args: Args = Args::parse();
+    println!("{:#?}", args);
+    if args.path == "" {
+        exit();
     }
 }

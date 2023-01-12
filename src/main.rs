@@ -8,6 +8,7 @@ mod variables;
 mod preprocess;
 
 fn main() {
+    preprocess::process_args();
     let file = file_traitement::open_file();
     let mut program = parser::parser(file);
 
