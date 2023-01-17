@@ -2,11 +2,11 @@
 use crate::{
     errors::{Error, ErrorKind},
     file_traitement::File,
+    preprocess::Args,
     tokens::Token,
     variables::Variable,
 };
 use std::collections::HashMap;
-use std::env;
 
 #[allow(dead_code)]
 pub struct Program {
@@ -16,11 +16,11 @@ pub struct Program {
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: usize,
-    verbose: bool,
+    args: Args,
 }
 
 impl Program {
-    #[allow(dead_code)]
+    // #[allow(dead_code)]
     pub fn get_name(&self) -> &String {
         &self.name
     }
@@ -29,8 +29,8 @@ impl Program {
         &self.lines
     }
 
-    pub fn get_verbose(&self) -> bool {
-        self.verbose
+    pub fn get_args(&self) -> &Args {
+        &self.args
     }
 
     pub fn get_variables(&self) -> &HashMap<String, Variable> {
@@ -49,7 +49,7 @@ impl Program {
         name: String,
         lines: Vec<Vec<Token>>,
         variables: HashMap<String, Variable>,
-        verbose: bool,
+        args: Args,
         filename: String,
         path: String,
     ) -> Program {
@@ -60,7 +60,7 @@ impl Program {
             variables,
             lines,
             pc: 0,
-            verbose,
+            args,
         }
     }
 
@@ -77,7 +77,7 @@ impl Program {
             variables: self.variables.clone(),
             lines: self.lines.clone(),
             pc: self.pc,
-            verbose: self.verbose,
+            args: self.args.clone(),
         }
     }
 }
@@ -183,7 +183,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     return tokens;
 }
 
-pub fn parser(file: File) -> Program {
+pub fn parser(file: File, args: Args) -> Program {
     let tmp_lines: Vec<String> = split_line(file.clone());
 
     let mut lines: Vec<Vec<Token>> = Vec::new();
@@ -197,16 +197,6 @@ pub fn parser(file: File) -> Program {
 
     let name: String = lines[0][1].get_value().clone();
 
-    let verbose: bool = if env::args().len() >= 3 {
-        let verbose: bool = match env::args().nth(2).unwrap().as_str() {
-            "-v" => true,
-            _ => false,
-        };
-        verbose
-    } else {
-        false
-    };
-
     Program {
         filename: file.get_name().to_string(),
         path: file.get_path().to_string(),
@@ -214,6 +204,6 @@ pub fn parser(file: File) -> Program {
         variables: HashMap::new(),
         lines,
         pc: 0,
-        verbose,
+        args,
     }
 }

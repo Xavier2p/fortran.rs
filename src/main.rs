@@ -6,23 +6,15 @@ mod tokens;
 mod variables;
 // mod ast;
 mod preprocess;
+mod tests;
 
 fn main() {
-    preprocess::process_args();
-    let file = file_traitement::open_file();
-    let mut program = parser::parser(file);
+    let args = preprocess::process_args();
+    let file = file_traitement::File::new(args.get_path_str());
+    let mut program = parser::parser(file, args);
 
     program = variables::lex_with_variables(program);
 
     lexer::lexer(&mut program);
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-
-//     #[test]
-//     fn it_works() {
-//         assert_eq!(2 + 2, 4);
-//     }
-// }

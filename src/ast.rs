@@ -57,7 +57,7 @@ impl NodeTrait<i32> for Node {
 
 impl NodeTrait<f64> for Node {
     fn new(token: Token, left: Box<Node>, right: Box<Node>) -> Node {
-        Node { token, left, right, }
+        Node { token, left, right }
     }
 
     fn eval(&self) -> f64 {
@@ -91,7 +91,7 @@ impl NodeTrait<f64> for Node {
                 var.get_value() // parse value for f64
             }
             _ => 0.0,
-        } 
+        }
     }
 }
 

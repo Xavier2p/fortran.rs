@@ -17,7 +17,7 @@ pub fn lexer(program: &mut Program) {
             let token: &Token = line.get(index).unwrap();
             match token {
                 Token::Comment(_) => {
-                    if program.get_verbose() {
+                    if program.get_args().get_verbose() {
                         println!("{}", token.get_value().dimmed());
                     }
                 }
