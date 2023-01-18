@@ -1,3 +1,4 @@
+use crate::preprocess::Args;
 use std::fs;
 
 #[allow(dead_code)]
@@ -7,6 +8,7 @@ pub struct File {
     name: String,
     content: String,
     version: String,
+    args: Args,
 }
 
 #[allow(dead_code)]
@@ -27,22 +29,27 @@ impl File {
         &self.version
     }
 
-    pub fn new(path: &String) -> File {
-        let file_name_with_extension: &str = path.split('/').last().unwrap();
+    pub fn get_args(&self) -> &Args {
+        &self.args
+    }
+
+    pub fn new(args: Args) -> File {
+        let file_name_with_extension: &str = args.get_path_str().split('/').last().unwrap();
 
         return File {
-            path: path.to_string(),
+            path: args.get_path_str().to_string(),
             name: file_name_with_extension
                 .split('.')
                 .next()
                 .unwrap()
                 .to_string(),
-            content: fs::read_to_string(path).unwrap(),
+            content: fs::read_to_string(args.get_path_str()).unwrap(),
             version: file_name_with_extension
                 .split('.')
                 .last()
                 .unwrap()
                 .to_string(),
+            args: args,
         };
     }
 }

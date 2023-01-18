@@ -15,12 +15,11 @@ pub struct Program {
     name: String,
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
-    pc: usize,
+    pc: u8,
     args: Args,
 }
 
 impl Program {
-    // #[allow(dead_code)]
     pub fn get_name(&self) -> &String {
         &self.name
     }
@@ -41,6 +40,7 @@ impl Program {
         &self.filename
     }
 
+    #[allow(dead_code)]
     pub fn get_path(&self) -> &String {
         &self.path
     }
@@ -51,11 +51,10 @@ impl Program {
         variables: HashMap<String, Variable>,
         args: Args,
         filename: String,
-        path: String,
     ) -> Program {
         Program {
             filename,
-            path,
+            path: args.get_path_str().to_string(),
             name,
             variables,
             lines,
@@ -86,10 +85,8 @@ pub fn split_line(file: File) -> Vec<String> {
     let mut lines: Vec<String> = Vec::new();
     let tmp_lines = file.get_content().split('\n');
 
-    for line in tmp_lines {
-        if line.len() != 0 {
-            lines.push(line.to_string());
-        }
+    for line in tmp_lines.filter(|line| (*line).len() != 0) {
+        lines.push(line.to_string());
     }
 
     return lines;
@@ -183,7 +180,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     return tokens;
 }
 
-pub fn parser(file: File, args: Args) -> Program {
+pub fn parser(file: File) -> Program {
     let tmp_lines: Vec<String> = split_line(file.clone());
 
     let mut lines: Vec<Vec<Token>> = Vec::new();
@@ -204,6 +201,6 @@ pub fn parser(file: File, args: Args) -> Program {
         variables: HashMap::new(),
         lines,
         pc: 0,
-        args,
+        args: file.get_args().clone(),
     }
 }

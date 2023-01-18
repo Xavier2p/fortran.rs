@@ -1,5 +1,4 @@
 use crate::{parser::Program, tokens::Token};
-
 use std::collections::HashMap;
 
 #[allow(dead_code)]
@@ -16,12 +15,12 @@ pub enum Variable {
 impl Variable {
     pub fn new(value: String) -> Variable {
         match value.parse::<i32>() {
-            Ok(value) => Variable::Integer(value), // { name, value }
+            Ok(value) => Variable::Integer(value),
             Err(_) => match value.parse::<f64>() {
-                Ok(value) => Variable::Real(value), // { name, value }
+                Ok(value) => Variable::Real(value),
                 Err(_) => match value.parse::<bool>() {
-                    Ok(value) => Variable::Logical(value), // { name, value }
-                    Err(_) => Variable::Character(value),  // { name, value }
+                    Ok(value) => Variable::Logical(value),
+                    Err(_) => Variable::Character(value),
                 },
             },
         }
@@ -105,6 +104,5 @@ pub fn lex_with_variables(program: Program) -> Program {
         variables,
         program.get_args().clone(),
         program.get_filename().to_string(),
-        program.get_path().to_string(),
     );
 }

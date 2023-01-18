@@ -10,8 +10,8 @@ mod tests;
 
 fn main() {
     let args = preprocess::process_args();
-    let file = file_traitement::File::new(args.get_path_str());
-    let mut program = parser::parser(file, args);
+    let file = file_traitement::File::new(args);
+    let mut program = parser::parser(file);
 
     program = variables::lex_with_variables(program);
 

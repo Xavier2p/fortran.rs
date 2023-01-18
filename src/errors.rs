@@ -87,7 +87,7 @@ impl Error {
 
     #[allow(dead_code)]
     pub fn raise(&self) {
-        println!(
+        eprintln!(
             "Error handled on {}, in `{}` at line {}:{}.",
             self.filename.blue(),
             self.function.yellow(),
@@ -97,9 +97,9 @@ impl Error {
 
         let kind: String = self.get_error("Error");
 
-        println!("Error: {}", kind.red());
-        println!("      > {}", self.value.magenta());
-        println!("Exiting with code {}", self.code.to_string().red().dimmed());
+        eprintln!("Error: {}", kind.red());
+        eprintln!("      > {}", self.value.magenta());
+        eprintln!("Exiting with code {}", self.code.to_string().red().dimmed());
         std::process::exit(self.code);
     }
 }
