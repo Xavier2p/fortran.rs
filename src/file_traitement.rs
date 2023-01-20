@@ -34,16 +34,16 @@ impl File {
     }
 
     pub fn new(args: Args) -> File {
-        let file_name_with_extension: &str = args.get_path_str().split('/').last().unwrap();
+        let file_name_with_extension: &str = args.get_path().split('/').last().unwrap();
 
         return File {
-            path: args.get_path_str().to_string(),
+            path: args.get_path().to_string(),
             name: file_name_with_extension
                 .split('.')
                 .next()
                 .unwrap()
                 .to_string(),
-            content: fs::read_to_string(args.get_path_str()).unwrap(),
+            content: fs::read_to_string(args.get_path()).unwrap(),
             version: file_name_with_extension
                 .split('.')
                 .last()

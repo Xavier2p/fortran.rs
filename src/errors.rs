@@ -99,7 +99,10 @@ impl Error {
 
         eprintln!("Error: {}", kind.red());
         eprintln!("      > {}", self.value.magenta());
-        eprintln!("Exiting with code {}", self.code.to_string().red().dimmed());
+        eprintln!(
+            "Exiting with code {}...",
+            self.code.to_string().red().dimmed()
+        );
         std::process::exit(self.code);
     }
 }

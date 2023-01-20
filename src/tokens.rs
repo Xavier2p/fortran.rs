@@ -1,10 +1,7 @@
 #[derive(PartialEq, Clone)]
 #[allow(dead_code)]
 pub enum Token {
-    Comment(String),
-    String(String),
     Null,
-    Operator(String),
     Print,
     Program,
     End,
@@ -12,8 +9,11 @@ pub enum Token {
     If,
     Then,
     Else,
-    Identifier(String),
     Return,
+    Comment(String),
+    String(String),
+    Operator(String),
+    Identifier(String),
     Other(String),
     Variable(String),
     Type(String),
@@ -27,39 +27,41 @@ impl Token {
     }
 
     pub fn get_value(&self) -> String {
-        return match self {
-            Token::Identifier(string) => string.to_string(),
-            Token::Comment(string) => string.to_string(),
-            Token::String(string) => string.to_string(),
-            Token::Operator(string) => string.to_string(),
-            Token::Other(string) => string.to_string(),
-            Token::Variable(string) => string.to_string(),
-            Token::Type(string) => string.to_string(),
-            Token::Assign(string) => string.to_string(),
-            _ => String::from(""),
-        };
+        match self {
+            Token::Identifier(string) => string,
+            Token::Comment(string) => string,
+            Token::String(string) => string,
+            Token::Operator(string) => string,
+            Token::Other(string) => string,
+            Token::Variable(string) => string,
+            Token::Type(string) => string,
+            Token::Assign(string) => string,
+            _ => "",
+        }
+        .to_string()
     }
 
     pub fn get_name(&self) -> String {
-        return match self {
-            Token::Comment(_) => String::from("Comment"),
-            Token::String(_) => String::from("String"),
-            Token::Operator(_) => String::from("Operator"),
-            Token::Identifier(_) => String::from("Identifier"),
-            Token::Other(_) => String::from("Other"),
-            Token::Variable(_) => String::from("Variable"),
-            Token::Type(_) => String::from("Type"),
-            Token::Assign(_) => String::from("Assign"),
-            Token::Number(_) => String::from("Number"),
-            Token::Null => String::from("Null"),
-            Token::Print => String::from("Print"),
-            Token::Program => String::from("Program"),
-            Token::End => String::from("End"),
-            Token::For => String::from("For"),
-            Token::If => String::from("If"),
-            Token::Then => String::from("Then"),
-            Token::Else => String::from("Else"),
-            Token::Return => String::from("Return"),
-        };
+        match self {
+            Token::Comment(_) => "Comment",
+            Token::String(_) => "String",
+            Token::Operator(_) => "Operator",
+            Token::Identifier(_) => "Identifier",
+            Token::Other(_) => "Other",
+            Token::Variable(_) => "Variable",
+            Token::Type(_) => "Type",
+            Token::Assign(_) => "Assign",
+            Token::Number(_) => "Number",
+            Token::Null => "Null",
+            Token::Print => "Print",
+            Token::Program => "Program",
+            Token::End => "End",
+            Token::For => "For",
+            Token::If => "If",
+            Token::Then => "Then",
+            Token::Else => "Else",
+            Token::Return => "Return",
+        }
+        .to_string()
     }
 }

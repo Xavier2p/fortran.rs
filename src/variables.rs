@@ -1,4 +1,4 @@
-use crate::{parser::Program, tokens::Token};
+use crate::{program::Program, tokens::Token};
 use std::collections::HashMap;
 
 #[allow(dead_code)]
@@ -11,19 +11,6 @@ pub enum Variable {
 }
 
 impl Variable {
-    // pub fn new(value: String) -> Variable {
-    //     match value.parse::<i32>() {
-    //         Ok(value) => Variable::Integer(value),
-    //         Err(_) => match value.parse::<f64>() {
-    //             Ok(value) => Variable::Real(value),
-    //             Err(_) => match value.parse::<bool>() {
-    //                 Ok(value) => Variable::Logical(value),
-    //                 Err(_) => Variable::Character(value),
-    //             },
-    //         },
-    //     }
-    // }
-
     pub fn new_integer(value: i32) -> Variable {
         Variable::Integer(value)
     }

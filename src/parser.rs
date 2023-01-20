@@ -3,85 +3,13 @@ use crate::{
     errors::{Error, ErrorKind},
     file_traitement::File,
     preprocess::Args,
+    program::Program,
     tokens::Token,
     variables::Variable,
 };
 use std::collections::HashMap;
 
-#[allow(dead_code)]
-pub struct Program {
-    filename: String,
-    path: String,
-    name: String,
-    variables: HashMap<String, Variable>,
-    lines: Vec<Vec<Token>>,
-    pc: u8,
-    args: Args,
-}
-
-impl Program {
-    pub fn get_name(&self) -> &String {
-        &self.name
-    }
-
-    pub fn get_lines(&self) -> &Vec<Vec<Token>> {
-        &self.lines
-    }
-
-    pub fn get_args(&self) -> &Args {
-        &self.args
-    }
-
-    pub fn get_variables(&self) -> &HashMap<String, Variable> {
-        &self.variables
-    }
-
-    pub fn get_filename(&self) -> &String {
-        &self.filename
-    }
-
-    #[allow(dead_code)]
-    pub fn get_path(&self) -> &String {
-        &self.path
-    }
-
-    pub fn new(
-        name: String,
-        lines: Vec<Vec<Token>>,
-        variables: HashMap<String, Variable>,
-        args: Args,
-        filename: String,
-    ) -> Program {
-        Program {
-            filename,
-            path: args.get_path_str().to_string(),
-            name,
-            variables,
-            lines,
-            pc: 0,
-            args,
-        }
-    }
-
-    pub fn set_variable(&mut self, name: String, value: Variable) {
-        self.variables.remove(&name);
-        self.variables.insert(name, value);
-    }
-
-    pub fn clone(&self) -> Program {
-        Program {
-            filename: self.filename.clone(),
-            path: self.path.clone(),
-            name: self.name.clone(),
-            variables: self.variables.clone(),
-            lines: self.lines.clone(),
-            pc: self.pc,
-            args: self.args.clone(),
-        }
-    }
-}
-
-pub fn split_line(file: File) -> Vec<String> {
+fn split_line(file: File) -> Vec<String> {
     let mut lines: Vec<String> = Vec::new();
     let tmp_lines = file.get_content().split('\n');
 
@@ -94,19 +22,19 @@ pub fn split_line(file: File) -> Vec<String> {
 
 fn tokenize(word: String) -> Token {
     match word.to_ascii_uppercase().as_str() {
-        "PRINT" => return Token::new(Token::Print),
-        "PROGRAM" => return Token::new(Token::Program),
-        "IF" => return Token::new(Token::If),
-        "THEN" => return Token::new(Token::Then),
-        "ELSE" => return Token::new(Token::Else),
-        "FOR" => return Token::new(Token::For),
-        "RETURN" => return Token::new(Token::Return),
-        "END" => return Token::new(Token::End),
-        "::" | "=" => return Token::new(Token::Assign(word)),
-        "REAL" | "INTEGER" | "CHARACTER" | "LOGICAL" => return Token::new(Token::Type(word)),
-        "+" | "-" | "*" | "/" => return Token::new(Token::Operator(word)),
-        _ => return Token::new(Token::Other(word)),
-    };
+        "PRINT" => Token::new(Token::Print),
+        "PROGRAM" => Token::new(Token::Program),
+        "IF" => Token::new(Token::If),
+        "THEN" => Token::new(Token::Then),
+        "ELSE" => Token::new(Token::Else),
+        "FOR" => Token::new(Token::For),
+        "RETURN" => Token::new(Token::Return),
+        "END" => Token::new(Token::End),
+        "::" | "=" => Token::new(Token::Assign(word)),
+        "REAL" | "INTEGER" | "CHARACTER" | "LOGICAL" => Token::new(Token::Type(word)),
+        "+" | "-" | "*" | "/" => Token::new(Token::Operator(word)),
+        _ => Token::new(Token::Other(word)),
+    }
 }
 
 fn parse_line(line: String, _pc: usize) -> Vec<Token> {
@@ -136,30 +64,32 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                     tmp_word.push(letter);
                 }
 
-                if tmp_word.len() > 0 {
-                    let mut token: Token = tokenize(tmp_word.clone());
-
-                    if matches!(token, Token::Other(_)) {
-                        if tokens.len() > 0 && tokens.last().unwrap() == &Token::Program {
-                            token = Token::new(Token::Identifier(tmp_word));
-                        } else if tokens.len() > 0
-                            && tokens.last().unwrap() == &Token::Assign("::".to_string())
-                        {
-                            token = Token::new(Token::Variable(tmp_word.clone()));
-                        // } else {
-                        //         let error = Error::new(
-                        //             "tests.f90".to_string(),
-                        //             "module".to_string(),
-                        //             pc,
-                        //             index,
-                        //             format!("Unknown token `{}`", tmp_word),
-                        //             ErrorKind::UnknownToken,
-                        //         );
-                        }
-                    }
-                    tokens.push(token);
-                    tmp_word = String::new();
+                if tmp_word.len() <= 0 {
+                    continue;
                 }
+
+                let mut token: Token = tokenize(tmp_word.clone());
+
+                if matches!(token, Token::Other(_)) {
+                    if tokens.len() > 0 && tokens.last().unwrap() == &Token::Program {
+                        token = Token::new(Token::Identifier(tmp_word));
+                    } else if tokens.len() > 0
+                        && tokens.last().unwrap() == &Token::Assign("::".to_string())
+                    {
+                        token = Token::new(Token::Variable(tmp_word.clone()));
+                        // } else {
+                        //     let error = Error::new(
+                        //         "tests.f90".to_string(),
+                        //         "module".to_string(),
+                        //         pc,
+                        //         index,
+                        //         format!("Unknown token `{}`", tmp_word),
+                        //         ErrorKind::UnknownToken,
+                        //     );
+                    }
+                }
+                tokens.push(token);
+                tmp_word = String::new();
             } else if letter == '!' {
                 let mut comment: String = String::new();
 
@@ -181,7 +111,6 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
 
 pub fn parser(file: File) -> Program {
     let tmp_lines: Vec<String> = split_line(file.clone());
-
     let mut lines: Vec<Vec<Token>> = Vec::new();
 
     for index in 0..tmp_lines.len() {
@@ -193,13 +122,11 @@ pub fn parser(file: File) -> Program {
 
     let name: String = lines[0][1].get_value().clone();
 
-    Program {
-        filename: file.get_name().to_string(),
-        path: file.get_path().to_string(),
+    Program::new(
         name,
-        variables: HashMap::new(),
         lines,
-        pc: 0,
-        args: file.get_args().clone(),
-    }
+        HashMap::new(),
+        file.get_args().clone(),
+        file.get_name().to_string(),
+    )
 }

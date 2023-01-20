@@ -1,6 +1,6 @@
 use crate::{
     errors::{Error, ErrorKind},
-    parser::Program,
+    program::Program,
     tokens::Token,
 };
 

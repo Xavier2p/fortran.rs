@@ -1,9 +1,9 @@
 use crate::{
     errors::{Error, ErrorKind},
-    parser::Program,
+    print::print_to_stdout,
+    program::Program,
     tokens::Token,
     variables,
-    print::print_to_stdout,
 };
 use colored::Colorize;
 
@@ -18,7 +18,7 @@ pub fn lexer(program: &mut Program) {
             match token {
                 Token::Comment(_) => {
                     if program.get_args().get_verbose() {
-                        println!("{}", token.get_value().dimmed());
+                        println!("{} {}", "|".dimmed(), token.get_value().dimmed());
                     }
                 }
                 Token::Print => {
@@ -50,8 +50,7 @@ pub fn lexer(program: &mut Program) {
                         error.raise();
                     }
                 }
-                Token::Identifier(_) | Token::Assign(_) | Token::Other(_) => {
-                }
+                Token::Identifier(_) | Token::Assign(_) | Token::Other(_) => {}
                 Token::Type(_) => break,
                 Token::Variable(_) => {
                     *program = variables::assign(line.to_vec(), index, program, token);

@@ -2,12 +2,12 @@ mod errors;
 mod file_traitement;
 mod lexer;
 mod parser;
+mod preprocess;
+mod print;
+mod program;
+mod tests;
 mod tokens;
 mod variables;
-// mod ast;
-mod preprocess;
-mod tests;
-mod print;
 
 fn main() {
     let args = preprocess::process_args();
@@ -18,4 +18,3 @@ fn main() {
 
     lexer::lexer(&mut program);
 }
-

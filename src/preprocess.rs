@@ -1,6 +1,7 @@
+use crate::errors::{Error, ErrorKind};
 use clap::Parser;
 use colored::Colorize;
-use std::{path::Path, process};
+use std::path::Path;
 
 #[derive(Parser, Default, Debug, Clone)]
 #[command(author = "Xavier2p", version, about)]
@@ -19,11 +20,7 @@ pub struct Args {
 }
 
 impl Args {
-    // pub fn get_path(&self) -> &Path {
-    // return Path::new(&self.path.as_str());
-    // }
-
-    pub fn get_path_str(&self) -> &String {
+    pub fn get_path(&self) -> &String {
         return &self.path;
     }
 
@@ -35,21 +32,27 @@ impl Args {
         self.werror
     }
 
-    pub fn check(&self) {
-        if self.path == "" {
-            exit();
-        }
-
-        if !Path::new(&self.path.as_str()).exists() {
-            exit();
+    pub fn check(&self) -> Result<(), Error> {
+        if self.path == "" || !Path::new(&self.path.as_str()).exists() {
+            Err(Error::new(
+                "none".to_string(),
+                "none".to_string(),
+                0,
+                0,
+                format!("No file exists with this name: `{}`", self.path),
+                ErrorKind::FileNotFound,
+            ))
+        } else {
+            Ok(())
         }
     }
 
     pub fn print(&self) {
-        println!("Arguments:");
-        println!(" + {}", "`PATH`".green());
+        println!("{} Arguments:", "|".dimmed());
+        println!("{} + {}", "|".dimmed(), "`PATH`".green());
         println!(
-            " + {}",
+            "{} + {}",
+            "|".dimmed(),
             if self.get_verbose() {
                 "`VERBOSE`".green()
             } else {
@@ -57,7 +60,8 @@ impl Args {
             }
         );
         println!(
-            " + {}",
+            "{} + {}",
+            "|".dimmed(),
             if self.get_werror() {
                 "`WERROR`".green()
             } else {
@@ -67,20 +71,12 @@ impl Args {
     }
 }
 
-fn exit() {
-    println!(
-        "{} The following required arguments were not provided:\n  {}",
-        "error:".red(),
-        "<PATH>".green()
-    );
-    println!("\n{} fortran-rs <PATH>", "Usage:".underline());
-    println!("\nFor more information try '--help'");
-    process::exit(2);
-}
-
 pub fn process_args() -> Args {
     let args: Args = Args::parse();
-    args.check();
+    match args.check() {
+        Ok(_) => {}
+        Err(err) => err.raise(),
+    }
 
     if args.get_verbose() {
         args.print();
