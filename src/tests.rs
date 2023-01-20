@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // use super::*;
     use test_case::test_case;
 
     #[test_case(2, 2, 4; "2+2")]

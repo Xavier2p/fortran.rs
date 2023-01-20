@@ -146,16 +146,15 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                             && tokens.last().unwrap() == &Token::Assign("::".to_string())
                         {
                             token = Token::new(Token::Variable(tmp_word.clone()));
-                            // } else {
-                            //     let error = Error::new(
-                            //         "tests.f90".to_string(),
-                            //         "module".to_string(),
-                            //         pc,
-                            //         index,
-                            //         format!("Unknown token `{}`", tmp_word),
-                            //         ErrorKind::UnknownToken,
-                            //     );
-                            //     error.warn();
+                        // } else {
+                        //         let error = Error::new(
+                        //             "tests.f90".to_string(),
+                        //             "module".to_string(),
+                        //             pc,
+                        //             index,
+                        //             format!("Unknown token `{}`", tmp_word),
+                        //             ErrorKind::UnknownToken,
+                        //         );
                         }
                     }
                     tokens.push(token);

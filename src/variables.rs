@@ -10,21 +10,19 @@ pub enum Variable {
     Logical(bool),
 }
 
-#[allow(dead_code)]
-#[allow(unused_variables)]
 impl Variable {
-    pub fn new(value: String) -> Variable {
-        match value.parse::<i32>() {
-            Ok(value) => Variable::Integer(value),
-            Err(_) => match value.parse::<f64>() {
-                Ok(value) => Variable::Real(value),
-                Err(_) => match value.parse::<bool>() {
-                    Ok(value) => Variable::Logical(value),
-                    Err(_) => Variable::Character(value),
-                },
-            },
-        }
-    }
+    // pub fn new(value: String) -> Variable {
+    //     match value.parse::<i32>() {
+    //         Ok(value) => Variable::Integer(value),
+    //         Err(_) => match value.parse::<f64>() {
+    //             Ok(value) => Variable::Real(value),
+    //             Err(_) => match value.parse::<bool>() {
+    //                 Ok(value) => Variable::Logical(value),
+    //                 Err(_) => Variable::Character(value),
+    //             },
+    //         },
+    //     }
+    // }
 
     pub fn new_integer(value: i32) -> Variable {
         Variable::Integer(value)
@@ -52,7 +50,7 @@ impl Variable {
     }
 }
 
-pub fn lex_with_variables(program: Program) -> Program {
+pub fn parse(program: Program) -> Program {
     let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut lines: Vec<Vec<Token>> = Vec::new();
 
@@ -105,4 +103,51 @@ pub fn lex_with_variables(program: Program) -> Program {
         program.get_args().clone(),
         program.get_filename().to_string(),
     );
+}
+
+pub fn assign(line: Vec<Token>, index: usize, program: &mut Program, token: &Token) -> Program {
+    if line.get(index + 1).unwrap() == &Token::Assign("=".to_string()) {
+        let new_variable: Variable = match program
+            .clone()
+            .get_variables()
+            .get_key_value(token.get_value().as_str())
+            .unwrap()
+            .1
+        {
+            Variable::Integer(_) => {
+                let value: i32 = line
+                    .get(index + 2)
+                    .unwrap()
+                    .get_value()
+                    .parse::<i32>()
+                    .unwrap();
+                Variable::Integer(value)
+            }
+            Variable::Real(_) => {
+                let value: f64 = line
+                    .get(index + 2)
+                    .unwrap()
+                    .get_value()
+                    .parse::<f64>()
+                    .unwrap();
+                Variable::Real(value)
+            }
+            Variable::Character(_) => {
+                let value: String = line.get(index + 2).unwrap().get_value();
+                Variable::Character(value)
+            }
+            Variable::Logical(_) => {
+                let value: bool = line
+                    .get(index + 2)
+                    .unwrap()
+                    .get_value()
+                    .parse::<bool>()
+                    .unwrap();
+                Variable::Logical(value)
+            }
+        };
+
+        program.set_variable(token.get_value(), new_variable);
+    }
+    return program.clone();
 }
