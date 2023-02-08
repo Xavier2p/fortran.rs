@@ -39,7 +39,7 @@ pub fn lexer(program: &mut Program) {
                             index,
                             format!(
                                 "Expected `END {}`, got `END {}`",
-                                stack.last().unwrap().get_name().to_ascii_uppercase(),
+                                stack.last().unwrap().get_token().to_ascii_uppercase(),
                                 line.get(index + 1)
                                     .unwrap()
                                     .get_value()
@@ -63,7 +63,7 @@ pub fn lexer(program: &mut Program) {
                         index,
                         format!(
                             "Unexpected token {} `{}`",
-                            token.get_name(),
+                            token.get_token(),
                             token.get_value()
                         ),
                         ErrorKind::UnexpectedToken,

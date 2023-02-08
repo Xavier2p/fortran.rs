@@ -1,10 +1,9 @@
-name: ci 
-
+name: ci
 
 on:
   push:
     branches:
-      - master 
+      - master
       - main
 
 jobs:

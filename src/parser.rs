@@ -1,3 +1,4 @@
+use crate::variables::Var;
 #[allow(unused_imports)]
 use crate::{
     errors::{Error, ErrorKind},
@@ -76,7 +77,8 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                     } else if tokens.len() > 0
                         && tokens.last().unwrap() == &Token::Assign("::".to_string())
                     {
-                        token = Token::new(Token::Variable(tmp_word.clone()));
+                        let tmp_var = Variable::new(tmp_word.clone(), None);
+                        token = Token::new(Token::Variable(tmp_var));
                         // } else {
                         //     let error = Error::new(
                         //         "tests.f90".to_string(),

@@ -1,3 +1,6 @@
+// use crate::variables::{Var, Variable};
+
+mod ast;
 mod errors;
 mod file_traitement;
 mod lexer;
@@ -18,3 +21,12 @@ fn main() {
 
     lexer::lexer(&mut program);
 }
+
+// fn test<T, U>(var: T) -> U
+// where
+//     T: variables::Var<U>,
+//     U: std::fmt::Display,
+// {
+//     println!("{} => {}", var.get_name(), var.get_value());
+//     var.get_value()
+// }
