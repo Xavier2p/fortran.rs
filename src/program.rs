@@ -1,7 +1,7 @@
 use crate::{
     preprocess::Args,
     tokens::Token,
-    variables::{VarType, Variable},
+    variables::VarType,
 };
 use std::collections::HashMap;
 
