@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"fortran_rs":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.71.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"struct\" href=\"fortran_rs/preprocess/struct.Args.html\" title=\"struct fortran_rs::preprocess::Args\">Args</a>"],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.71.0/core/fmt/trait.Debug.html\" title=\"trait core::fmt::Debug\">Debug</a> for <a class=\"enum\" href=\"fortran_rs/variables/enum.Variable.html\" title=\"enum fortran_rs::variables::Variable\">Variable</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

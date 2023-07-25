@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["check_path","get_path","get_verbose","get_werror","print","process_args"],"struct":["Args"]};
