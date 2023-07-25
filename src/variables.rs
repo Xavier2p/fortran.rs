@@ -136,5 +136,5 @@ pub fn assign(line: Vec<Token>, index: usize, program: &mut Program, token: &Tok
 
         program.set_variable(token.get_value(), new_variable);
     }
-    return program.clone();
+    program.clone()
 }

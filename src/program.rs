@@ -1,4 +1,4 @@
-use crate::{preprocess::Args, tokens::Token, variables::Variable};
+use crate::{preprocess, tokens::Token, variables::Variable};
 use std::collections::HashMap;
 
 pub struct Program {
@@ -8,7 +8,7 @@ pub struct Program {
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: u8,
-    args: Args,
+    args: preprocess::Args,
 }
 
 impl Program {
@@ -20,7 +20,7 @@ impl Program {
         &self.lines
     }
 
-    pub fn get_args(&self) -> &Args {
+    pub fn get_args(&self) -> &preprocess::Args {
         &self.args
     }
 
@@ -41,12 +41,12 @@ impl Program {
         name: String,
         lines: Vec<Vec<Token>>,
         variables: HashMap<String, Variable>,
-        args: Args,
+        args: preprocess::Args,
         filename: String,
     ) -> Program {
         Program {
             filename,
-            path: args.get_path().to_string(),
+            path: preprocess::get_path(&args),
             name,
             variables,
             lines,

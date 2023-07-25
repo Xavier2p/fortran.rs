@@ -1,5 +1,6 @@
 use crate::{
     errors::{Error, ErrorKind},
+    preprocess,
     print::print_to_stdout,
     program::Program,
     tokens::Token,
@@ -17,7 +18,7 @@ pub fn lexer(program: &mut Program) {
             let token: &Token = line.get(index).unwrap();
             match token {
                 Token::Comment(_) => {
-                    if program.get_args().get_verbose() {
+                    if preprocess::get_verbose(program.get_args()) {
                         println!("{} {}", "|".dimmed(), token.get_value().dimmed());
                     }
                 }

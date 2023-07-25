@@ -5,7 +5,6 @@ mod parser;
 mod preprocess;
 mod print;
 mod program;
-mod tests;
 mod tokens;
 mod variables;
 
