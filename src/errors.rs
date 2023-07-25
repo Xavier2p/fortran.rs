@@ -1,5 +1,9 @@
+//! # Errors
+//!
+//! This module contains the error handling system.
 use colored::Colorize;
 
+/// This enum contains the different types of errors.
 #[allow(dead_code)]
 #[derive(Clone, Copy)]
 pub enum ErrorKind {
@@ -12,6 +16,7 @@ pub enum ErrorKind {
     Critical,
 }
 
+/// This struct contains the errors.
 #[allow(dead_code)]
 pub struct Error {
     filename: String,
@@ -23,7 +28,9 @@ pub struct Error {
     code: i32,
 }
 
+/// This struct contains the errors.
 impl Error {
+    /// This function returns the code of the error.
     fn get_code_number(kind: ErrorKind) -> i32 {
         match kind {
             ErrorKind::Syntax => 1,
@@ -36,6 +43,7 @@ impl Error {
         }
     }
 
+    /// This function returns the error's level.
     fn get_error(&self, level: &str) -> String {
         match self.kind {
             ErrorKind::Syntax => "Syntax",
@@ -50,6 +58,7 @@ impl Error {
             + level
     }
 
+    /// This function returns a new error.
     pub fn new(
         filename: String,
         function: String,
@@ -69,6 +78,7 @@ impl Error {
         }
     }
 
+    /// This function returns a new warning.
     #[allow(dead_code)]
     pub fn warn(&self) {
         println!(
@@ -85,6 +95,7 @@ impl Error {
         println!("        > {}", self.value.cyan());
     }
 
+    /// This function returns a new error.
     #[allow(dead_code)]
     pub fn raise(&self) {
         eprintln!(

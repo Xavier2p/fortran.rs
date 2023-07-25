@@ -1,8 +1,9 @@
-// use crate::errors::{Error, ErrorKind};
+//! This module is used to parse the arguments passed to the program.
 use clap::Parser;
 use colored::Colorize;
 use std::path::Path;
 
+/// This struct is used to parse the arguments passed to the program.
 #[derive(Debug, Parser, Clone)]
 #[clap(about, version, author)]
 pub struct Args {
@@ -19,18 +20,22 @@ pub struct Args {
     werror: bool,
 }
 
+/// This function returns the path to the file to interpret.
 pub fn get_path(args: &Args) -> String {
     args.file.clone()
 }
 
+/// This function returns the value of the `verbose` argument.
 pub fn get_verbose(args: &Args) -> bool {
     args.verbose
 }
 
+/// This function returns the value of the `werror` argument.
 pub fn get_werror(args: &Args) -> bool {
     args.werror
 }
 
+/// This function prints the arguments passed to the program.
 pub fn print(args: &Args) {
     println!("{} Arguments:", "|".dimmed());
     println!("{} + {}", "|".dimmed(), "`PATH`".green());
@@ -54,6 +59,7 @@ pub fn print(args: &Args) {
     );
 }
 
+/// This function parses the arguments passed to the program.
 pub fn process_args() -> Args {
     let args: Args = Args::parse();
 
@@ -64,6 +70,7 @@ pub fn process_args() -> Args {
     args
 }
 
+/// This function checks if the file exists.
 fn check_path(input: &str) -> Result<String, String> {
     if !Path::new(input).exists() {
         Err(format!("No file exists with this name: `{}`", input))

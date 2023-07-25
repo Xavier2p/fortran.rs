@@ -1,3 +1,6 @@
+//! # Lexer
+//!
+//! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 use crate::{
     errors::{Error, ErrorKind},
     preprocess,
@@ -8,6 +11,7 @@ use crate::{
 };
 use colored::Colorize;
 
+/// This function returns the tokens.
 pub fn lexer(program: &mut Program) {
     let mut stack: Vec<Token> = Vec::new();
 

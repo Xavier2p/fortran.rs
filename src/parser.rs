@@ -1,3 +1,6 @@
+//! # Parser
+//!
+//! The parser is the second step of the compilation process. It takes the output of the preprocessor and transforms it into a program.
 #[allow(unused_imports)]
 use crate::{
     errors::{Error, ErrorKind},
@@ -9,6 +12,7 @@ use crate::{
 };
 use std::collections::HashMap;
 
+/// This function splits the file into lines.
 fn split_line(file: File) -> Vec<String> {
     let mut lines: Vec<String> = Vec::new();
     let tmp_lines = file.get_content().split('\n');
@@ -20,6 +24,7 @@ fn split_line(file: File) -> Vec<String> {
     lines
 }
 
+/// This function returns the token corresponding to the word.
 fn tokenize(word: String) -> Token {
     match word.to_ascii_uppercase().as_str() {
         "PRINT" => Token::new(Token::Print),
@@ -37,6 +42,7 @@ fn tokenize(word: String) -> Token {
     }
 }
 
+/// This function parses a line.
 fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut tmp_word: String = String::new();
@@ -107,6 +113,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     tokens
 }
 
+/// This function parses the file.
 pub fn parser(file: File) -> Program {
     let tmp_lines: Vec<String> = split_line(file.clone());
     let mut lines: Vec<Vec<Token>> = Vec::new();

@@ -1,9 +1,13 @@
+//! # Print
+//!
+//! This module contains the `print` function.
 use crate::{
     errors::{Error, ErrorKind},
     program::Program,
     tokens::Token,
 };
 
+/// This function prints the value of the variable to the standard output.
 pub fn print_to_stdout(line: Vec<Token>, index: usize, pc: usize, prog: Program) {
     if line.get(index + 1).unwrap().get_value() == "*" {
         let mut to_print: String = String::new();

@@ -1,5 +1,5 @@
 ---
-name: Create Documentation
+name: Publish Documentation
 
 on:
   push:
@@ -9,12 +9,26 @@ on:
 jobs:
   docs:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Generate Documentation
+      - name: Build Documentation
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --no-deps
+
+      - name: Prepare Documentation
         run: |
-          echo "Generating Documentation"
-          echo "Documentation Generated"
+          mkdir -p docs
+          cp -r target/doc/* docs/
+          echo '<meta http-equiv="refresh" content="0; URL=fortran-rs">' > docs/index.html
+
+      - name: Deploy Documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

@@ -1,7 +1,10 @@
+//! # Variables
+//!
+//! This module contains the functions to parse and assign variables.
 use crate::{program::Program, tokens::Token};
 use std::collections::HashMap;
 
-#[allow(dead_code)]
+/// This enum contains the different types of variables.
 #[derive(PartialEq, Debug, Clone)]
 pub enum Variable {
     Integer(i32),
@@ -10,23 +13,29 @@ pub enum Variable {
     Logical(bool),
 }
 
+/// This struct contains the variables.
 impl Variable {
+    /// This function returns a new variable.
     pub fn new_integer(value: i32) -> Variable {
         Variable::Integer(value)
     }
 
+    /// This function returns a new variable.
     pub fn new_real(value: f64) -> Variable {
         Variable::Real(value)
     }
 
+    /// This function returns a new variable.
     pub fn new_character(value: String) -> Variable {
         Variable::Character(value)
     }
 
+    /// This function returns a new variable.
     pub fn new_logical(value: bool) -> Variable {
         Variable::Logical(value)
     }
 
+    /// This function returns the value of the variable.
     pub fn get_value(&self) -> String {
         match self {
             Variable::Integer(value) => value.to_string(),
@@ -37,6 +46,7 @@ impl Variable {
     }
 }
 
+/// This function parses the variables.
 pub fn parse(program: Program) -> Program {
     let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut lines: Vec<Vec<Token>> = Vec::new();
@@ -92,6 +102,7 @@ pub fn parse(program: Program) -> Program {
     );
 }
 
+/// This function assigns the variables.
 pub fn assign(line: Vec<Token>, index: usize, program: &mut Program, token: &Token) -> Program {
     if line.get(index + 1).unwrap() == &Token::Assign("=".to_string()) {
         let new_variable: Variable = match program

@@ -1,3 +1,8 @@
+//! # Tokens
+//!
+//! This module contains the Token enum, which is used to represent the tokens
+
+/// This enum contains the different types of tokens.
 #[derive(PartialEq, Clone)]
 #[allow(dead_code)]
 pub enum Token {
@@ -21,11 +26,14 @@ pub enum Token {
     Number(i32),
 }
 
+/// This struct contains the tokens.
 impl Token {
+    /// This function returns a new token.
     pub fn new(token: Token) -> Self {
         token
     }
 
+    /// This function returns the value of the token.
     pub fn get_value(&self) -> String {
         match self {
             Token::Identifier(string) => string,
@@ -41,6 +49,7 @@ impl Token {
         .to_string()
     }
 
+    /// This function returns the name of the token.
     pub fn get_name(&self) -> String {
         match self {
             Token::Comment(_) => "Comment",
