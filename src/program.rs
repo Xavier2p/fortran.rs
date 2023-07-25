@@ -1,18 +1,14 @@
-use crate::{
-    preprocess::Args,
-    tokens::Token,
-    variables::VarType,
-};
+use crate::{preprocess, tokens::Token, variables::Variable};
 use std::collections::HashMap;
 
 pub struct Program {
     filename: String,
     path: String,
     name: String,
-    variables: HashMap<String, VarType>,
+    variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: u8,
-    args: Args,
+    args: preprocess::Args,
 }
 
 impl Program {
@@ -24,11 +20,11 @@ impl Program {
         &self.lines
     }
 
-    pub fn get_args(&self) -> &Args {
+    pub fn get_args(&self) -> &preprocess::Args {
         &self.args
     }
 
-    pub fn get_variables(&self) -> &HashMap<String, VarType> {
+    pub fn get_variables(&self) -> &HashMap<String, Variable> {
         &self.variables
     }
 
@@ -44,13 +40,13 @@ impl Program {
     pub fn new(
         name: String,
         lines: Vec<Vec<Token>>,
-        variables: HashMap<String, VarType>,
-        args: Args,
+        variables: HashMap<String, Variable>,
+        args: preprocess::Args,
         filename: String,
     ) -> Program {
         Program {
             filename,
-            path: args.get_path().to_string(),
+            path: preprocess::get_path(&args),
             name,
             variables,
             lines,
@@ -59,11 +55,9 @@ impl Program {
         }
     }
 
-    pub fn set_variable(&mut self, name: String, value: VarType) {
-        // TODO: Not Working /!\
-        todo!("Not Working /!\\");
-        // self.variables.remove(&name);
-        // self.variables.insert(name, value);
+    pub fn set_variable(&mut self, name: String, value: Variable) {
+        self.variables.remove(&name);
+        self.variables.insert(name, value);
     }
 
     pub fn clone(&self) -> Program {

@@ -1,0 +1,20 @@
+---
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Publish Release
+        run: |
+          echo "Publishing Release"
+          echo "Release ${{ github.ref_name }} published"

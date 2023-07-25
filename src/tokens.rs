@@ -1,5 +1,3 @@
-use crate::variables::{Var, VarType};
-
 #[derive(PartialEq, Clone)]
 #[allow(dead_code)]
 pub enum Token {
@@ -17,9 +15,10 @@ pub enum Token {
     Operator(String),
     Identifier(String),
     Other(String),
-    Variable(VarType),
+    Variable(String),
     Type(String),
     Assign(String),
+    Number(i32),
 }
 
 impl Token {
@@ -34,38 +33,34 @@ impl Token {
             Token::String(string) => string,
             Token::Operator(string) => string,
             Token::Other(string) => string,
+            Token::Variable(string) => string,
             Token::Type(string) => string,
             Token::Assign(string) => string,
-            Token::Variable(var_type) => &match var_type {
-                VarType::Integer(var) => var.get_name(),
-                VarType::Character(var) => var.get_name(),
-                VarType::Logical(var)  => var.get_name(),
-                VarType::Real(var) => var.get_name(),
-            },
             _ => "",
         }
         .to_string()
     }
 
-    pub fn get_token(&self) -> String {
+    pub fn get_name(&self) -> String {
         match self {
-            Token::Comment(_) => "COMMENT",
-            Token::String(_) => "STRING",
-            Token::Operator(_) => "OPERATOR",
-            Token::Identifier(_) => "IDENTIFIER",
-            Token::Other(_) => "OTHER",
-            Token::Variable(_) => "VARIABLE",
-            Token::Type(_) => "TYPE",
-            Token::Assign(_) => "ASSIGN",
-            Token::Null => "NULL",
-            Token::Print => "PRINT",
-            Token::Program => "PROGRAM",
-            Token::End => "END",
-            Token::For => "FOR",
-            Token::If => "IF",
-            Token::Then => "THEN",
-            Token::Else => "ELSE",
-            Token::Return => "RETURN",
+            Token::Comment(_) => "Comment",
+            Token::String(_) => "String",
+            Token::Operator(_) => "Operator",
+            Token::Identifier(_) => "Identifier",
+            Token::Other(_) => "Other",
+            Token::Variable(_) => "Variable",
+            Token::Type(_) => "Type",
+            Token::Assign(_) => "Assign",
+            Token::Number(_) => "Number",
+            Token::Null => "Null",
+            Token::Print => "Print",
+            Token::Program => "Program",
+            Token::End => "End",
+            Token::For => "For",
+            Token::If => "If",
+            Token::Then => "Then",
+            Token::Else => "Else",
+            Token::Return => "Return",
         }
         .to_string()
     }

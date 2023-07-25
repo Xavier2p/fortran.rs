@@ -1,34 +1,44 @@
 use crate::{program::Program, tokens::Token};
 use std::collections::HashMap;
 
-mod character;
-mod integer;
-mod logical;
-mod real;
-
-#[derive(PartialEq, Clone)]
-pub enum VarType {
-    Integer(Variable<i32>),
-    Real(Variable<f64>),
-    Character(Variable<String>),
-    Logical(Variable<bool>),
+#[allow(dead_code)]
+#[derive(PartialEq, Debug, Clone)]
+pub enum Variable {
+    Integer(i32),
+    Real(f64),
+    Character(String),
+    Logical(bool),
 }
 
-#[derive(PartialEq, Clone)]
-pub struct Variable<T> {
-    name: String,
-    value: T,
-}
+impl Variable {
+    pub fn new_integer(value: i32) -> Variable {
+        Variable::Integer(value)
+    }
 
-pub trait Var<T> {
-    fn new(name: String, value: T) -> Self;
-    fn get_value(&self) -> T;
-    fn get_name(&self) -> String;
-    fn set_value(&mut self, value: T);
+    pub fn new_real(value: f64) -> Variable {
+        Variable::Real(value)
+    }
+
+    pub fn new_character(value: String) -> Variable {
+        Variable::Character(value)
+    }
+
+    pub fn new_logical(value: bool) -> Variable {
+        Variable::Logical(value)
+    }
+
+    pub fn get_value(&self) -> String {
+        match self {
+            Variable::Integer(value) => value.to_string(),
+            Variable::Real(value) => value.to_string(),
+            Variable::Character(value) => value.to_string(),
+            Variable::Logical(value) => value.to_string(),
+        }
+    }
 }
 
 pub fn parse(program: Program) -> Program {
-    let mut variables: HashMap<String, VarType> = HashMap::new();
+    let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut lines: Vec<Vec<Token>> = Vec::new();
 
     for pc in 0..program.get_lines().len() {
@@ -126,5 +136,5 @@ pub fn assign(line: Vec<Token>, index: usize, program: &mut Program, token: &Tok
 
         program.set_variable(token.get_value(), new_variable);
     }
-    return program.clone();
+    program.clone()
 }

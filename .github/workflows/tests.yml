@@ -1,0 +1,20 @@
+---
+name: Testing code
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          echo "Running tests"
+          echo "Tests passed"

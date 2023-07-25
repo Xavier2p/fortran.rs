@@ -1,86 +1,73 @@
-use crate::errors::{Error, ErrorKind};
+// use crate::errors::{Error, ErrorKind};
 use clap::Parser;
 use colored::Colorize;
 use std::path::Path;
 
-#[derive(Parser, Default, Debug, Clone)]
-#[command(author = "Xavier2p", version, about)]
-/// fortran-rs: An open-source Fortran interpreter, written in Rust
+#[derive(Debug, Parser, Clone)]
+#[clap(about, version, author)]
 pub struct Args {
-    /// Path to the file to threat
-    path: String,
+    /// Path to the file to interpret
+    #[clap(value_parser = check_path)]
+    file: String,
 
-    #[arg(short, long)]
     /// Print the comment during the execution of the program
+    #[clap(short, long)]
     verbose: bool,
 
-    #[arg(long)]
     /// Threat `Warning` as `Error`
+    #[clap(long)]
     werror: bool,
 }
 
-impl Args {
-    pub fn get_path(&self) -> &String {
-        return &self.path;
-    }
+pub fn get_path(args: &Args) -> String {
+    args.file.clone()
+}
 
-    pub fn get_verbose(&self) -> bool {
-        self.verbose
-    }
+pub fn get_verbose(args: &Args) -> bool {
+    args.verbose
+}
 
-    pub fn get_werror(&self) -> bool {
-        self.werror
-    }
+pub fn get_werror(args: &Args) -> bool {
+    args.werror
+}
 
-    pub fn check(&self) -> Result<(), Error> {
-        if self.path == "" || !Path::new(&self.path.as_str()).exists() {
-            Err(Error::new(
-                "none".to_string(),
-                "none".to_string(),
-                0,
-                0,
-                format!("No file exists with this name: `{}`", self.path),
-                ErrorKind::FileNotFound,
-            ))
+pub fn print(args: &Args) {
+    println!("{} Arguments:", "|".dimmed());
+    println!("{} + {}", "|".dimmed(), "`PATH`".green());
+    println!(
+        "{} + {}",
+        "|".dimmed(),
+        if get_verbose(args) {
+            "`VERBOSE`".green()
         } else {
-            Ok(())
+            "`VERBOSE`".red()
         }
-    }
-
-    pub fn print(&self) {
-        println!("{} Arguments:", "|".dimmed());
-        println!("{} + {}", "|".dimmed(), "`PATH`".green());
-        println!(
-            "{} + {}",
-            "|".dimmed(),
-            if self.get_verbose() {
-                "`VERBOSE`".green()
-            } else {
-                "`VERBOSE`".red()
-            }
-        );
-        println!(
-            "{} + {}",
-            "|".dimmed(),
-            if self.get_werror() {
-                "`WERROR`".green()
-            } else {
-                "`WERROR`".red()
-            }
-        );
-    }
+    );
+    println!(
+        "{} + {}",
+        "|".dimmed(),
+        if get_werror(args) {
+            "`WERROR`".green()
+        } else {
+            "`WERROR`".red()
+        }
+    );
 }
 
 pub fn process_args() -> Args {
     let args: Args = Args::parse();
-    match args.check() {
-        Ok(_) => {}
-        Err(err) => err.raise(),
+
+    if get_verbose(&args) {
+        print(&args);
     }
 
-    if args.get_verbose() {
-        args.print();
-    }
+    args
+}
 
-    return args;
+fn check_path(input: &str) -> Result<String, String> {
+    if !Path::new(input).exists() {
+        Err(format!("No file exists with this name: `{}`", input))
+    } else {
+        Ok(input.to_string())
+    }
 }

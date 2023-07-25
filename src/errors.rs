@@ -25,7 +25,7 @@ pub struct Error {
 
 impl Error {
     fn get_code_number(kind: ErrorKind) -> i32 {
-        return match kind {
+        match kind {
             ErrorKind::Syntax => 1,
             ErrorKind::NotImplemented => 2,
             ErrorKind::FileNotFound => 1,
@@ -33,11 +33,11 @@ impl Error {
             ErrorKind::UnknownToken => 1,
             ErrorKind::UnexpectedToken => 1,
             ErrorKind::Critical => 2,
-        };
+        }
     }
 
     fn get_error(&self, level: &str) -> String {
-        return match self.kind {
+        match self.kind {
             ErrorKind::Syntax => "Syntax",
             ErrorKind::NotImplemented => "NotImplemented",
             ErrorKind::FileNotFound => "FileNotFound",
@@ -47,7 +47,7 @@ impl Error {
             ErrorKind::Critical => "Critical",
         }
         .to_string()
-            + level;
+            + level
     }
 
     pub fn new(
