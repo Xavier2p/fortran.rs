@@ -2,12 +2,11 @@
 //!
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 use crate::{
-    errors::{Error, ErrorKind},
-    preprocess,
+    helpers::errors::{self, Error},
     print::print_to_stdout,
     program::Program,
     tokens::Token,
-    variables,
+    variables, VERBOSE,
 };
 use colored::Colorize;
 
@@ -22,12 +21,12 @@ pub fn lexer(program: &mut Program) {
             let token: &Token = line.get(index).unwrap();
             match token {
                 Token::Comment(_) => {
-                    if preprocess::get_verbose(program.get_args()) {
+                    if VERBOSE {
                         println!("{} {}", "|".dimmed(), token.get_value().dimmed());
                     }
                 }
                 Token::Print => {
-                    print_to_stdout(line.to_vec(), index, pc, program.clone());
+                    print_to_stdout(line.to_vec(), index, program);
                     break;
                 }
                 Token::Program => {
@@ -37,11 +36,9 @@ pub fn lexer(program: &mut Program) {
                     if stack.last().unwrap() == line.get(index + 1).unwrap() {
                         stack.pop();
                     } else {
-                        let error: Error = Error::new(
-                            program.get_filename().to_string(),
-                            program.get_name().to_string(),
-                            pc,
-                            index,
+                        errors::raise(
+                            program,
+                            Error::UnexpectedToken,
                             format!(
                                 "Expected `END {}`, got `END {}`",
                                 stack.last().unwrap().get_name().to_ascii_uppercase(),
@@ -50,9 +47,7 @@ pub fn lexer(program: &mut Program) {
                                     .get_value()
                                     .to_ascii_uppercase()
                             ),
-                            ErrorKind::UnexpectedToken,
-                        );
-                        error.raise();
+                        )
                     }
                 }
                 Token::Identifier(_) | Token::Assign(_) | Token::Other(_) => {}
@@ -60,21 +55,15 @@ pub fn lexer(program: &mut Program) {
                 Token::Variable(_) => {
                     *program = variables::assign(line.to_vec(), index, program, token);
                 }
-                _ => {
-                    let error: Error = Error::new(
-                        program.get_filename().to_string(),
-                        program.get_name().to_string(),
-                        pc,
-                        index,
-                        format!(
-                            "Unexpected token {} `{}`",
-                            token.get_name(),
-                            token.get_value()
-                        ),
-                        ErrorKind::UnexpectedToken,
-                    );
-                    error.warn();
-                }
+                _ => errors::warn(
+                    program,
+                    Error::UnexpectedToken,
+                    format!(
+                        "Unexpected token {} `{}`",
+                        token.get_name(),
+                        token.get_value()
+                    ),
+                ),
             }
         }
     }

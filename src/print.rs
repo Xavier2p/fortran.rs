@@ -2,13 +2,13 @@
 //!
 //! This module contains the `print` function.
 use crate::{
-    errors::{Error, ErrorKind},
+    helpers::errors::{self, Error},
     program::Program,
     tokens::Token,
 };
 
 /// This function prints the value of the variable to the standard output.
-pub fn print_to_stdout(line: Vec<Token>, index: usize, pc: usize, prog: Program) {
+pub fn print_to_stdout(line: Vec<Token>, index: usize, prog: &Program) {
     if line.get(index + 1).unwrap().get_value() == "*" {
         let mut to_print: String = String::new();
         for index in index + 1..line.len() {
@@ -27,17 +27,13 @@ pub fn print_to_stdout(line: Vec<Token>, index: usize, pc: usize, prog: Program)
         }
         println!("{}", to_print);
     } else {
-        let error: Error = Error::new(
-            prog.get_filename().to_string(),
-            prog.get_name().to_string(),
-            pc,
-            index,
+        errors::raise(
+            prog,
+            Error::Syntax,
             format!(
                 "Expected `PRINT *,`, got `PRINT {}`",
                 line.get(index + 1).unwrap().get_value()
             ),
-            ErrorKind::Syntax,
-        );
-        error.raise();
+        )
     }
 }

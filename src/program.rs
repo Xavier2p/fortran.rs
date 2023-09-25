@@ -1,69 +1,53 @@
 //! # Program
 //!
 //! This module contains the `Program` struct.
-use crate::{preprocess, tokens::Token, variables::Variable};
+use crate::{tokens::Token, variables::Variable};
 use std::collections::HashMap;
 
-/// This struct contains the program's name, lines, variables, arguments and program counter.
+/// This struct contains the program's name, lines, variables, arguments and program counter
+#[derive(Clone)]
 pub struct Program {
     filename: String,
-    path: String,
     name: String,
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: u8,
-    args: preprocess::Cli,
 }
 
 /// This struct contains the program's name, lines, variables, arguments and program counter.
 impl Program {
-    /// This function returns the program counter.
     pub fn get_name(&self) -> &String {
         &self.name
     }
 
-    /// This function returns the program counter.
     pub fn get_lines(&self) -> &Vec<Vec<Token>> {
         &self.lines
     }
 
-    /// This function returns the program counter.
-    pub fn get_args(&self) -> &preprocess::Cli {
-        &self.args
-    }
-
-    /// This function returns the program counter.
     pub fn get_variables(&self) -> &HashMap<String, Variable> {
         &self.variables
     }
 
-    /// This function returns the program counter.
     pub fn get_filename(&self) -> &String {
         &self.filename
     }
 
-    /// This function returns the program counter.
-    #[allow(dead_code)]
-    pub fn get_path(&self) -> &String {
-        &self.path
+    pub fn get_line(&self) -> u8 {
+        self.pc
     }
 
-    /// This function returns the program counter.
     pub fn new(
         name: String,
         lines: Vec<Vec<Token>>,
         variables: HashMap<String, Variable>,
-        args: preprocess::Cli,
         filename: String,
     ) -> Program {
         Program {
             filename,
-            path: preprocess::get_path(&args),
             name,
             variables,
             lines,
             pc: 0,
-            args,
         }
     }
 
@@ -77,12 +61,25 @@ impl Program {
     pub fn clone(&self) -> Program {
         Program {
             filename: self.filename.clone(),
-            path: self.path.clone(),
             name: self.name.clone(),
             variables: self.variables.clone(),
             lines: self.lines.clone(),
             pc: self.pc,
-            args: self.args.clone(),
         }
+    }
+
+    pub fn debug(&self) {
+        println!("Program {{");
+        println!("    name: {}", self.name);
+        println!("    filename: {}", self.filename);
+        println!("    variables: {:?}", self.variables);
+        println!("    pc: {}", self.pc);
+        println!("    lines: [");
+        for line in self.lines.iter() {
+            println!("        {:?}", line);
+        }
+        println!("    ]");
+        println!("}}");
+        println!("---- ---- ---- ---- ----");
     }
 }

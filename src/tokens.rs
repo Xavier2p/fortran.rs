@@ -3,7 +3,7 @@
 //! This module contains the Token enum, which is used to represent the tokens
 
 /// This enum contains the different types of tokens.
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Debug)]
 #[allow(dead_code)]
 pub enum Token {
     Null,

@@ -15,14 +15,13 @@ pub struct File {
 
 /// This struct contains the file's path, name, content, version and arguments.
 impl File {
-    /// This function returns the file's name.
-    pub fn get_name(&self) -> &String {
-        &self.name
-    }
-
     /// This function returns the file's content.
     pub fn get_content(&self) -> &String {
         &self.content
+    }
+
+    pub fn get_path(&self) -> &String {
+        &self.path
     }
 
     pub fn debug(&self) {

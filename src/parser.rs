@@ -1,14 +1,11 @@
 //! # Parser
 //!
 //! The parser is the second step of the compilation process. It takes the output of the preprocessor and transforms it into a program.
-#[allow(unused_imports)]
 use crate::{
-    errors::{Error, ErrorKind},
-    file_traitement::File,
-    preprocess::Cli,
+    helpers::file::File,
     program::Program,
     tokens::Token,
-    variables::Variable,
+    // variables::Variable,
 };
 use std::collections::HashMap;
 
@@ -125,11 +122,5 @@ pub fn parser(file: File) -> Program {
 
     let name: String = lines[0][1].get_value();
 
-    Program::new(
-        name,
-        lines,
-        HashMap::new(),
-        file.get_args().clone(),
-        file.get_name().to_string(),
-    )
+    Program::new(name, lines, HashMap::new(), file.get_path().to_string())
 }

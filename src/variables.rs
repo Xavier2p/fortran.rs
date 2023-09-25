@@ -97,7 +97,7 @@ pub fn parse(program: Program) -> Program {
         program.get_name().to_string(),
         lines,
         variables,
-        program.get_args().clone(),
+        // program.get_args().clone(),
         program.get_filename().to_string(),
     );
 }

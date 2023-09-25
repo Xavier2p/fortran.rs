@@ -1,7 +1,7 @@
 [package]
 name = "fortran-rs"
 version = "0.1.0"
-edition = "2021" 
+edition = "2021"
 authors = ["Xavier2p <https://github.com/Xavier2p>"]
 description = "An open-source Fortran interpreter.\nWritten in Rust."
 license = "MIT"
@@ -16,4 +16,4 @@ documentation = "https://xavier2p.github.io/fortran.rs"
 test-case = "3.1.0"
 colored = "2.0.0"
 # clap = { version = "3.2.25", features = ["derive"] }
-clap = {version = "4.4.4", features = ["derive"] }
+clap = { version = "4.4.4", features = ["derive"] }

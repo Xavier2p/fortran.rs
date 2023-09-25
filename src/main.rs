@@ -18,20 +18,48 @@
 //! * `-v`, `--verbose` - Print the verbose output.
 //! * `-V`, `--version` - Print the version.
 //! * `--werror` - Treat all warnings as errors.
-mod errors;
-mod file_traitement;
+mod ast;
+mod helpers;
 mod lexer;
 mod parser;
-mod preprocess;
 mod print;
 mod program;
 mod tokens;
 mod variables;
+mod verbose;
+
+use crate::helpers::cli;
+use clap::Parser;
+
+static VERBOSE: bool = true;
 
 fn main() {
-    let args = preprocess::process_args();
-    let file = file_traitement::File::new(args);
+    let args: cli::Cli = cli::Cli::parse();
+
+    if VERBOSE {
+        args.debug();
+    }
+
+    match args.get_command() {
+        cli::Commands::Run { .. } => {
+            println!("Running: `{}`...", args.get_path());
+        }
+        cli::Commands::Check { .. } => {
+            println!("Checking: `{}`...", args.get_path());
+        }
+    }
+
+    let file = helpers::file::new(args);
+
+    if VERBOSE {
+        file.debug();
+    }
+
     let mut program = parser::parser(file);
+
+    if VERBOSE {
+        program.debug();
+    }
 
     program = variables::parse(program);
 
