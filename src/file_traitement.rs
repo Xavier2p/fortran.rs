@@ -1,7 +1,7 @@
 //! # File Traitement
 //!
 //! This module contains the `File` struct and its methods.
-use crate::preprocess::{get_path, Args};
+use crate::preprocess::{get_path, Cli};
 use std::fs;
 
 /// This struct contains the file's path, name, content, version and arguments.
@@ -12,7 +12,7 @@ pub struct File {
     name: String,
     content: String,
     version: String,
-    args: Args,
+    args: Cli,
 }
 
 /// This struct contains the file's path, name, content, version and arguments.
@@ -36,12 +36,12 @@ impl File {
     // }
 
     /// This function returns the file's arguments.
-    pub fn get_args(&self) -> &Args {
+    pub fn get_args(&self) -> &Cli {
         &self.args
     }
 
     /// This function returns the file's arguments.
-    pub fn new(args: Args) -> File {
+    pub fn new(args: Cli) -> File {
         let path: String = get_path(&args);
         let file_name_with_extension: &str = path.split('/').last().unwrap();
 

@@ -12,7 +12,7 @@ pub struct Program {
     variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: u8,
-    args: preprocess::Args,
+    args: preprocess::Cli,
 }
 
 /// This struct contains the program's name, lines, variables, arguments and program counter.
@@ -28,7 +28,7 @@ impl Program {
     }
 
     /// This function returns the program counter.
-    pub fn get_args(&self) -> &preprocess::Args {
+    pub fn get_args(&self) -> &preprocess::Cli {
         &self.args
     }
 
@@ -53,7 +53,7 @@ impl Program {
         name: String,
         lines: Vec<Vec<Token>>,
         variables: HashMap<String, Variable>,
-        args: preprocess::Args,
+        args: preprocess::Cli,
         filename: String,
     ) -> Program {
         Program {

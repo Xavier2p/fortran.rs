@@ -8,10 +8,12 @@ license = "MIT"
 readme = ".github/README.md"
 repository = "https://github.com/Xavier2p/fortran.rs"
 homepage = "https://xavier2p.github.io/fortran.rs"
+documentation = "https://xavier2p.github.io/fortran.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 test-case = "3.1.0"
 colored = "2.0.0"
-clap = { version = "3.2.25", features = ["derive"] }
+# clap = { version = "3.2.25", features = ["derive"] }
+clap = {version = "4.4.4", features = ["derive"] }
