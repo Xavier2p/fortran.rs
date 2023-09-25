@@ -124,27 +124,15 @@
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
 <a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
-<a href="#135" id="135">135</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Parser
 //!
 //! The parser is the second step of the compilation process. It takes the output of the preprocessor and transforms it into a program.
-</span><span class="attr">#[allow(unused_imports)]
 </span><span class="kw">use crate</span>::{
-    errors::{Error, ErrorKind},
-    file_traitement::File,
-    preprocess::Cli,
+    helpers::file::File,
     program::Program,
     tokens::Token,
-    variables::Variable,
-};
+    <span class="comment">// variables::Variable,
+</span>};
 <span class="kw">use </span>std::collections::HashMap;
 
 <span class="doccomment">/// This function splits the file into lines.
@@ -260,12 +248,6 @@
 
     <span class="kw">let </span>name: String = lines[<span class="number">0</span>][<span class="number">1</span>].get_value();
 
-    Program::new(
-        name,
-        lines,
-        HashMap::new(),
-        file.get_args().clone(),
-        file.get_name().to_string(),
-    )
+    Program::new(name, lines, HashMap::new(), file.get_path().to_string())
 }
 </code></pre></div></section></main></body></html>

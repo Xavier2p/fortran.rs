@@ -83,75 +83,56 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
-<a href="#87" id="87">87</a>
-<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Program
 //!
 //! This module contains the `Program` struct.
-</span><span class="kw">use crate</span>::{preprocess, tokens::Token, variables::Variable};
+</span><span class="kw">use crate</span>::{tokens::Token, variables::Variable};
 <span class="kw">use </span>std::collections::HashMap;
 
-<span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter.
+<span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter
+</span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>Program {
     filename: String,
-    path: String,
     name: String,
     variables: HashMap&lt;String, Variable&gt;,
     lines: Vec&lt;Vec&lt;Token&gt;&gt;,
     pc: u8,
-    args: preprocess::Cli,
 }
 
 <span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter.
 </span><span class="kw">impl </span>Program {
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
+    <span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
         <span class="kw-2">&amp;</span><span class="self">self</span>.name
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>get_lines(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;Token&gt;&gt; {
+    <span class="kw">pub fn </span>get_lines(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;Token&gt;&gt; {
         <span class="kw-2">&amp;</span><span class="self">self</span>.lines
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>get_args(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>preprocess::Cli {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.args
-    }
-
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>get_variables(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, Variable&gt; {
+    <span class="kw">pub fn </span>get_variables(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, Variable&gt; {
         <span class="kw-2">&amp;</span><span class="self">self</span>.variables
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>get_filename(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
+    <span class="kw">pub fn </span>get_filename(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
         <span class="kw-2">&amp;</span><span class="self">self</span>.filename
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="attr">#[allow(dead_code)]
-    </span><span class="kw">pub fn </span>get_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.path
+    <span class="kw">pub fn </span>get_line(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u8 {
+        <span class="self">self</span>.pc
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>new(
+    <span class="kw">pub fn </span>new(
         name: String,
         lines: Vec&lt;Vec&lt;Token&gt;&gt;,
         variables: HashMap&lt;String, Variable&gt;,
-        args: preprocess::Cli,
         filename: String,
     ) -&gt; Program {
         Program {
             filename,
-            path: preprocess::get_path(<span class="kw-2">&amp;</span>args),
             name,
             variables,
             lines,
             pc: <span class="number">0</span>,
-            args,
         }
     }
 
@@ -165,13 +146,26 @@
     </span><span class="kw">pub fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Program {
         Program {
             filename: <span class="self">self</span>.filename.clone(),
-            path: <span class="self">self</span>.path.clone(),
             name: <span class="self">self</span>.name.clone(),
             variables: <span class="self">self</span>.variables.clone(),
             lines: <span class="self">self</span>.lines.clone(),
             pc: <span class="self">self</span>.pc,
-            args: <span class="self">self</span>.args.clone(),
         }
+    }
+
+    <span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="macro">println!</span>(<span class="string">&quot;Program {{&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;    name: {}&quot;</span>, <span class="self">self</span>.name);
+        <span class="macro">println!</span>(<span class="string">&quot;    filename: {}&quot;</span>, <span class="self">self</span>.filename);
+        <span class="macro">println!</span>(<span class="string">&quot;    variables: {:?}&quot;</span>, <span class="self">self</span>.variables);
+        <span class="macro">println!</span>(<span class="string">&quot;    pc: {}&quot;</span>, <span class="self">self</span>.pc);
+        <span class="macro">println!</span>(<span class="string">&quot;    lines: [&quot;</span>);
+        <span class="kw">for </span>line <span class="kw">in </span><span class="self">self</span>.lines.iter() {
+            <span class="macro">println!</span>(<span class="string">&quot;        {:?}&quot;</span>, line);
+        }
+        <span class="macro">println!</span>(<span class="string">&quot;    ]&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;}}&quot;</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;---- ---- ---- ---- ----&quot;</span>);
     }
 }
 </code></pre></div></section></main></body></html>

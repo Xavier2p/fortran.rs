@@ -68,27 +68,15 @@
 <a href="#68" id="68">68</a>
 <a href="#69" id="69">69</a>
 <a href="#70" id="70">70</a>
-<a href="#71" id="71">71</a>
-<a href="#72" id="72">72</a>
-<a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a>
-<a href="#75" id="75">75</a>
-<a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Lexer
 //!
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 </span><span class="kw">use crate</span>::{
-    errors::{Error, ErrorKind},
-    preprocess,
+    helpers::errors::{<span class="self">self</span>, Error},
     print::print_to_stdout,
     program::Program,
     tokens::Token,
-    variables,
+    variables, VERBOSE,
 };
 <span class="kw">use </span>colored::Colorize;
 
@@ -103,12 +91,12 @@
             <span class="kw">let </span>token: <span class="kw-2">&amp;</span>Token = line.get(index).unwrap();
             <span class="kw">match </span>token {
                 Token::Comment(<span class="kw">_</span>) =&gt; {
-                    <span class="kw">if </span>preprocess::get_verbose(program.get_args()) {
+                    <span class="kw">if </span>VERBOSE {
                         <span class="macro">println!</span>(<span class="string">&quot;{} {}&quot;</span>, <span class="string">&quot;|&quot;</span>.dimmed(), token.get_value().dimmed());
                     }
                 }
                 Token::Print =&gt; {
-                    print_to_stdout(line.to_vec(), index, pc, program.clone());
+                    print_to_stdout(line.to_vec(), index, program);
                     <span class="kw">break</span>;
                 }
                 Token::Program =&gt; {
@@ -118,11 +106,9 @@
                     <span class="kw">if </span>stack.last().unwrap() == line.get(index + <span class="number">1</span>).unwrap() {
                         stack.pop();
                     } <span class="kw">else </span>{
-                        <span class="kw">let </span>error: Error = Error::new(
-                            program.get_filename().to_string(),
-                            program.get_name().to_string(),
-                            pc,
-                            index,
+                        errors::raise(
+                            program,
+                            Error::UnexpectedToken,
                             <span class="macro">format!</span>(
                                 <span class="string">&quot;Expected `END {}`, got `END {}`&quot;</span>,
                                 stack.last().unwrap().get_name().to_ascii_uppercase(),
@@ -131,9 +117,7 @@
                                     .get_value()
                                     .to_ascii_uppercase()
                             ),
-                            ErrorKind::UnexpectedToken,
-                        );
-                        error.raise();
+                        )
                     }
                 }
                 Token::Identifier(<span class="kw">_</span>) | Token::Assign(<span class="kw">_</span>) | Token::Other(<span class="kw">_</span>) =&gt; {}
@@ -141,21 +125,15 @@
                 Token::Variable(<span class="kw">_</span>) =&gt; {
                     <span class="kw-2">*</span>program = variables::assign(line.to_vec(), index, program, token);
                 }
-                <span class="kw">_ </span>=&gt; {
-                    <span class="kw">let </span>error: Error = Error::new(
-                        program.get_filename().to_string(),
-                        program.get_name().to_string(),
-                        pc,
-                        index,
-                        <span class="macro">format!</span>(
-                            <span class="string">&quot;Unexpected token {} `{}`&quot;</span>,
-                            token.get_name(),
-                            token.get_value()
-                        ),
-                        ErrorKind::UnexpectedToken,
-                    );
-                    error.warn();
-                }
+                <span class="kw">_ </span>=&gt; errors::warn(
+                    program,
+                    Error::UnexpectedToken,
+                    <span class="macro">format!</span>(
+                        <span class="string">&quot;Unexpected token {} `{}`&quot;</span>,
+                        token.get_name(),
+                        token.get_value()
+                    ),
+                ),
             }
         }
     }
