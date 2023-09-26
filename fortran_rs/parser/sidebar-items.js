@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["parse_line","parser","split_line","tokenize"]};
+window.SIDEBAR_ITEMS = {"enum":["InQuote"],"fn":["new_line","parse","quote_management"]};
