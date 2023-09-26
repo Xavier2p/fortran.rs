@@ -56,13 +56,7 @@ fn main() {
         file.debug();
     }
 
-    let tokenized = tokenizer::tokenizer(&file);
-
-    if VERBOSE {
-        tokenized.debug();
-    }
-
-    let mut program = parser::parser(file);
+    let mut program = parser::parse(&file);
 
     if VERBOSE {
         program.debug();

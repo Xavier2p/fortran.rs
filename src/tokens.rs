@@ -16,6 +16,7 @@ pub enum Token {
     Then,
     Else,
     Return,
+    Comma,
     Comment(String),
     String(String),
     Operator(String),
@@ -72,6 +73,7 @@ impl Token {
             Token::Return => "Return",
             Token::Then => "Then",
             Token::While => "While",
+            Token::Comma => "Comma",
         }
         .to_string()
     }
