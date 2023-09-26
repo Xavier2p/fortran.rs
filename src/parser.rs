@@ -86,8 +86,9 @@ pub fn parse(file: &File) -> Program {
                 tmp_line.push(Token::Comma);
             }
             ('!', _, _) => in_comment = true,
-            ('+' | '-' | '*' | '/', _, _) => tmp_line.push(Token::Operator(letter.to_string())),
-            ('=', _, _) => tmp_line.push(Token::Assign("=")),
+            ('+' | '-' | '*' | '/' | '=', _, _) => {
+                tmp_line.push(Token::Operator(letter.to_string()))
+            }
             _ => tmp_word.push(letter),
         };
     }

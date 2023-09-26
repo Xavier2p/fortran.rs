@@ -31,21 +31,6 @@ fn error_to_string(error: &Error) -> &'static str {
     }
 }
 
-// fn get_code_number(kind: &Error) -> u8 {
-//     match kind {
-//         Error::Syntax => 1,
-//         Error::NotImplemented => 2,
-//         Error::FileNotFound => 1,
-//         Error::Type => 1,
-//         Error::UnknownToken => 1,
-//         Error::UnexpectedToken => 1,
-//         Error::Critical => 2,
-//         Error::TooCharactersOnLine => 1,
-//         Error::ForbiddenCharacter => 1,
-//         Error::WrongFormat => 1,
-//     }
-// }
-
 fn to_stderr(program: &Program, kind: &Error, message: String, is_warning: bool) -> String {
     let location = format!(
         "{} {}:{}:{}",
@@ -70,9 +55,10 @@ fn to_stderr(program: &Program, kind: &Error, message: String, is_warning: bool)
 pub fn raise(program: &Program, kind: Error, message: String) {
     let stderr: String = to_stderr(program, &kind, message, false);
     eprintln!("{}\n", stderr);
-    // std::process::exit();
+    std::process::exit(1);
 }
 
+#[allow(dead_code)]
 pub fn warn(program: &Program, kind: Error, message: String) {
     let stderr: String = to_stderr(program, &kind, message, true);
     println!("{}\n", stderr);

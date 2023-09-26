@@ -48,7 +48,7 @@ pub fn lexer(program: &mut Program) {
                 // Token::Variable(_) => {
                 //     *program = variables::assign(line.to_vec(), index, program, token);
                 // }
-                _ => errors::warn(
+                _ => errors::raise(
                     program,
                     Error::UnexpectedToken,
                     format!("Unexpected token {} `{}`", token.debug(), token.get_value()),
