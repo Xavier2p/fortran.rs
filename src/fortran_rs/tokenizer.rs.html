@@ -92,6 +92,10 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Tokenizer module
 //!
 //! This module is in charge of tokenizing the file.
@@ -109,16 +113,20 @@
 }
 
 <span class="kw">fn </span>new_line(lines: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;Token&gt;&gt;, tmp_line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, tmp_word: <span class="kw-2">&amp;mut </span>String) {
-    new_word(tmp_line, tmp_word);
+    new_word(tmp_line, tmp_word, <span class="bool-val">false</span>);
     <span class="kw">if </span>!tmp_line.is_empty() {
         lines.push(tmp_line.clone());
     }
     tmp_line.clear();
 }
 
-<span class="kw">fn </span>new_word(tmp_line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, tmp_word: <span class="kw-2">&amp;mut </span>String) {
+<span class="kw">fn </span>new_word(tmp_line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, tmp_word: <span class="kw-2">&amp;mut </span>String, is_string: bool) {
     <span class="kw">if </span>!tmp_word.is_empty() {
-        tmp_line.push(Token::Other(tmp_word.clone()));
+        tmp_line.push(<span class="kw">if </span>is_string {
+            Token::String(tmp_word.clone())
+        } <span class="kw">else </span>{
+            Token::Other(tmp_word.clone())
+        });
         tmp_word.clear();
     }
 }
@@ -149,7 +157,7 @@
                     }
                     (InQuote::Double, <span class="string">&#39;\&quot;&#39;</span>) | (InQuote::Single, <span class="string">&#39;\&#39;&#39;</span>) =&gt; {
                         in_quote = InQuote::No;
-                        new_word(<span class="kw-2">&amp;mut </span>tmp_line, <span class="kw-2">&amp;mut </span>tmp_word);
+                        new_word(<span class="kw-2">&amp;mut </span>tmp_line, <span class="kw-2">&amp;mut </span>tmp_word, <span class="bool-val">true</span>);
                     }
                     <span class="kw">_ </span>=&gt; {
                         tmp_word.push(letter);
@@ -159,7 +167,7 @@
             <span class="string">&#39; &#39; </span>=&gt; {
                 <span class="comment">// add support for commas
                 </span><span class="kw">if </span>in_quote == InQuote::No {
-                    new_word(<span class="kw-2">&amp;mut </span>tmp_line, <span class="kw-2">&amp;mut </span>tmp_word);
+                    new_word(<span class="kw-2">&amp;mut </span>tmp_line, <span class="kw-2">&amp;mut </span>tmp_word, <span class="bool-val">false</span>);
                 } <span class="kw">else </span>{
                     tmp_word.push(letter);
                 }
