@@ -111,7 +111,7 @@
 <span class="kw">fn </span>main() {
     <span class="kw">let </span>args = cli::Cli::parse();
 
-    <span class="kw">if </span>VERBOSE {
+    <span class="kw">if </span>!VERBOSE {
         args.debug();
     }
 
@@ -126,7 +126,7 @@
 
     <span class="kw">let </span>file = helpers::file::new(args);
 
-    <span class="kw">if </span>VERBOSE {
+    <span class="kw">if </span>!VERBOSE {
         file.debug();
     }
 

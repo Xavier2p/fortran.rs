@@ -72,6 +72,7 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::program::Program;
 <span class="kw">use </span>colored::Colorize;
 
@@ -85,7 +86,7 @@
     UnknownToken,
     UnexpectedToken,
     Critical,
-    TooCharacters,
+    TooCharactersOnLine,
 }
 
 <span class="kw">fn </span>error_to_string(error: <span class="kw-2">&amp;</span>Error) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str {
@@ -97,11 +98,11 @@
         Error::UnknownToken =&gt; <span class="string">&quot;UnknownToken&quot;</span>,
         Error::UnexpectedToken =&gt; <span class="string">&quot;UnexpectedToken&quot;</span>,
         Error::Critical =&gt; <span class="string">&quot;Critical&quot;</span>,
-        Error::TooCharacters =&gt; <span class="string">&quot;TooCharacters&quot;</span>,
+        Error::TooCharactersOnLine =&gt; <span class="string">&quot;TooCharacters&quot;</span>,
     }
 }
 
-<span class="kw">fn </span>get_code_number(kind: Error) -&gt; u8 {
+<span class="kw">fn </span>get_code_number(kind: <span class="kw-2">&amp;</span>Error) -&gt; u8 {
     <span class="kw">match </span>kind {
         Error::Syntax =&gt; <span class="number">1</span>,
         Error::NotImplemented =&gt; <span class="number">2</span>,
@@ -110,40 +111,41 @@
         Error::UnknownToken =&gt; <span class="number">1</span>,
         Error::UnexpectedToken =&gt; <span class="number">1</span>,
         Error::Critical =&gt; <span class="number">2</span>,
-        Error::TooCharacters =&gt; <span class="number">1</span>,
+        Error::TooCharactersOnLine =&gt; <span class="number">1</span>,
     }
 }
 
-<span class="kw">fn </span>header(program: <span class="kw-2">&amp;</span>Program, kind: <span class="kw-2">&amp;</span>Error, is_warning: bool) -&gt; String {
-    <span class="kw">let </span>kind_colored = <span class="kw">if </span>is_warning {
-        error_to_string(kind).yellow()
-    } <span class="kw">else </span>{
-        error_to_string(kind).red()
-    };
+<span class="kw">fn </span>to_stderr(program: <span class="kw-2">&amp;</span>Program, kind: <span class="kw-2">&amp;</span>Error, message: String, is_warning: bool) -&gt; String {
     <span class="kw">let </span>location = <span class="macro">format!</span>(
-        <span class="string">&quot;In the file `{}`,\n  at block `{}`,\n    at line {}&quot;</span>,
+        <span class="string">&quot;{} {}:{}:{}&quot;</span>,
+        <span class="string">&quot;--&gt;&quot;</span>.blue(),
         program.get_filename(),
         program.get_name(),
         program.get_line()
     );
+    <span class="kw">let </span>code = get_code_number(kind);
     <span class="macro">format!</span>(
-        <span class="string">&quot;{}\n     {} {}&quot;</span>,
+        <span class="string">&quot;{}: {}: `{}` [code:{}]\n{}&quot;</span>,
+        <span class="kw">if </span>is_warning {
+            <span class="string">&quot;warning&quot;</span>.yellow()
+        } <span class="kw">else </span>{
+            <span class="string">&quot;error&quot;</span>.red()
+        },
+        error_to_string(kind).cyan(),
+        message,
+        code,
         location,
-        kind_colored,
-        <span class="kw">if </span>is_warning { <span class="string">&quot;warning&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot;error&quot; </span>}
     )
 }
 
 <span class="kw">pub fn </span>raise(program: <span class="kw-2">&amp;</span>Program, kind: Error, message: String) {
-    <span class="kw">let </span>header: String = header(program, <span class="kw-2">&amp;</span>kind, <span class="bool-val">false</span>);
-    <span class="kw">let </span>code = get_code_number(kind);
-    <span class="macro">eprintln!</span>(<span class="string">&quot;{} [Code {}]\nDetails: {}&quot;</span>, header, code, message);
+    <span class="kw">let </span>stderr: String = to_stderr(program, <span class="kw-2">&amp;</span>kind, message, <span class="bool-val">false</span>);
+    <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, stderr);
     <span class="comment">// std::process::exit();
 </span>}
 
 <span class="kw">pub fn </span>warn(program: <span class="kw-2">&amp;</span>Program, kind: Error, message: String) {
-    <span class="kw">let </span>header: String = header(program, <span class="kw-2">&amp;</span>kind, <span class="bool-val">true</span>);
-    <span class="kw">let </span>code: u8 = get_code_number(kind);
-    <span class="macro">println!</span>(<span class="string">&quot;{} [Code {}]\nDetails: {}&quot;</span>, header, code, message);
+    <span class="kw">let </span>stderr: String = to_stderr(program, <span class="kw-2">&amp;</span>kind, message, <span class="bool-val">true</span>);
+    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, stderr);
 }
 </code></pre></div></section></main></body></html>
