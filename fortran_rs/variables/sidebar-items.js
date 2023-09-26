@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["VariableType"],"fn":["assign","parse"],"struct":["Variable"]};
+window.SIDEBAR_ITEMS = {"enum":["Variable"],"fn":["assign_type","change_in_line"]};

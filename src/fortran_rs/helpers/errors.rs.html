@@ -148,12 +148,12 @@
 
 <span class="kw">pub fn </span>raise(program: <span class="kw-2">&amp;</span>Program, kind: Error, message: String) {
     <span class="kw">let </span>stderr: String = to_stderr(program, <span class="kw-2">&amp;</span>kind, message, <span class="bool-val">false</span>);
-    <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, stderr);
+    <span class="macro">eprintln!</span>(<span class="string">&quot;{}\n&quot;</span>, stderr);
     <span class="comment">// std::process::exit();
 </span>}
 
 <span class="kw">pub fn </span>warn(program: <span class="kw-2">&amp;</span>Program, kind: Error, message: String) {
     <span class="kw">let </span>stderr: String = to_stderr(program, <span class="kw-2">&amp;</span>kind, message, <span class="bool-val">true</span>);
-    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, stderr);
+    <span class="macro">println!</span>(<span class="string">&quot;{}\n&quot;</span>, stderr);
 }
 </code></pre></div></section></main></body></html>

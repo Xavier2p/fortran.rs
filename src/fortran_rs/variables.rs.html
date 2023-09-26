@@ -115,235 +115,121 @@
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
-<a href="#135" id="135">135</a>
-<a href="#136" id="136">136</a>
-<a href="#137" id="137">137</a>
-<a href="#138" id="138">138</a>
-<a href="#139" id="139">139</a>
-<a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
-<a href="#142" id="142">142</a>
-<a href="#143" id="143">143</a>
-<a href="#144" id="144">144</a>
-<a href="#145" id="145">145</a>
-<a href="#146" id="146">146</a>
-<a href="#147" id="147">147</a>
-<a href="#148" id="148">148</a>
-<a href="#149" id="149">149</a>
-<a href="#150" id="150">150</a>
-<a href="#151" id="151">151</a>
-<a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a>
-<a href="#154" id="154">154</a>
-<a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
-<a href="#157" id="157">157</a>
-<a href="#158" id="158">158</a>
-<a href="#159" id="159">159</a>
-<a href="#160" id="160">160</a>
-<a href="#161" id="161">161</a>
-<a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-<a href="#167" id="167">167</a>
-<a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a>
-<a href="#172" id="172">172</a>
-<a href="#173" id="173">173</a>
-<a href="#174" id="174">174</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Variables
 //!
 //! This module contains the functions to parse and assign variables.
-</span><span class="kw">use crate</span>::{program::Program, tokens::Token};
+</span><span class="kw">use </span><span class="kw">crate</span>::tokens::Token;
 <span class="kw">use </span>std::collections::HashMap;
 
 <span class="doccomment">/// This enum contains the different types of variables.
 </span><span class="attr">#[derive(PartialEq, Debug, Clone)]
-</span><span class="kw">pub enum </span>VariableType {
+</span><span class="kw">pub enum </span>Variable {
     Integer(<span class="prelude-ty">Option</span>&lt;i32&gt;),
     Real(<span class="prelude-ty">Option</span>&lt;f64&gt;),
     Character(<span class="prelude-ty">Option</span>&lt;String&gt;),
     Logical(<span class="prelude-ty">Option</span>&lt;bool&gt;),
-}
-
-<span class="attr">#[derive(PartialEq, Debug, Clone)]
-</span><span class="kw">pub struct </span>Variable {
-    value: VariableType,
-    name: String,
+    <span class="prelude-val">None</span>,
 }
 
 <span class="kw">impl </span>Variable {
-    <span class="kw">pub fn </span>new(value: VariableType, name: String) -&gt; Variable {
-        Variable { value, name }
-    }
-
-    <span class="kw">pub fn </span>get_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>VariableType {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.value
-    }
-
-    <span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.name
-    }
-
-    <span class="kw">pub fn </span>change_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: VariableType) {
-        <span class="self">self</span>.value = value;
-    }
-}
-
-<span class="doccomment">/// This struct contains the variables.
-</span><span class="kw">impl </span>VariableType {
-    <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_integer(value: i32) -&gt; VariableType {
-        VariableType::Integer(<span class="prelude-val">Some</span>(value))
-    }
-
-    <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_real(value: f64) -&gt; VariableType {
-        VariableType::Real(<span class="prelude-val">Some</span>(value))
-    }
-
-    <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_character(value: String) -&gt; VariableType {
-        VariableType::Character(<span class="prelude-val">Some</span>(value))
-    }
-
-    <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_logical(value: bool) -&gt; VariableType {
-        VariableType::Logical(<span class="prelude-val">Some</span>(value))
-    }
-
     <span class="doccomment">/// This function returns the value of the variable.
-    </span><span class="kw">pub fn </span>get_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+    </span><span class="kw">pub fn </span>get_value_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
-            VariableType::Integer(value) =&gt; value.unwrap().to_string(),
-            VariableType::Real(value) =&gt; value.unwrap().to_string(),
-            VariableType::Character(value) =&gt; value.clone().unwrap(),
-            VariableType::Logical(value) =&gt; value.unwrap().to_string(),
+            Variable::Integer(value) =&gt; <span class="kw">match </span>value {
+                <span class="prelude-val">Some</span>(value) =&gt; value.to_string(),
+                <span class="prelude-val">None </span>=&gt; <span class="string">&quot;[NONE]&quot;</span>.to_string(),
+            },
+            Variable::Real(value) =&gt; <span class="kw">match </span>value {
+                <span class="prelude-val">Some</span>(value) =&gt; value.to_string(),
+                <span class="prelude-val">None </span>=&gt; <span class="string">&quot;[NONE]&quot;</span>.to_string(),
+            },
+            Variable::Character(value) =&gt; <span class="kw">match </span>value {
+                <span class="prelude-val">Some</span>(value) =&gt; value.to_string(),
+                <span class="prelude-val">None </span>=&gt; <span class="string">&quot;[NONE]&quot;</span>.to_string(),
+            },
+            Variable::Logical(value) =&gt; <span class="kw">match </span>value {
+                <span class="prelude-val">Some</span>(value) =&gt; value.to_string(),
+                <span class="prelude-val">None </span>=&gt; <span class="string">&quot;[NONE]&quot;</span>.to_string(),
+            },
+            Variable::None =&gt; <span class="string">&quot;[NONE]&quot;</span>.to_string(),
         }
     }
 }
 
-<span class="doccomment">/// This function parses the variables.
-</span><span class="kw">pub fn </span>parse(program: Program) -&gt; Program {
-    <span class="kw">let </span><span class="kw-2">mut </span>variables: HashMap&lt;String, VariableType&gt; = HashMap::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>lines: Vec&lt;Vec&lt;Token&gt;&gt; = Vec::new();
+<span class="doccomment">/// This function changes the variable in the line.
+</span><span class="kw">pub fn </span>change_in_line(line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, name: String, position: usize) {
+    line.remove(position);
+    line.insert(position, Token::Variable(name));
+}
 
-    <span class="kw">for </span>pc <span class="kw">in </span><span class="number">0</span>..program.get_lines().len() {
-        <span class="kw">let </span>line: <span class="kw-2">&amp;</span>Vec&lt;Token&gt; = <span class="kw-2">&amp;</span>program.get_lines()[pc];
-        <span class="kw">let </span><span class="kw-2">mut </span>new_line: Vec&lt;Token&gt; = Vec::new();
-
-        <span class="kw">if </span><span class="macro">matches!</span>(line[<span class="number">0</span>], Token::Type(<span class="kw">_</span>)) {
-            <span class="kw">for </span>tok <span class="kw">in </span>line {
-                <span class="kw">match </span>tok {
-                    Token::Assign(<span class="kw">_</span>) =&gt; new_line.push(Token::Assign(<span class="string">&quot;::&quot;</span>.to_string())),
-                    Token::Variable(name) | Token::Other(name) =&gt; {
-                        <span class="kw">let </span>var: VariableType =
-                            <span class="kw">match </span>line[<span class="number">0</span>].get_value().to_ascii_uppercase().as_str() {
-                                <span class="string">&quot;INTEGER&quot; </span>=&gt; VariableType::new_integer(<span class="number">0</span>),
-                                <span class="string">&quot;REAL&quot; </span>=&gt; VariableType::new_real(<span class="number">0.0</span>),
-                                <span class="string">&quot;CHARACTER&quot; </span>=&gt; VariableType::new_character(<span class="string">&quot;&quot;</span>.to_string()),
-                                <span class="string">&quot;LOGICAL&quot; </span>=&gt; VariableType::new_logical(<span class="bool-val">false</span>),
-                                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Not a type = {}&quot;</span>, line[<span class="number">0</span>].get_value()),
-                            };
-
-                        variables.insert(name.to_string(), var);
-                        new_line.push(Token::Variable(name.to_string()));
-                    }
-                    <span class="kw">_ </span>=&gt; new_line.push(tok.clone()),
-                }
+<span class="doccomment">/// This function assigns the type of the variable.
+</span><span class="kw">pub fn </span>assign_type(line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, variables: <span class="kw-2">&amp;mut </span>HashMap&lt;String, Variable&gt;) {
+    <span class="kw">let </span>kind: Variable = <span class="kw">match </span>line[<span class="number">0</span>].get_value().as_str() {
+        <span class="string">&quot;INTEGER&quot; </span>=&gt; Variable::Integer(<span class="prelude-val">None</span>),
+        <span class="string">&quot;REAL&quot; </span>=&gt; Variable::Real(<span class="prelude-val">None</span>),
+        <span class="string">&quot;CHARACTER&quot; </span>=&gt; Variable::Character(<span class="prelude-val">None</span>),
+        <span class="string">&quot;LOGICAL&quot; </span>=&gt; Variable::Logical(<span class="prelude-val">None</span>),
+        <span class="kw">_ </span>=&gt; Variable::None,
+    };
+    <span class="kw">let </span><span class="kw-2">mut </span>is_assigned: bool = <span class="bool-val">false</span>;
+    <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..line.len() {
+        <span class="kw">match </span>(line[i].clone(), is_assigned) {
+            (Token::Assign(<span class="string">&quot;::&quot;</span>), <span class="bool-val">false</span>) =&gt; is_assigned = <span class="bool-val">true</span>,
+            (Token::Other(<span class="kw">_</span>), <span class="bool-val">true</span>) =&gt; {
+                <span class="kw">let </span>name = line[i].get_value().to_string();
+                change_in_line(line, name.clone(), i);
+                variables.insert(name, kind.clone());
             }
-        } <span class="kw">else </span>{
-            <span class="kw">for </span>tok <span class="kw">in </span>line {
-                <span class="kw">match </span>tok {
-                    Token::Other(<span class="kw">_</span>) =&gt; {
-                        new_line.push(<span class="kw">if </span>variables.contains_key(tok.get_value().as_str()) {
-                            Token::Variable(tok.get_value().to_string())
-                        } <span class="kw">else </span>{
-                            tok.clone()
-                        });
-                    }
-                    <span class="kw">_ </span>=&gt; new_line.push(tok.clone()),
-                }
-            }
+            <span class="kw">_ </span>=&gt; {}
         }
-
-        lines.push(new_line);
     }
-
-    <span class="kw">return </span>Program::new(
-        program.get_name().to_string(),
-        lines,
-        variables,
-        program.get_filename().to_string(),
-    );
 }
 
-<span class="doccomment">/// This function assigns the variables.
-</span><span class="kw">pub fn </span>assign(line: Vec&lt;Token&gt;, index: usize, program: <span class="kw-2">&amp;mut </span>Program, token: <span class="kw-2">&amp;</span>Token) -&gt; Program {
-    <span class="kw">if </span>line.get(index + <span class="number">1</span>).unwrap() == <span class="kw-2">&amp;</span>Token::Assign(<span class="string">&quot;=&quot;</span>.to_string()) {
-        <span class="kw">let </span>new_variable: VariableType = <span class="kw">match </span>program
-            .clone()
-            .get_variables()
-            .get_key_value(token.get_value().as_str())
-            .unwrap()
-            .<span class="number">1
-        </span>{
-            VariableType::Integer(<span class="kw">_</span>) =&gt; {
-                <span class="kw">let </span>value: i32 = line
-                    .get(index + <span class="number">2</span>)
-                    .unwrap()
-                    .get_value()
-                    .parse::&lt;i32&gt;()
-                    .unwrap();
-                VariableType::Integer(<span class="prelude-val">Some</span>(value))
-            }
-            VariableType::Real(<span class="kw">_</span>) =&gt; {
-                <span class="kw">let </span>value: f64 = line
-                    .get(index + <span class="number">2</span>)
-                    .unwrap()
-                    .get_value()
-                    .parse::&lt;f64&gt;()
-                    .unwrap();
-                VariableType::Real(<span class="prelude-val">Some</span>(value))
-            }
-            VariableType::Character(<span class="kw">_</span>) =&gt; {
-                <span class="kw">let </span>value: String = line.get(index + <span class="number">2</span>).unwrap().get_value();
-                VariableType::Character(<span class="prelude-val">Some</span>(value))
-            }
-            VariableType::Logical(<span class="kw">_</span>) =&gt; {
-                <span class="kw">let </span>value: bool = line
-                    .get(index + <span class="number">2</span>)
-                    .unwrap()
-                    .get_value()
-                    .parse::&lt;bool&gt;()
-                    .unwrap();
-                VariableType::Logical(<span class="prelude-val">Some</span>(value))
-            }
-        };
+<span class="comment">// /// This function assigns the variables.
+// pub fn assign(line: Vec&lt;Token&gt;, index: usize, program: &amp;mut Program, token: &amp;Token) -&gt; Program {
+//     if line.get(index + 1).unwrap() == &amp;Token::Assign(&quot;=&quot;.to_string()) {
+//         let new_variable: VariableType = match program
+//             .clone()
+//             .get_variables()
+//             .get_key_value(token.get_value().as_str())
+//             .unwrap()
+//             .1
+//         {
+//             VariableType::Integer(_) =&gt; {
+//                 let value: i32 = line
+//                     .get(index + 2)
+//                     .unwrap()
+//                     .get_value()
+//                     .parse::&lt;i32&gt;()
+//                     .unwrap();
+//                 VariableType::Integer(Some(value))
+//             }
+//             VariableType::Real(_) =&gt; {
+//                 let value: f64 = line
+//                     .get(index + 2)
+//                     .unwrap()
+//                     .get_value()
+//                     .parse::&lt;f64&gt;()
+//                     .unwrap();
+//                 VariableType::Real(Some(value))
+//             }
+//             VariableType::Character(_) =&gt; {
+//                 let value: String = line.get(index + 2).unwrap().get_value();
+//                 VariableType::Character(Some(value))
+//             }
+//             VariableType::Logical(_) =&gt; {
+//                 let value: bool = line
+//                     .get(index + 2)
+//                     .unwrap()
+//                     .get_value()
+//                     .parse::&lt;bool&gt;()
+//                     .unwrap();
+//                 VariableType::Logical(Some(value))
+//             }
+//         };
 
-        program.set_variable(token.get_value(), new_variable);
-    }
-    program.clone()
-}
-</code></pre></div></section></main></body></html>
+//         program.set_variable(token.get_value(), new_variable);
+//     }
+//     program.clone()
+// }
+</span></code></pre></div></section></main></body></html>

@@ -102,13 +102,13 @@
 <a href="#102" id="102">102</a>
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Parser module
 //!
 //! This module is in charge of parsing the file.
 //! It&#39;s the first step of the interpreter.
 //! Each letter is reviewed, and the primitive tokens are created.
 </span><span class="kw">use crate</span>::{helpers::file::File, program::Program, tokenizer, tokens::Token};
-<span class="kw">use </span>std::collections::HashMap;
 
 <span class="doccomment">/// This enum contains the different types of quotes, and if there is no quote.
 </span><span class="attr">#[derive(PartialEq)]
@@ -192,17 +192,19 @@
             }
             (<span class="string">&#39;!&#39;</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; in_comment = <span class="bool-val">true</span>,
             (<span class="string">&#39;+&#39; </span>| <span class="string">&#39;-&#39; </span>| <span class="string">&#39;*&#39; </span>| <span class="string">&#39;/&#39;</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; tmp_line.push(Token::Operator(letter.to_string())),
-            (<span class="string">&#39;=&#39;</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; tmp_line.push(Token::Assign(letter.to_string())),
+            (<span class="string">&#39;=&#39;</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; tmp_line.push(Token::Assign(<span class="string">&quot;=&quot;</span>)),
             <span class="kw">_ </span>=&gt; tmp_word.push(letter),
         };
     }
 
     new_line(<span class="kw-2">&amp;mut </span>lines, <span class="kw-2">&amp;mut </span>tmp_line, <span class="kw-2">&amp;mut </span>tmp_word);
 
+    <span class="kw">let </span>variables = tokenizer::variables(<span class="kw-2">&amp;mut </span>lines);
+
     Program::new(
         <span class="string">&quot;test&quot;</span>.to_string(),
         lines,
-        HashMap::new(),
+        variables,
         file.get_path().to_string(),
     )
 }

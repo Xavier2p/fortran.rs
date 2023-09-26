@@ -73,10 +73,13 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Program
 //!
 //! This module contains the `Program` struct.
-</span><span class="kw">use crate</span>::{tokens::Token, variables::VariableType};
+</span><span class="kw">use crate</span>::{tokens::Token, variables::Variable};
 <span class="kw">use </span>std::collections::HashMap;
 
 <span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter
@@ -84,7 +87,7 @@
 </span><span class="kw">pub struct </span>Program {
     filename: String,
     name: String,
-    variables: HashMap&lt;String, VariableType&gt;,
+    variables: HashMap&lt;String, Variable&gt;,
     lines: Vec&lt;Vec&lt;Token&gt;&gt;,
     pc: u8,
     <span class="comment">// implicit: bool,
@@ -100,7 +103,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.lines
     }
 
-    <span class="kw">pub fn </span>get_variables(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, VariableType&gt; {
+    <span class="kw">pub fn </span>get_variables(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>HashMap&lt;String, Variable&gt; {
         <span class="kw-2">&amp;</span><span class="self">self</span>.variables
     }
 
@@ -115,7 +118,7 @@
     <span class="kw">pub fn </span>new(
         name: String,
         lines: Vec&lt;Vec&lt;Token&gt;&gt;,
-        variables: HashMap&lt;String, VariableType&gt;,
+        variables: HashMap&lt;String, Variable&gt;,
         filename: String,
     ) -&gt; Program {
         Program {
@@ -127,13 +130,16 @@
         }
     }
 
-    <span class="doccomment">/// This function returns the program counter.
-    </span><span class="kw">pub fn </span>set_variable(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, value: VariableType) {
-        <span class="self">self</span>.variables.remove(<span class="kw-2">&amp;</span>name);
-        <span class="self">self</span>.variables.insert(name, value);
-    }
+    <span class="comment">// pub fn add_variable(&amp;mut self, variable: Variable) {
+    // self.variables.push(variable);
+    // }
 
-    <span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    // pub fn remove_variable(&amp;mut self, variable: Variable) {
+    // self.variables
+    // .remove(self.variables.iter().position(|x| *x == variable).unwrap());
+    // }
+
+    </span><span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Program {{&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;    name: {}&quot;</span>, <span class="self">self</span>.name);
         <span class="macro">println!</span>(<span class="string">&quot;    filename: {}&quot;</span>, <span class="self">self</span>.filename);

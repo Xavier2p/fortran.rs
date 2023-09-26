@@ -136,12 +136,12 @@
         program.debug();
     }
 
-    program = variables::parse(program);
+    <span class="comment">// program = variables::parse(program);
 
-    <span class="kw">if </span>VERBOSE {
-        program.debug();
-    }
+    // if VERBOSE {
+    //     program.debug();
+    // }
 
-    lexer::lexer(<span class="kw-2">&amp;mut </span>program);
+    </span>lexer::lexer(<span class="kw-2">&amp;mut </span>program);
 }
 </code></pre></div></section></main></body></html>

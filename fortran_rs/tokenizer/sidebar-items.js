@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["word"]};
+window.SIDEBAR_ITEMS = {"fn":["variables","word"]};

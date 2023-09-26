@@ -68,11 +68,6 @@
 <a href="#68" id="68">68</a>
 <a href="#69" id="69">69</a>
 <a href="#70" id="70">70</a>
-<a href="#71" id="71">71</a>
-<a href="#72" id="72">72</a>
-<a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a>
-<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Tokens
 //!
 //! This module contains the Token enum, which is used to represent the tokens
@@ -81,26 +76,24 @@
 </span><span class="attr">#[derive(Clone, Debug, PartialEq)]
 #[allow(dead_code)]
 </span><span class="kw">pub enum </span>Token {
+    Assign(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str),
+    Identifier(String),
+    Operator(String),
+    Other(String),
+    String(String),
+    Type(String),
+    Variable(String),
+    Comma,
+    Do,
+    Else,
+    End,
+    If,
     Null,
     Print,
     Program,
-    End,
-    Do,
-    While,
-    If,
-    Then,
-    Else,
     Return,
-    Comma,
-    Comment(String),
-    String(String),
-    Operator(String),
-    Identifier(String),
-    Other(String),
-    Variable(String),
-    Type(String),
-    Assign(String),
-    Number(i32),
+    Then,
+    While,
 }
 
 <span class="doccomment">/// This struct contains the tokens.
@@ -108,14 +101,13 @@
     <span class="doccomment">/// This function returns the value of the token.
     </span><span class="kw">pub fn </span>get_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
+            Token::Assign(string) =&gt; <span class="kw-2">*</span>string,
             Token::Identifier(string) =&gt; string,
-            Token::Comment(string) =&gt; string,
-            Token::String(string) =&gt; string,
             Token::Operator(string) =&gt; string,
             Token::Other(string) =&gt; string,
-            Token::Variable(var) =&gt; var,
+            Token::String(string) =&gt; string,
             Token::Type(string) =&gt; string,
-            Token::Assign(string) =&gt; string,
+            Token::Variable(string) =&gt; string,
             <span class="kw">_ </span>=&gt; <span class="string">&quot;&quot;</span>,
         }
         .to_string()
@@ -125,9 +117,7 @@
     </span><span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
             Token::Assign(<span class="kw">_</span>) =&gt; <span class="string">&quot;Assign&quot;</span>,
-            Token::Comment(<span class="kw">_</span>) =&gt; <span class="string">&quot;Comment&quot;</span>,
             Token::Identifier(<span class="kw">_</span>) =&gt; <span class="string">&quot;Identifier&quot;</span>,
-            Token::Number(<span class="kw">_</span>) =&gt; <span class="string">&quot;Number&quot;</span>,
             Token::Operator(<span class="kw">_</span>) =&gt; <span class="string">&quot;Operator&quot;</span>,
             Token::Other(<span class="kw">_</span>) =&gt; <span class="string">&quot;Other&quot;</span>,
             Token::String(<span class="kw">_</span>) =&gt; <span class="string">&quot;String&quot;</span>,

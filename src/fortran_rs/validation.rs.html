@@ -56,14 +56,18 @@
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::helpers::errors::Error;
 
-<span class="kw">pub struct </span>ValidationError {
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub struct </span>ValidationError {
     error: Error,
     message: String,
 }
 
-<span class="kw">pub fn </span>identifier_name(name: String) -&gt; <span class="prelude-ty">Result</span>&lt;(), ValidationError&gt; {
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub fn </span>identifier_name(name: String) -&gt; <span class="prelude-ty">Result</span>&lt;(), ValidationError&gt; {
     <span class="kw">if </span>name.len() &gt; <span class="number">31 </span>|| name.is_empty() {
         <span class="prelude-val">Err</span>(ValidationError {
             error: Error::WrongFormat,
