@@ -1,7 +1,7 @@
 //! # Program
 //!
 //! This module contains the `Program` struct.
-use crate::{tokens::Token, variables::Variable};
+use crate::{tokens::Token, variables::VariableType};
 use std::collections::HashMap;
 
 /// This struct contains the program's name, lines, variables, arguments and program counter
@@ -9,9 +9,10 @@ use std::collections::HashMap;
 pub struct Program {
     filename: String,
     name: String,
-    variables: HashMap<String, Variable>,
+    variables: HashMap<String, VariableType>,
     lines: Vec<Vec<Token>>,
     pc: u8,
+    // implicit: bool,
 }
 
 /// This struct contains the program's name, lines, variables, arguments and program counter.
@@ -24,7 +25,7 @@ impl Program {
         &self.lines
     }
 
-    pub fn get_variables(&self) -> &HashMap<String, Variable> {
+    pub fn get_variables(&self) -> &HashMap<String, VariableType> {
         &self.variables
     }
 
@@ -39,7 +40,7 @@ impl Program {
     pub fn new(
         name: String,
         lines: Vec<Vec<Token>>,
-        variables: HashMap<String, Variable>,
+        variables: HashMap<String, VariableType>,
         filename: String,
     ) -> Program {
         Program {
@@ -52,20 +53,9 @@ impl Program {
     }
 
     /// This function returns the program counter.
-    pub fn set_variable(&mut self, name: String, value: Variable) {
+    pub fn set_variable(&mut self, name: String, value: VariableType) {
         self.variables.remove(&name);
         self.variables.insert(name, value);
-    }
-
-    /// This function returns the program counter.
-    pub fn clone(&self) -> Program {
-        Program {
-            filename: self.filename.clone(),
-            name: self.name.clone(),
-            variables: self.variables.clone(),
-            lines: self.lines.clone(),
-            pc: self.pc,
-        }
     }
 
     pub fn debug(&self) {

@@ -1,6 +1,7 @@
 //! # Parser
 //!
-//! The parser is the second step of the compilation process. It takes the output of the preprocessor and transforms it into a program.
+//! The parser is the second step of the compilation process.
+//! It takes the output of the preprocessor and transforms it into a program.
 use crate::{
     helpers::file::File,
     program::Program,
@@ -24,17 +25,18 @@ fn split_line(file: File) -> Vec<String> {
 /// This function returns the token corresponding to the word.
 fn tokenize(word: String) -> Token {
     match word.to_ascii_uppercase().as_str() {
+        "::" | "=" => Token::new(Token::Assign(word)),
+        "+" | "-" | "*" | "/" => Token::new(Token::Operator(word)),
+        "DO" => Token::new(Token::Do),
+        "ELSE" => Token::new(Token::Else),
+        "END" => Token::new(Token::End),
+        "IF" => Token::new(Token::If),
         "PRINT" => Token::new(Token::Print),
         "PROGRAM" => Token::new(Token::Program),
-        "IF" => Token::new(Token::If),
-        "THEN" => Token::new(Token::Then),
-        "ELSE" => Token::new(Token::Else),
-        "FOR" => Token::new(Token::For),
-        "RETURN" => Token::new(Token::Return),
-        "END" => Token::new(Token::End),
-        "::" | "=" => Token::new(Token::Assign(word)),
         "REAL" | "INTEGER" | "CHARACTER" | "LOGICAL" => Token::new(Token::Type(word)),
-        "+" | "-" | "*" | "/" => Token::new(Token::Operator(word)),
+        "RETURN" => Token::new(Token::Return),
+        "THEN" => Token::new(Token::Then),
+        "WHILE" => Token::new(Token::While),
         _ => Token::new(Token::Other(word)),
     }
 }
@@ -43,13 +45,13 @@ fn tokenize(word: String) -> Token {
 fn parse_line(line: String, _pc: usize) -> Vec<Token> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut tmp_word: String = String::new();
-    let mut in_bracket: bool = false;
+    let mut in_quote: bool = false;
 
     for index in 0..line.len() {
         let letter: char = line.chars().nth(index).unwrap();
 
         if letter == '\"' {
-            in_bracket = !in_bracket;
+            in_quote = !in_quote;
 
             if !tmp_word.is_empty() {
                 tokens.push(Token::new(Token::String(tmp_word)));
@@ -59,7 +61,7 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
             continue;
         }
 
-        if in_bracket {
+        if in_quote {
             tmp_word.push(letter);
         } else if letter == ' ' || letter == ',' || index == line.len() - 1 {
             if index == line.len() - 1 {
@@ -79,15 +81,6 @@ fn parse_line(line: String, _pc: usize) -> Vec<Token> {
                     && tokens.last().unwrap() == &Token::Assign("::".to_string())
                 {
                     token = Token::new(Token::Variable(tmp_word.clone()));
-                    // } else {
-                    //     let error = Error::new(
-                    //         "tests.f90".to_string(),
-                    //         "module".to_string(),
-                    //         pc,
-                    //         index,
-                    //         format!("Unknown token `{}`", tmp_word),
-                    //         ErrorKind::UnknownToken,
-                    //     );
                 }
             }
             tokens.push(token);

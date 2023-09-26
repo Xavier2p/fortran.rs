@@ -3,9 +3,9 @@
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 use crate::{
     helpers::errors::{self, Error},
-    print::print_to_stdout,
     program::Program,
     tokens::Token,
+    utils::print::print_to_stdout,
     variables, VERBOSE,
 };
 use colored::Colorize;
@@ -41,7 +41,7 @@ pub fn lexer(program: &mut Program) {
                             Error::UnexpectedToken,
                             format!(
                                 "Expected `END {}`, got `END {}`",
-                                stack.last().unwrap().get_name().to_ascii_uppercase(),
+                                stack.last().unwrap().debug().to_ascii_uppercase(),
                                 line.get(index + 1)
                                     .unwrap()
                                     .get_value()
@@ -58,11 +58,7 @@ pub fn lexer(program: &mut Program) {
                 _ => errors::warn(
                     program,
                     Error::UnexpectedToken,
-                    format!(
-                        "Unexpected token {} `{}`",
-                        token.get_name(),
-                        token.get_value()
-                    ),
+                    format!("Unexpected token {} `{}`", token.debug(), token.get_value()),
                 ),
             }
         }

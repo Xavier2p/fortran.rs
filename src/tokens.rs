@@ -3,14 +3,15 @@
 //! This module contains the Token enum, which is used to represent the tokens
 
 /// This enum contains the different types of tokens.
-#[derive(PartialEq, Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(dead_code)]
 pub enum Token {
     Null,
     Print,
     Program,
     End,
-    For,
+    Do,
+    While,
     If,
     Then,
     Else,
@@ -41,7 +42,7 @@ impl Token {
             Token::String(string) => string,
             Token::Operator(string) => string,
             Token::Other(string) => string,
-            Token::Variable(string) => string,
+            Token::Variable(var) => var,
             Token::Type(string) => string,
             Token::Assign(string) => string,
             _ => "",
@@ -50,26 +51,27 @@ impl Token {
     }
 
     /// This function returns the name of the token.
-    pub fn get_name(&self) -> String {
+    pub fn debug(&self) -> String {
         match self {
-            Token::Comment(_) => "Comment",
-            Token::String(_) => "String",
-            Token::Operator(_) => "Operator",
-            Token::Identifier(_) => "Identifier",
-            Token::Other(_) => "Other",
-            Token::Variable(_) => "Variable",
-            Token::Type(_) => "Type",
             Token::Assign(_) => "Assign",
+            Token::Comment(_) => "Comment",
+            Token::Identifier(_) => "Identifier",
             Token::Number(_) => "Number",
+            Token::Operator(_) => "Operator",
+            Token::Other(_) => "Other",
+            Token::String(_) => "String",
+            Token::Type(_) => "Type",
+            Token::Variable(_) => "Variable",
+            Token::Do => "For",
+            Token::Else => "Else",
+            Token::End => "End",
+            Token::If => "If",
             Token::Null => "Null",
             Token::Print => "Print",
             Token::Program => "Program",
-            Token::End => "End",
-            Token::For => "For",
-            Token::If => "If",
-            Token::Then => "Then",
-            Token::Else => "Else",
             Token::Return => "Return",
+            Token::Then => "Then",
+            Token::While => "While",
         }
         .to_string()
     }

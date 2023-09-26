@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 use std::path::Path;
 
 /// This struct is used to parse the arguments passed to the program.
-#[derive(Debug, Parser, Clone)]
+#[derive(Parser, Clone)]
 #[command(author, version, about)]
 #[command(subcommand_required = true)]
 pub struct Cli {
@@ -38,7 +38,7 @@ pub enum Commands {
         file: String,
 
         /// Threat `Warning` as `Error`
-        #[arg(long)]
+        #[arg(long, short = 'W')]
         werror: bool,
 
         /// Print the comment during the execution of the program
@@ -57,13 +57,14 @@ impl Cli {
     }
 
     /// This function returns the value of the `verbose` argument.
-    // pub fn get_verbose(&self) -> bool {
-    //     self.verbose
-    //         || match &self.command {
-    //             Commands::Run { verbose, .. } => *verbose,
-    //             Commands::Check { verbose, .. } => *verbose,
-    //         }
-    // }
+    #[allow(dead_code)]
+    pub fn get_verbose(&self) -> bool {
+        self.verbose
+            || match &self.command {
+                Commands::Run { verbose, .. } => *verbose,
+                Commands::Check { verbose, .. } => *verbose,
+            }
+    }
 
     /// This function returns the value of the `werror` argument.
     pub fn get_werror(&self) -> bool {
@@ -78,6 +79,8 @@ impl Cli {
         &self.command
     }
 
+    /// This function prints the `Cli` struct for debug purposes.
+    /// Not available in release mode.
     pub fn debug(&self) {
         println!("Cli {{");
         println!("    command: {:?}", self.get_command());

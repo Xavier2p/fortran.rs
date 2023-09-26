@@ -22,9 +22,10 @@ mod ast;
 mod helpers;
 mod lexer;
 mod parser;
-mod print;
 mod program;
+mod tokenizer;
 mod tokens;
+mod utils;
 mod variables;
 mod verbose;
 
@@ -34,7 +35,7 @@ use clap::Parser;
 static VERBOSE: bool = true;
 
 fn main() {
-    let args: cli::Cli = cli::Cli::parse();
+    let args = cli::Cli::parse();
 
     if VERBOSE {
         args.debug();
@@ -53,6 +54,12 @@ fn main() {
 
     if VERBOSE {
         file.debug();
+    }
+
+    let tokenized = tokenizer::tokenizer(&file);
+
+    if VERBOSE {
+        tokenized.debug();
     }
 
     let mut program = parser::parser(file);
