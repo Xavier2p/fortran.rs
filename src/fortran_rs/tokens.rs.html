@@ -74,19 +74,22 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Tokens
 //!
 //! This module contains the Token enum, which is used to represent the tokens
 
 /// This enum contains the different types of tokens.
-</span><span class="attr">#[derive(PartialEq, Clone, Debug)]
+</span><span class="attr">#[derive(Clone, Debug, PartialEq)]
 #[allow(dead_code)]
 </span><span class="kw">pub enum </span>Token {
     Null,
     Print,
     Program,
     End,
-    For,
+    Do,
+    While,
     If,
     Then,
     Else,
@@ -117,7 +120,7 @@
             Token::String(string) =&gt; string,
             Token::Operator(string) =&gt; string,
             Token::Other(string) =&gt; string,
-            Token::Variable(string) =&gt; string,
+            Token::Variable(var) =&gt; var,
             Token::Type(string) =&gt; string,
             Token::Assign(string) =&gt; string,
             <span class="kw">_ </span>=&gt; <span class="string">&quot;&quot;</span>,
@@ -126,26 +129,27 @@
     }
 
     <span class="doccomment">/// This function returns the name of the token.
-    </span><span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+    </span><span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
-            Token::Comment(<span class="kw">_</span>) =&gt; <span class="string">&quot;Comment&quot;</span>,
-            Token::String(<span class="kw">_</span>) =&gt; <span class="string">&quot;String&quot;</span>,
-            Token::Operator(<span class="kw">_</span>) =&gt; <span class="string">&quot;Operator&quot;</span>,
-            Token::Identifier(<span class="kw">_</span>) =&gt; <span class="string">&quot;Identifier&quot;</span>,
-            Token::Other(<span class="kw">_</span>) =&gt; <span class="string">&quot;Other&quot;</span>,
-            Token::Variable(<span class="kw">_</span>) =&gt; <span class="string">&quot;Variable&quot;</span>,
-            Token::Type(<span class="kw">_</span>) =&gt; <span class="string">&quot;Type&quot;</span>,
             Token::Assign(<span class="kw">_</span>) =&gt; <span class="string">&quot;Assign&quot;</span>,
+            Token::Comment(<span class="kw">_</span>) =&gt; <span class="string">&quot;Comment&quot;</span>,
+            Token::Identifier(<span class="kw">_</span>) =&gt; <span class="string">&quot;Identifier&quot;</span>,
             Token::Number(<span class="kw">_</span>) =&gt; <span class="string">&quot;Number&quot;</span>,
+            Token::Operator(<span class="kw">_</span>) =&gt; <span class="string">&quot;Operator&quot;</span>,
+            Token::Other(<span class="kw">_</span>) =&gt; <span class="string">&quot;Other&quot;</span>,
+            Token::String(<span class="kw">_</span>) =&gt; <span class="string">&quot;String&quot;</span>,
+            Token::Type(<span class="kw">_</span>) =&gt; <span class="string">&quot;Type&quot;</span>,
+            Token::Variable(<span class="kw">_</span>) =&gt; <span class="string">&quot;Variable&quot;</span>,
+            Token::Do =&gt; <span class="string">&quot;For&quot;</span>,
+            Token::Else =&gt; <span class="string">&quot;Else&quot;</span>,
+            Token::End =&gt; <span class="string">&quot;End&quot;</span>,
+            Token::If =&gt; <span class="string">&quot;If&quot;</span>,
             Token::Null =&gt; <span class="string">&quot;Null&quot;</span>,
             Token::Print =&gt; <span class="string">&quot;Print&quot;</span>,
             Token::Program =&gt; <span class="string">&quot;Program&quot;</span>,
-            Token::End =&gt; <span class="string">&quot;End&quot;</span>,
-            Token::For =&gt; <span class="string">&quot;For&quot;</span>,
-            Token::If =&gt; <span class="string">&quot;If&quot;</span>,
-            Token::Then =&gt; <span class="string">&quot;Then&quot;</span>,
-            Token::Else =&gt; <span class="string">&quot;Else&quot;</span>,
             Token::Return =&gt; <span class="string">&quot;Return&quot;</span>,
+            Token::Then =&gt; <span class="string">&quot;Then&quot;</span>,
+            Token::While =&gt; <span class="string">&quot;While&quot;</span>,
         }
         .to_string()
     }

@@ -149,6 +149,29 @@
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Variables
 //!
 //! This module contains the functions to parse and assign variables.
@@ -157,49 +180,73 @@
 
 <span class="doccomment">/// This enum contains the different types of variables.
 </span><span class="attr">#[derive(PartialEq, Debug, Clone)]
-</span><span class="kw">pub enum </span>Variable {
-    Integer(i32),
-    Real(f64),
-    Character(String),
-    Logical(bool),
+</span><span class="kw">pub enum </span>VariableType {
+    Integer(<span class="prelude-ty">Option</span>&lt;i32&gt;),
+    Real(<span class="prelude-ty">Option</span>&lt;f64&gt;),
+    Character(<span class="prelude-ty">Option</span>&lt;String&gt;),
+    Logical(<span class="prelude-ty">Option</span>&lt;bool&gt;),
+}
+
+<span class="attr">#[derive(PartialEq, Debug, Clone)]
+</span><span class="kw">pub struct </span>Variable {
+    value: VariableType,
+    name: String,
+}
+
+<span class="kw">impl </span>Variable {
+    <span class="kw">pub fn </span>new(value: VariableType, name: String) -&gt; Variable {
+        Variable { value, name }
+    }
+
+    <span class="kw">pub fn </span>get_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>VariableType {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.value
+    }
+
+    <span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>String {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.name
+    }
+
+    <span class="kw">pub fn </span>change_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: VariableType) {
+        <span class="self">self</span>.value = value;
+    }
 }
 
 <span class="doccomment">/// This struct contains the variables.
-</span><span class="kw">impl </span>Variable {
+</span><span class="kw">impl </span>VariableType {
     <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_integer(value: i32) -&gt; Variable {
-        Variable::Integer(value)
+    </span><span class="kw">pub fn </span>new_integer(value: i32) -&gt; VariableType {
+        VariableType::Integer(<span class="prelude-val">Some</span>(value))
     }
 
     <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_real(value: f64) -&gt; Variable {
-        Variable::Real(value)
+    </span><span class="kw">pub fn </span>new_real(value: f64) -&gt; VariableType {
+        VariableType::Real(<span class="prelude-val">Some</span>(value))
     }
 
     <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_character(value: String) -&gt; Variable {
-        Variable::Character(value)
+    </span><span class="kw">pub fn </span>new_character(value: String) -&gt; VariableType {
+        VariableType::Character(<span class="prelude-val">Some</span>(value))
     }
 
     <span class="doccomment">/// This function returns a new variable.
-    </span><span class="kw">pub fn </span>new_logical(value: bool) -&gt; Variable {
-        Variable::Logical(value)
+    </span><span class="kw">pub fn </span>new_logical(value: bool) -&gt; VariableType {
+        VariableType::Logical(<span class="prelude-val">Some</span>(value))
     }
 
     <span class="doccomment">/// This function returns the value of the variable.
     </span><span class="kw">pub fn </span>get_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
-            Variable::Integer(value) =&gt; value.to_string(),
-            Variable::Real(value) =&gt; value.to_string(),
-            Variable::Character(value) =&gt; value.to_string(),
-            Variable::Logical(value) =&gt; value.to_string(),
+            VariableType::Integer(value) =&gt; value.unwrap().to_string(),
+            VariableType::Real(value) =&gt; value.unwrap().to_string(),
+            VariableType::Character(value) =&gt; value.clone().unwrap(),
+            VariableType::Logical(value) =&gt; value.unwrap().to_string(),
         }
     }
 }
 
 <span class="doccomment">/// This function parses the variables.
 </span><span class="kw">pub fn </span>parse(program: Program) -&gt; Program {
-    <span class="kw">let </span><span class="kw-2">mut </span>variables: HashMap&lt;String, Variable&gt; = HashMap::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>variables: HashMap&lt;String, VariableType&gt; = HashMap::new();
     <span class="kw">let </span><span class="kw-2">mut </span>lines: Vec&lt;Vec&lt;Token&gt;&gt; = Vec::new();
 
     <span class="kw">for </span>pc <span class="kw">in </span><span class="number">0</span>..program.get_lines().len() {
@@ -211,14 +258,14 @@
                 <span class="kw">match </span>tok {
                     Token::Assign(<span class="kw">_</span>) =&gt; new_line.push(Token::Assign(<span class="string">&quot;::&quot;</span>.to_string())),
                     Token::Variable(name) | Token::Other(name) =&gt; {
-                        <span class="kw">let </span>var: Variable = <span class="kw">match </span>line[<span class="number">0</span>].get_value().to_ascii_uppercase().as_str()
-                        {
-                            <span class="string">&quot;INTEGER&quot; </span>=&gt; Variable::new_integer(<span class="number">0</span>),
-                            <span class="string">&quot;REAL&quot; </span>=&gt; Variable::new_real(<span class="number">0.0</span>),
-                            <span class="string">&quot;CHARACTER&quot; </span>=&gt; Variable::new_character(<span class="string">&quot;&quot;</span>.to_string()),
-                            <span class="string">&quot;LOGICAL&quot; </span>=&gt; Variable::new_logical(<span class="bool-val">false</span>),
-                            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Not a type = {}&quot;</span>, line[<span class="number">0</span>].get_value()),
-                        };
+                        <span class="kw">let </span>var: VariableType =
+                            <span class="kw">match </span>line[<span class="number">0</span>].get_value().to_ascii_uppercase().as_str() {
+                                <span class="string">&quot;INTEGER&quot; </span>=&gt; VariableType::new_integer(<span class="number">0</span>),
+                                <span class="string">&quot;REAL&quot; </span>=&gt; VariableType::new_real(<span class="number">0.0</span>),
+                                <span class="string">&quot;CHARACTER&quot; </span>=&gt; VariableType::new_character(<span class="string">&quot;&quot;</span>.to_string()),
+                                <span class="string">&quot;LOGICAL&quot; </span>=&gt; VariableType::new_logical(<span class="bool-val">false</span>),
+                                <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Not a type = {}&quot;</span>, line[<span class="number">0</span>].get_value()),
+                            };
 
                         variables.insert(name.to_string(), var);
                         new_line.push(Token::Variable(name.to_string()));
@@ -248,51 +295,50 @@
         program.get_name().to_string(),
         lines,
         variables,
-        <span class="comment">// program.get_args().clone(),
-        </span>program.get_filename().to_string(),
+        program.get_filename().to_string(),
     );
 }
 
 <span class="doccomment">/// This function assigns the variables.
 </span><span class="kw">pub fn </span>assign(line: Vec&lt;Token&gt;, index: usize, program: <span class="kw-2">&amp;mut </span>Program, token: <span class="kw-2">&amp;</span>Token) -&gt; Program {
     <span class="kw">if </span>line.get(index + <span class="number">1</span>).unwrap() == <span class="kw-2">&amp;</span>Token::Assign(<span class="string">&quot;=&quot;</span>.to_string()) {
-        <span class="kw">let </span>new_variable: Variable = <span class="kw">match </span>program
+        <span class="kw">let </span>new_variable: VariableType = <span class="kw">match </span>program
             .clone()
             .get_variables()
             .get_key_value(token.get_value().as_str())
             .unwrap()
             .<span class="number">1
         </span>{
-            Variable::Integer(<span class="kw">_</span>) =&gt; {
+            VariableType::Integer(<span class="kw">_</span>) =&gt; {
                 <span class="kw">let </span>value: i32 = line
                     .get(index + <span class="number">2</span>)
                     .unwrap()
                     .get_value()
                     .parse::&lt;i32&gt;()
                     .unwrap();
-                Variable::Integer(value)
+                VariableType::Integer(<span class="prelude-val">Some</span>(value))
             }
-            Variable::Real(<span class="kw">_</span>) =&gt; {
+            VariableType::Real(<span class="kw">_</span>) =&gt; {
                 <span class="kw">let </span>value: f64 = line
                     .get(index + <span class="number">2</span>)
                     .unwrap()
                     .get_value()
                     .parse::&lt;f64&gt;()
                     .unwrap();
-                Variable::Real(value)
+                VariableType::Real(<span class="prelude-val">Some</span>(value))
             }
-            Variable::Character(<span class="kw">_</span>) =&gt; {
+            VariableType::Character(<span class="kw">_</span>) =&gt; {
                 <span class="kw">let </span>value: String = line.get(index + <span class="number">2</span>).unwrap().get_value();
-                Variable::Character(value)
+                VariableType::Character(<span class="prelude-val">Some</span>(value))
             }
-            Variable::Logical(<span class="kw">_</span>) =&gt; {
+            VariableType::Logical(<span class="kw">_</span>) =&gt; {
                 <span class="kw">let </span>value: bool = line
                     .get(index + <span class="number">2</span>)
                     .unwrap()
                     .get_value()
                     .parse::&lt;bool&gt;()
                     .unwrap();
-                Variable::Logical(value)
+                VariableType::Logical(<span class="prelude-val">Some</span>(value))
             }
         };
 

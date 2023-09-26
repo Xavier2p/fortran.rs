@@ -97,12 +97,15 @@
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module is used to parse the arguments passed to the program.
 </span><span class="kw">use </span>clap::{Parser, Subcommand};
 <span class="kw">use </span>std::path::Path;
 
 <span class="doccomment">/// This struct is used to parse the arguments passed to the program.
-</span><span class="attr">#[derive(Debug, Parser, Clone)]
+</span><span class="attr">#[derive(Parser, Clone)]
 #[command(author, version, about)]
 #[command(subcommand_required = <span class="bool-val">true</span>)]
 </span><span class="kw">pub struct </span>Cli {
@@ -137,7 +140,7 @@
         </span>file: String,
 
         <span class="doccomment">/// Threat `Warning` as `Error`
-        </span><span class="attr">#[arg(long)]
+        </span><span class="attr">#[arg(long, short = <span class="string">&#39;W&#39;</span>)]
         </span>werror: bool,
 
         <span class="doccomment">/// Print the comment during the execution of the program
@@ -156,15 +159,16 @@
     }
 
     <span class="doccomment">/// This function returns the value of the `verbose` argument.
-    </span><span class="comment">// pub fn get_verbose(&amp;self) -&gt; bool {
-    //     self.verbose
-    //         || match &amp;self.command {
-    //             Commands::Run { verbose, .. } =&gt; *verbose,
-    //             Commands::Check { verbose, .. } =&gt; *verbose,
-    //         }
-    // }
+    </span><span class="attr">#[allow(dead_code)]
+    </span><span class="kw">pub fn </span>get_verbose(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.verbose
+            || <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.command {
+                Commands::Run { verbose, .. } =&gt; <span class="kw-2">*</span>verbose,
+                Commands::Check { verbose, .. } =&gt; <span class="kw-2">*</span>verbose,
+            }
+    }
 
-    </span><span class="doccomment">/// This function returns the value of the `werror` argument.
+    <span class="doccomment">/// This function returns the value of the `werror` argument.
     </span><span class="kw">pub fn </span>get_werror(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.command {
             Commands::Run { .. } =&gt; <span class="bool-val">false</span>,
@@ -177,7 +181,9 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.command
     }
 
-    <span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="doccomment">/// This function prints the `Cli` struct for debug purposes.
+    /// Not available in release mode.
+    </span><span class="kw">pub fn </span>debug(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Cli {{&quot;</span>);
         <span class="macro">println!</span>(<span class="string">&quot;    command: {:?}&quot;</span>, <span class="self">self</span>.get_command());
         <span class="macro">println!</span>(<span class="string">&quot;    path: {}&quot;</span>, <span class="self">self</span>.get_path());

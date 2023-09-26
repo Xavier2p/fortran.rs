@@ -117,16 +117,10 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Parser
 //!
-//! The parser is the second step of the compilation process. It takes the output of the preprocessor and transforms it into a program.
+//! The parser is the second step of the compilation process.
+//! It takes the output of the preprocessor and transforms it into a program.
 </span><span class="kw">use crate</span>::{
     helpers::file::File,
     program::Program,
@@ -150,17 +144,18 @@
 <span class="doccomment">/// This function returns the token corresponding to the word.
 </span><span class="kw">fn </span>tokenize(word: String) -&gt; Token {
     <span class="kw">match </span>word.to_ascii_uppercase().as_str() {
+        <span class="string">&quot;::&quot; </span>| <span class="string">&quot;=&quot; </span>=&gt; Token::new(Token::Assign(word)),
+        <span class="string">&quot;+&quot; </span>| <span class="string">&quot;-&quot; </span>| <span class="string">&quot;*&quot; </span>| <span class="string">&quot;/&quot; </span>=&gt; Token::new(Token::Operator(word)),
+        <span class="string">&quot;DO&quot; </span>=&gt; Token::new(Token::Do),
+        <span class="string">&quot;ELSE&quot; </span>=&gt; Token::new(Token::Else),
+        <span class="string">&quot;END&quot; </span>=&gt; Token::new(Token::End),
+        <span class="string">&quot;IF&quot; </span>=&gt; Token::new(Token::If),
         <span class="string">&quot;PRINT&quot; </span>=&gt; Token::new(Token::Print),
         <span class="string">&quot;PROGRAM&quot; </span>=&gt; Token::new(Token::Program),
-        <span class="string">&quot;IF&quot; </span>=&gt; Token::new(Token::If),
-        <span class="string">&quot;THEN&quot; </span>=&gt; Token::new(Token::Then),
-        <span class="string">&quot;ELSE&quot; </span>=&gt; Token::new(Token::Else),
-        <span class="string">&quot;FOR&quot; </span>=&gt; Token::new(Token::For),
-        <span class="string">&quot;RETURN&quot; </span>=&gt; Token::new(Token::Return),
-        <span class="string">&quot;END&quot; </span>=&gt; Token::new(Token::End),
-        <span class="string">&quot;::&quot; </span>| <span class="string">&quot;=&quot; </span>=&gt; Token::new(Token::Assign(word)),
         <span class="string">&quot;REAL&quot; </span>| <span class="string">&quot;INTEGER&quot; </span>| <span class="string">&quot;CHARACTER&quot; </span>| <span class="string">&quot;LOGICAL&quot; </span>=&gt; Token::new(Token::Type(word)),
-        <span class="string">&quot;+&quot; </span>| <span class="string">&quot;-&quot; </span>| <span class="string">&quot;*&quot; </span>| <span class="string">&quot;/&quot; </span>=&gt; Token::new(Token::Operator(word)),
+        <span class="string">&quot;RETURN&quot; </span>=&gt; Token::new(Token::Return),
+        <span class="string">&quot;THEN&quot; </span>=&gt; Token::new(Token::Then),
+        <span class="string">&quot;WHILE&quot; </span>=&gt; Token::new(Token::While),
         <span class="kw">_ </span>=&gt; Token::new(Token::Other(word)),
     }
 }
@@ -169,13 +164,13 @@
 </span><span class="kw">fn </span>parse_line(line: String, _pc: usize) -&gt; Vec&lt;Token&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>tokens: Vec&lt;Token&gt; = Vec::new();
     <span class="kw">let </span><span class="kw-2">mut </span>tmp_word: String = String::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>in_bracket: bool = <span class="bool-val">false</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>in_quote: bool = <span class="bool-val">false</span>;
 
     <span class="kw">for </span>index <span class="kw">in </span><span class="number">0</span>..line.len() {
         <span class="kw">let </span>letter: char = line.chars().nth(index).unwrap();
 
         <span class="kw">if </span>letter == <span class="string">&#39;\&quot;&#39; </span>{
-            in_bracket = !in_bracket;
+            in_quote = !in_quote;
 
             <span class="kw">if </span>!tmp_word.is_empty() {
                 tokens.push(Token::new(Token::String(tmp_word)));
@@ -185,7 +180,7 @@
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if </span>in_bracket {
+        <span class="kw">if </span>in_quote {
             tmp_word.push(letter);
         } <span class="kw">else if </span>letter == <span class="string">&#39; &#39; </span>|| letter == <span class="string">&#39;,&#39; </span>|| index == line.len() - <span class="number">1 </span>{
             <span class="kw">if </span>index == line.len() - <span class="number">1 </span>{
@@ -205,16 +200,7 @@
                     &amp;&amp; tokens.last().unwrap() == <span class="kw-2">&amp;</span>Token::Assign(<span class="string">&quot;::&quot;</span>.to_string())
                 {
                     token = Token::new(Token::Variable(tmp_word.clone()));
-                    <span class="comment">// } else {
-                    //     let error = Error::new(
-                    //         &quot;tests.f90&quot;.to_string(),
-                    //         &quot;module&quot;.to_string(),
-                    //         pc,
-                    //         index,
-                    //         format!(&quot;Unknown token `{}`&quot;, tmp_word),
-                    //         ErrorKind::UnknownToken,
-                    //     );
-                </span>}
+                }
             }
             tokens.push(token);
             tmp_word = String::new();

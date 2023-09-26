@@ -64,18 +64,14 @@
 <a href="#64" id="64">64</a>
 <a href="#65" id="65">65</a>
 <a href="#66" id="66">66</a>
-<a href="#67" id="67">67</a>
-<a href="#68" id="68">68</a>
-<a href="#69" id="69">69</a>
-<a href="#70" id="70">70</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Lexer
 //!
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 </span><span class="kw">use crate</span>::{
     helpers::errors::{<span class="self">self</span>, Error},
-    print::print_to_stdout,
     program::Program,
     tokens::Token,
+    utils::print::print_to_stdout,
     variables, VERBOSE,
 };
 <span class="kw">use </span>colored::Colorize;
@@ -111,7 +107,7 @@
                             Error::UnexpectedToken,
                             <span class="macro">format!</span>(
                                 <span class="string">&quot;Expected `END {}`, got `END {}`&quot;</span>,
-                                stack.last().unwrap().get_name().to_ascii_uppercase(),
+                                stack.last().unwrap().debug().to_ascii_uppercase(),
                                 line.get(index + <span class="number">1</span>)
                                     .unwrap()
                                     .get_value()
@@ -128,11 +124,7 @@
                 <span class="kw">_ </span>=&gt; errors::warn(
                     program,
                     Error::UnexpectedToken,
-                    <span class="macro">format!</span>(
-                        <span class="string">&quot;Unexpected token {} `{}`&quot;</span>,
-                        token.get_name(),
-                        token.get_value()
-                    ),
+                    <span class="macro">format!</span>(<span class="string">&quot;Unexpected token {} `{}`&quot;</span>, token.debug(), token.get_value()),
                 ),
             }
         }

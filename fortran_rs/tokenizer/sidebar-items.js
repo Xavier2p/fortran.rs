@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InQuote"],"fn":["new_line","new_word","tokenizer"]};

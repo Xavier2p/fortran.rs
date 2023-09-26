@@ -65,6 +65,13 @@
 <a href="#65" id="65">65</a>
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # `fortran.rs`
 //!
 //! &gt; `fortran.rs` is an interpreter for the Fortran language.
@@ -89,9 +96,10 @@
 <span class="kw">mod </span>helpers;
 <span class="kw">mod </span>lexer;
 <span class="kw">mod </span>parser;
-<span class="kw">mod </span>print;
 <span class="kw">mod </span>program;
+<span class="kw">mod </span>tokenizer;
 <span class="kw">mod </span>tokens;
+<span class="kw">mod </span>utils;
 <span class="kw">mod </span>variables;
 <span class="kw">mod </span>verbose;
 
@@ -101,7 +109,7 @@
 <span class="kw">static </span>VERBOSE: bool = <span class="bool-val">true</span>;
 
 <span class="kw">fn </span>main() {
-    <span class="kw">let </span>args: cli::Cli = cli::Cli::parse();
+    <span class="kw">let </span>args = cli::Cli::parse();
 
     <span class="kw">if </span>VERBOSE {
         args.debug();
@@ -120,6 +128,12 @@
 
     <span class="kw">if </span>VERBOSE {
         file.debug();
+    }
+
+    <span class="kw">let </span>tokenized = tokenizer::tokenizer(<span class="kw-2">&amp;</span>file);
+
+    <span class="kw">if </span>VERBOSE {
+        tokenized.debug();
     }
 
     <span class="kw">let </span><span class="kw-2">mut </span>program = parser::parser(file);
