@@ -15,16 +15,20 @@ enum InQuote {
 }
 
 fn new_line(lines: &mut Vec<Vec<Token>>, tmp_line: &mut Vec<Token>, tmp_word: &mut String) {
-    new_word(tmp_line, tmp_word);
+    new_word(tmp_line, tmp_word, false);
     if !tmp_line.is_empty() {
         lines.push(tmp_line.clone());
     }
     tmp_line.clear();
 }
 
-fn new_word(tmp_line: &mut Vec<Token>, tmp_word: &mut String) {
+fn new_word(tmp_line: &mut Vec<Token>, tmp_word: &mut String, is_string: bool) {
     if !tmp_word.is_empty() {
-        tmp_line.push(Token::Other(tmp_word.clone()));
+        tmp_line.push(if is_string {
+            Token::String(tmp_word.clone())
+        } else {
+            Token::Other(tmp_word.clone())
+        });
         tmp_word.clear();
     }
 }
@@ -55,7 +59,7 @@ pub fn tokenizer(file: &File) -> Program {
                     }
                     (InQuote::Double, '\"') | (InQuote::Single, '\'') => {
                         in_quote = InQuote::No;
-                        new_word(&mut tmp_line, &mut tmp_word);
+                        new_word(&mut tmp_line, &mut tmp_word, true);
                     }
                     _ => {
                         tmp_word.push(letter);
@@ -65,7 +69,7 @@ pub fn tokenizer(file: &File) -> Program {
             ' ' => {
                 // add support for commas
                 if in_quote == InQuote::No {
-                    new_word(&mut tmp_line, &mut tmp_word);
+                    new_word(&mut tmp_line, &mut tmp_word, false);
                 } else {
                     tmp_word.push(letter);
                 }

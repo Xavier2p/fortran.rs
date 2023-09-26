@@ -23,7 +23,7 @@ fn error_to_string(error: &Error) -> &'static str {
         Error::UnknownToken => "UnknownToken",
         Error::UnexpectedToken => "UnexpectedToken",
         Error::Critical => "Critical",
-        Error::TooCharactersOnLine => "TooCharacters",
+        Error::TooCharactersOnLine => "TooCharactersOnLine",
     }
 }
 
