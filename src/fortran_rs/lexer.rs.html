@@ -107,7 +107,7 @@
                 <span class="comment">// Token::Variable(_) =&gt; {
                 //     *program = variables::assign(line.to_vec(), index, program, token);
                 // }
-                </span><span class="kw">_ </span>=&gt; errors::warn(
+                </span><span class="kw">_ </span>=&gt; errors::raise(
                     program,
                     Error::UnexpectedToken,
                     <span class="macro">format!</span>(<span class="string">&quot;Unexpected token {} `{}`&quot;</span>, token.debug(), token.get_value()),
