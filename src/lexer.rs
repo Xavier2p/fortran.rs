@@ -6,9 +6,7 @@ use crate::{
     program::Program,
     tokens::Token,
     utils::print::print_to_stdout,
-    variables, VERBOSE,
 };
-use colored::Colorize;
 
 /// This function returns the tokens.
 pub fn lexer(program: &mut Program) {
@@ -20,11 +18,6 @@ pub fn lexer(program: &mut Program) {
         for index in 0..line.len() {
             let token: &Token = line.get(index).unwrap();
             match token {
-                Token::Comment(_) => {
-                    if VERBOSE {
-                        println!("{} {}", "|".dimmed(), token.get_value().dimmed());
-                    }
-                }
                 Token::Print => {
                     print_to_stdout(line.to_vec(), index, program);
                     break;
@@ -52,9 +45,9 @@ pub fn lexer(program: &mut Program) {
                 }
                 Token::Identifier(_) | Token::Assign(_) | Token::Other(_) => {}
                 Token::Type(_) => break,
-                Token::Variable(_) => {
-                    *program = variables::assign(line.to_vec(), index, program, token);
-                }
+                // Token::Variable(_) => {
+                //     *program = variables::assign(line.to_vec(), index, program, token);
+                // }
                 _ => errors::warn(
                     program,
                     Error::UnexpectedToken,

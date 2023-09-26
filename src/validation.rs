@@ -1,10 +1,12 @@
 use crate::helpers::errors::Error;
 
+#[allow(dead_code)]
 pub struct ValidationError {
     error: Error,
     message: String,
 }
 
+#[allow(dead_code)]
 pub fn identifier_name(name: String) -> Result<(), ValidationError> {
     if name.len() > 31 || name.is_empty() {
         Err(ValidationError {

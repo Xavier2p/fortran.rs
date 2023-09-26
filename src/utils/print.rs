@@ -20,7 +20,7 @@ pub fn print_to_stdout(line: Vec<Token>, index: usize, prog: &Program) {
                         .get_key_value(line.get(index).unwrap().get_value().as_str())
                         .unwrap()
                         .1
-                        .get_value()
+                        .get_value_string()
                         .as_str(),
                 );
             }

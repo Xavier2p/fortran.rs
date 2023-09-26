@@ -2,12 +2,10 @@ program nearlyuseless
     ! implicit none
 
     real    :: temperature
-    integer :: cows
+    integer :: cows, dogs
 
     temperature = 98.6
     cows        = 9
-    name        = "           dadsfdfadsfa                                      &
-    & . fsdafasdfasdd"
 
     print *, "There are ", cows, " cows outside."
     print *, "You are probably ",temperature, " right now"

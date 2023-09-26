@@ -63,11 +63,11 @@ fn main() {
         program.debug();
     }
 
-    program = variables::parse(program);
+    // program = variables::parse(program);
 
-    if VERBOSE {
-        program.debug();
-    }
+    // if VERBOSE {
+    //     program.debug();
+    // }
 
     lexer::lexer(&mut program);
 }

@@ -1,7 +1,7 @@
 //! # Program
 //!
 //! This module contains the `Program` struct.
-use crate::{tokens::Token, variables::VariableType};
+use crate::{tokens::Token, variables::Variable};
 use std::collections::HashMap;
 
 /// This struct contains the program's name, lines, variables, arguments and program counter
@@ -9,7 +9,7 @@ use std::collections::HashMap;
 pub struct Program {
     filename: String,
     name: String,
-    variables: HashMap<String, VariableType>,
+    variables: HashMap<String, Variable>,
     lines: Vec<Vec<Token>>,
     pc: u8,
     // implicit: bool,
@@ -25,7 +25,7 @@ impl Program {
         &self.lines
     }
 
-    pub fn get_variables(&self) -> &HashMap<String, VariableType> {
+    pub fn get_variables(&self) -> &HashMap<String, Variable> {
         &self.variables
     }
 
@@ -40,7 +40,7 @@ impl Program {
     pub fn new(
         name: String,
         lines: Vec<Vec<Token>>,
-        variables: HashMap<String, VariableType>,
+        variables: HashMap<String, Variable>,
         filename: String,
     ) -> Program {
         Program {
@@ -52,11 +52,14 @@ impl Program {
         }
     }
 
-    /// This function returns the program counter.
-    pub fn set_variable(&mut self, name: String, value: VariableType) {
-        self.variables.remove(&name);
-        self.variables.insert(name, value);
-    }
+    // pub fn add_variable(&mut self, variable: Variable) {
+    // self.variables.push(variable);
+    // }
+
+    // pub fn remove_variable(&mut self, variable: Variable) {
+    // self.variables
+    // .remove(self.variables.iter().position(|x| *x == variable).unwrap());
+    // }
 
     pub fn debug(&self) {
         println!("Program {{");

@@ -69,11 +69,11 @@ fn to_stderr(program: &Program, kind: &Error, message: String, is_warning: bool)
 
 pub fn raise(program: &Program, kind: Error, message: String) {
     let stderr: String = to_stderr(program, &kind, message, false);
-    eprintln!("{}", stderr);
+    eprintln!("{}\n", stderr);
     // std::process::exit();
 }
 
 pub fn warn(program: &Program, kind: Error, message: String) {
     let stderr: String = to_stderr(program, &kind, message, true);
-    println!("{}", stderr);
+    println!("{}\n", stderr);
 }

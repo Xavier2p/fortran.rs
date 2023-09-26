@@ -4,7 +4,6 @@
 //! It's the first step of the interpreter.
 //! Each letter is reviewed, and the primitive tokens are created.
 use crate::{helpers::file::File, program::Program, tokenizer, tokens::Token};
-use std::collections::HashMap;
 
 /// This enum contains the different types of quotes, and if there is no quote.
 #[derive(PartialEq)]
@@ -88,17 +87,19 @@ pub fn parse(file: &File) -> Program {
             }
             ('!', _, _) => in_comment = true,
             ('+' | '-' | '*' | '/', _, _) => tmp_line.push(Token::Operator(letter.to_string())),
-            ('=', _, _) => tmp_line.push(Token::Assign(letter.to_string())),
+            ('=', _, _) => tmp_line.push(Token::Assign("=")),
             _ => tmp_word.push(letter),
         };
     }
 
     new_line(&mut lines, &mut tmp_line, &mut tmp_word);
 
+    let variables = tokenizer::variables(&mut lines);
+
     Program::new(
         "test".to_string(),
         lines,
-        HashMap::new(),
+        variables,
         file.get_path().to_string(),
     )
 }

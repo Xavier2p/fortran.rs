@@ -6,26 +6,24 @@
 #[derive(Clone, Debug, PartialEq)]
 #[allow(dead_code)]
 pub enum Token {
+    Assign(&'static str),
+    Identifier(String),
+    Operator(String),
+    Other(String),
+    String(String),
+    Type(String),
+    Variable(String),
+    Comma,
+    Do,
+    Else,
+    End,
+    If,
     Null,
     Print,
     Program,
-    End,
-    Do,
-    While,
-    If,
-    Then,
-    Else,
     Return,
-    Comma,
-    Comment(String),
-    String(String),
-    Operator(String),
-    Identifier(String),
-    Other(String),
-    Variable(String),
-    Type(String),
-    Assign(String),
-    Number(i32),
+    Then,
+    While,
 }
 
 /// This struct contains the tokens.
@@ -33,14 +31,13 @@ impl Token {
     /// This function returns the value of the token.
     pub fn get_value(&self) -> String {
         match self {
+            Token::Assign(string) => *string,
             Token::Identifier(string) => string,
-            Token::Comment(string) => string,
-            Token::String(string) => string,
             Token::Operator(string) => string,
             Token::Other(string) => string,
-            Token::Variable(var) => var,
+            Token::String(string) => string,
             Token::Type(string) => string,
-            Token::Assign(string) => string,
+            Token::Variable(string) => string,
             _ => "",
         }
         .to_string()
@@ -50,9 +47,7 @@ impl Token {
     pub fn debug(&self) -> String {
         match self {
             Token::Assign(_) => "Assign",
-            Token::Comment(_) => "Comment",
             Token::Identifier(_) => "Identifier",
-            Token::Number(_) => "Number",
             Token::Operator(_) => "Operator",
             Token::Other(_) => "Other",
             Token::String(_) => "String",
