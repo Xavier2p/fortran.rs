@@ -11,7 +11,7 @@ pub enum Error {
     UnknownToken,
     UnexpectedToken,
     Critical,
-    TooCharacters,
+    TooCharactersOnLine,
 }
 
 fn error_to_string(error: &Error) -> &'static str {
@@ -23,11 +23,11 @@ fn error_to_string(error: &Error) -> &'static str {
         Error::UnknownToken => "UnknownToken",
         Error::UnexpectedToken => "UnexpectedToken",
         Error::Critical => "Critical",
-        Error::TooCharacters => "TooCharacters",
+        Error::TooCharactersOnLine => "TooCharacters",
     }
 }
 
-fn get_code_number(kind: Error) -> u8 {
+fn get_code_number(kind: &Error) -> u8 {
     match kind {
         Error::Syntax => 1,
         Error::NotImplemented => 2,
@@ -36,39 +36,40 @@ fn get_code_number(kind: Error) -> u8 {
         Error::UnknownToken => 1,
         Error::UnexpectedToken => 1,
         Error::Critical => 2,
-        Error::TooCharacters => 1,
+        Error::TooCharactersOnLine => 1,
     }
 }
 
-fn header(program: &Program, kind: &Error, is_warning: bool) -> String {
-    let kind_colored = if is_warning {
-        error_to_string(kind).yellow()
-    } else {
-        error_to_string(kind).red()
-    };
+fn to_stderr(program: &Program, kind: &Error, message: String, is_warning: bool) -> String {
     let location = format!(
-        "In the file `{}`,\n  at block `{}`,\n    at line {}",
+        "{} {}:{}:{}",
+        "-->".blue(),
         program.get_filename(),
         program.get_name(),
         program.get_line()
     );
+    let code = get_code_number(kind);
     format!(
-        "{}\n     {} {}",
+        "{}: {}: `{}` [code:{}]\n{}",
+        if is_warning {
+            "warning".yellow()
+        } else {
+            "error".red()
+        },
+        error_to_string(kind).cyan(),
+        message,
+        code,
         location,
-        kind_colored,
-        if is_warning { "warning" } else { "error" }
     )
 }
 
 pub fn raise(program: &Program, kind: Error, message: String) {
-    let header: String = header(program, &kind, false);
-    let code = get_code_number(kind);
-    eprintln!("{} [Code {}]\nDetails: {}", header, code, message);
+    let stderr: String = to_stderr(program, &kind, message, false);
+    eprintln!("{}", stderr);
     // std::process::exit();
 }
 
 pub fn warn(program: &Program, kind: Error, message: String) {
-    let header: String = header(program, &kind, true);
-    let code: u8 = get_code_number(kind);
-    println!("{} [Code {}]\nDetails: {}", header, code, message);
+    let stderr: String = to_stderr(program, &kind, message, true);
+    println!("{}", stderr);
 }

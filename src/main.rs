@@ -37,7 +37,7 @@ static VERBOSE: bool = true;
 fn main() {
     let args = cli::Cli::parse();
 
-    if VERBOSE {
+    if !VERBOSE {
         args.debug();
     }
 
@@ -52,7 +52,7 @@ fn main() {
 
     let file = helpers::file::new(args);
 
-    if VERBOSE {
+    if !VERBOSE {
         file.debug();
     }
 
