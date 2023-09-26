@@ -65,5 +65,9 @@ fn main() {
 
     program = variables::parse(program);
 
+    if VERBOSE {
+        program.debug();
+    }
+
     lexer::lexer(&mut program);
 }
