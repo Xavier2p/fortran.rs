@@ -26,6 +26,7 @@ mod program;
 mod tokenizer;
 mod tokens;
 mod utils;
+mod validation;
 mod variables;
 mod verbose;
 

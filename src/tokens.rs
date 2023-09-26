@@ -30,11 +30,6 @@ pub enum Token {
 
 /// This struct contains the tokens.
 impl Token {
-    /// This function returns a new token.
-    pub fn new(token: Token) -> Self {
-        token
-    }
-
     /// This function returns the value of the token.
     pub fn get_value(&self) -> String {
         match self {

@@ -1,6 +1,6 @@
-//! # Tokenizer module
+//! # Parser module
 //!
-//! This module is in charge of tokenizing the file.
+//! This module is in charge of parsing the file.
 //! It's the first step of the interpreter.
 //! Each letter is reviewed, and the primitive tokens are created.
 use crate::{helpers::file::File, program::Program, tokenizer, tokens::Token};
@@ -14,6 +14,11 @@ enum InQuote {
     Double,
 }
 
+/// This function creates a new line.
+/// It's called when a new line is found.
+/// It adds the current line to the lines vector.
+/// It clears the current line.
+/// It clears the current word.
 fn new_line(lines: &mut Vec<Vec<Token>>, tmp_line: &mut Vec<Token>, tmp_word: &mut String) {
     tokenizer::word(tmp_line, tmp_word, false);
     if !tmp_line.is_empty() {
@@ -22,6 +27,11 @@ fn new_line(lines: &mut Vec<Vec<Token>>, tmp_line: &mut Vec<Token>, tmp_word: &m
     tmp_line.clear();
 }
 
+/// This function manages the quotes.
+/// It's called when a quote is found.
+/// It adds the current word to the current line.
+/// It clears the current word.
+/// It changes the quote state.
 fn quote_management(
     in_quote: &mut InQuote,
     letter: char,
@@ -47,6 +57,7 @@ fn quote_management(
     };
 }
 
+/// This function parses the file.
 pub fn parse(file: &File) -> Program {
     let content: String = file.get_content().clone();
     let mut lines: Vec<Vec<Token>> = Vec::new();
