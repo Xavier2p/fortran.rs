@@ -1,21 +1,31 @@
 use crate::tokens::Token;
 
-pub struct Node {
-    token: Token,
-    left: Option<Box<Node>>,
-    right: Option<Box<Node>>,
+#[allow(dead_code)]
+pub enum Ast {
+    Empty,
+    Node {
+        token: Token,
+        left: Box<Ast>,
+        right: Box<Ast>,
+    },
 }
 
-impl Node {
-    fn new(token: Token, left: Option<Box<Node>>, right: Option<Box<Node>>) -> Node {
-        Node { token, left, right }
+#[allow(dead_code)]
+impl Ast {
+    fn new(token: Token, left: Box<Ast>, right: Box<Ast>) -> Ast {
+        Ast::Node { token, left, right }
     }
 }
 
-pub fn eval(root: Node) {
-    match root.token {
-        Token::Variable(_) => {}
-        Token::Operator(_) => {}
-        _ => {}
+#[allow(dead_code)]
+#[allow(unused_variables)]
+pub fn eval(root: Ast) {
+    match root {
+        Ast::Empty => {}
+        Ast::Node { token, left, right } => match token {
+            Token::Variable(_) => {}
+            Token::Operator(_) => {}
+            _ => {}
+        },
     }
 }

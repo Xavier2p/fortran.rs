@@ -4,14 +4,24 @@
 use crate::{tokens::Token, variables::Variable};
 use std::collections::HashMap;
 
-/// This struct contains the program's name, lines, variables, arguments and program counter
+/// This struct is the schema of the `program` object.
 #[derive(Clone)]
 pub struct Program {
+    /// This field contains the program's path.
     filename: String,
+
+    /// This field contains the program's name.
     name: String,
+
+    /// This field contains the program's variables.
     variables: HashMap<String, Variable>,
+
+    /// This field contains the program's lines.
     lines: Vec<Vec<Token>>,
+
+    /// This field contains the program's program counter.
     pc: u8,
+    // /// This field contains if the program is implicit.
     // implicit: bool,
 }
 

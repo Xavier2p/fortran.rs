@@ -3,9 +3,9 @@
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 use crate::{
     helpers::errors::{self, Error},
+    modules::print::print_to_stdout,
     program::Program,
     tokens::Token,
-    utils::print::print_to_stdout,
 };
 
 /// This function returns the tokens.

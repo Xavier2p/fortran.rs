@@ -7,15 +7,23 @@ use std::collections::HashMap;
 /// This enum contains the different types of variables.
 #[derive(PartialEq, Debug, Clone)]
 pub enum Variable {
+    /// This variant contains an integer.
     Integer(Option<i32>),
+
+    /// This variant contains a real number.
     Real(Option<f64>),
+
+    /// This variant contains a character.
     Character(Option<String>),
+
+    /// This variant contains a logical value.
     Logical(Option<bool>),
     None,
 }
 
 impl Variable {
     /// This function returns the value of the variable.
+    /// Else, it returns `[NONE]`.
     pub fn get_value_string(&self) -> String {
         match self {
             Variable::Integer(value) => match value {
@@ -40,12 +48,14 @@ impl Variable {
 }
 
 /// This function changes the variable in the line.
+/// It is used to assign the type of the variable.
 pub fn change_in_line(line: &mut Vec<Token>, name: String, position: usize) {
     line.remove(position);
     line.insert(position, Token::Variable(name));
 }
 
 /// This function assigns the type of the variable.
+/// It is used to assign the type of the variable.
 pub fn assign_type(line: &mut Vec<Token>, variables: &mut HashMap<String, Variable>) {
     let kind: Variable = match line[0].get_value().as_str() {
         "INTEGER" => Variable::Integer(None),

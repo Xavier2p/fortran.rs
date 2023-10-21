@@ -8,8 +8,13 @@ use crate::{helpers::file::File, program::Program, tokenizer, tokens::Token};
 /// This enum contains the different types of quotes, and if there is no quote.
 #[derive(PartialEq)]
 enum InQuote {
+    /// This variant is used when there is no quote.
     No,
+
+    /// This variant is used when there is a single quote. (`'`)
     Single,
+
+    /// This variant is used when there is a double quote. (`"`)
     Double,
 }
 

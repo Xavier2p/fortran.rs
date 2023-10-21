@@ -21,11 +21,11 @@
 mod ast;
 mod helpers;
 mod lexer;
+mod modules;
 mod parser;
 mod program;
 mod tokenizer;
 mod tokens;
-mod utils;
 mod validation;
 mod variables;
 mod verbose;

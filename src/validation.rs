@@ -1,11 +1,27 @@
+//! Validation module.
+//!
+//! This module contains the functions to validate the syntax of the code.
 use crate::helpers::errors::Error;
 
 #[allow(dead_code)]
+/// This struct contains the format of the error and the message.
 pub struct ValidationError {
+    /// This field contains type of the error.
     error: Error,
+
+    /// This field contains the message of the error.
     message: String,
 }
 
+/// This function validates the name of the identifier.
+/// ## Conditions:
+/// - The name must be between 1 and 31 characters.
+/// - The name must start with a letter.
+/// - The name must contain only alphanumeric and `_` characters.
+///
+/// ## Errors:
+/// - `ValidationError::WrongFormat` if the name is not between 1 and 31 characters or if it does not start with a letter.
+/// - `ValidationError::ForbiddenCharacter` if the name contains a forbidden character.
 #[allow(dead_code)]
 pub fn identifier_name(name: String) -> Result<(), ValidationError> {
     if name.len() > 31 || name.is_empty() {
