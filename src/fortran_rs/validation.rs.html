@@ -58,15 +58,47 @@
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
 <a href="#60" id="60">60</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::helpers::errors::Error;
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Validation module.
+//!
+//! This module contains the functions to validate the syntax of the code.
+</span><span class="kw">use </span><span class="kw">crate</span>::helpers::errors::Error;
 
 <span class="attr">#[allow(dead_code)]
+</span><span class="doccomment">/// This struct contains the format of the error and the message.
 </span><span class="kw">pub struct </span>ValidationError {
-    error: Error,
-    message: String,
+    <span class="doccomment">/// This field contains type of the error.
+    </span>error: Error,
+
+    <span class="doccomment">/// This field contains the message of the error.
+    </span>message: String,
 }
 
-<span class="attr">#[allow(dead_code)]
+<span class="doccomment">/// This function validates the name of the identifier.
+/// ## Conditions:
+/// - The name must be between 1 and 31 characters.
+/// - The name must start with a letter.
+/// - The name must contain only alphanumeric and `_` characters.
+///
+/// ## Errors:
+/// - `ValidationError::WrongFormat` if the name is not between 1 and 31 characters or if it does not start with a letter.
+/// - `ValidationError::ForbiddenCharacter` if the name contains a forbidden character.
+</span><span class="attr">#[allow(dead_code)]
 </span><span class="kw">pub fn </span>identifier_name(name: String) -&gt; <span class="prelude-ty">Result</span>&lt;(), ValidationError&gt; {
     <span class="kw">if </span>name.len() &gt; <span class="number">31 </span>|| name.is_empty() {
         <span class="prelude-val">Err</span>(ValidationError {

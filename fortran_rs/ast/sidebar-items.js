@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["eval"],"struct":["Node"]};
+window.SIDEBAR_ITEMS = {"enum":["Ast"],"fn":["eval"]};

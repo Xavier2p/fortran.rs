@@ -76,21 +76,41 @@
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Program
 //!
 //! This module contains the `Program` struct.
 </span><span class="kw">use crate</span>::{tokens::Token, variables::Variable};
 <span class="kw">use </span>std::collections::HashMap;
 
-<span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter
+<span class="doccomment">/// This struct is the schema of the `program` object.
 </span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>Program {
-    filename: String,
-    name: String,
-    variables: HashMap&lt;String, Variable&gt;,
-    lines: Vec&lt;Vec&lt;Token&gt;&gt;,
-    pc: u8,
-    <span class="comment">// implicit: bool,
+    <span class="doccomment">/// This field contains the program&#39;s path.
+    </span>filename: String,
+
+    <span class="doccomment">/// This field contains the program&#39;s name.
+    </span>name: String,
+
+    <span class="doccomment">/// This field contains the program&#39;s variables.
+    </span>variables: HashMap&lt;String, Variable&gt;,
+
+    <span class="doccomment">/// This field contains the program&#39;s lines.
+    </span>lines: Vec&lt;Vec&lt;Token&gt;&gt;,
+
+    <span class="doccomment">/// This field contains the program&#39;s program counter.
+    </span>pc: u8,
+    <span class="comment">// /// This field contains if the program is implicit.
+    // implicit: bool,
 </span>}
 
 <span class="doccomment">/// This struct contains the program&#39;s name, lines, variables, arguments and program counter.

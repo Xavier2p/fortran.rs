@@ -115,6 +115,16 @@
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Variables
 //!
 //! This module contains the functions to parse and assign variables.
@@ -124,15 +134,23 @@
 <span class="doccomment">/// This enum contains the different types of variables.
 </span><span class="attr">#[derive(PartialEq, Debug, Clone)]
 </span><span class="kw">pub enum </span>Variable {
-    Integer(<span class="prelude-ty">Option</span>&lt;i32&gt;),
-    Real(<span class="prelude-ty">Option</span>&lt;f64&gt;),
-    Character(<span class="prelude-ty">Option</span>&lt;String&gt;),
-    Logical(<span class="prelude-ty">Option</span>&lt;bool&gt;),
+    <span class="doccomment">/// This variant contains an integer.
+    </span>Integer(<span class="prelude-ty">Option</span>&lt;i32&gt;),
+
+    <span class="doccomment">/// This variant contains a real number.
+    </span>Real(<span class="prelude-ty">Option</span>&lt;f64&gt;),
+
+    <span class="doccomment">/// This variant contains a character.
+    </span>Character(<span class="prelude-ty">Option</span>&lt;String&gt;),
+
+    <span class="doccomment">/// This variant contains a logical value.
+    </span>Logical(<span class="prelude-ty">Option</span>&lt;bool&gt;),
     <span class="prelude-val">None</span>,
 }
 
 <span class="kw">impl </span>Variable {
     <span class="doccomment">/// This function returns the value of the variable.
+    /// Else, it returns `[NONE]`.
     </span><span class="kw">pub fn </span>get_value_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         <span class="kw">match </span><span class="self">self </span>{
             Variable::Integer(value) =&gt; <span class="kw">match </span>value {
@@ -157,12 +175,14 @@
 }
 
 <span class="doccomment">/// This function changes the variable in the line.
+/// It is used to assign the type of the variable.
 </span><span class="kw">pub fn </span>change_in_line(line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, name: String, position: usize) {
     line.remove(position);
     line.insert(position, Token::Variable(name));
 }
 
 <span class="doccomment">/// This function assigns the type of the variable.
+/// It is used to assign the type of the variable.
 </span><span class="kw">pub fn </span>assign_type(line: <span class="kw-2">&amp;mut </span>Vec&lt;Token&gt;, variables: <span class="kw-2">&amp;mut </span>HashMap&lt;String, Variable&gt;) {
     <span class="kw">let </span>kind: Variable = <span class="kw">match </span>line[<span class="number">0</span>].get_value().as_str() {
         <span class="string">&quot;INTEGER&quot; </span>=&gt; Variable::Integer(<span class="prelude-val">None</span>),
