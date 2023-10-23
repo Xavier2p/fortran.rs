@@ -18,7 +18,7 @@ git clone https://github.com/xavier2p/fortran.rs.git && cd fortran.rs/
 cargo install --path .
 ```
 
-Other ways are possible, please check [install.md](./docs/install.md) for more information.
+Other ways are possible, please check [install.md](../docs/install.md) for more information.
 
 ## How to use it
 
