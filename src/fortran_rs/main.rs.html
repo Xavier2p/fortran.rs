@@ -71,30 +71,71 @@
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! # `fortran.rs`
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! &gt; Fortran interpreter, written in Rust.
 //!
-//! &gt; `fortran.rs` is an interpreter for the Fortran language.
+//! Now, it supports only the Fortran90 version, but you can help me to add more versions !
 //!
-//! ## Usage
+//! ## How to install it
+//!
+//! ### From source
 //!
 //! ```bash
-//! $ cargo run -- &lt;file&gt;
+//! git clone https://github.com/xavier2p/fortran.rs.git &amp;&amp; cd fortran.rs/
+//! cargo install --path .
 //! ```
 //!
-//! ## Arguments
+//! Other ways are possible, please check [install.md](https://github.com/xavier2p/fortran.rs/blob/main/docs/install.md) for more information.
 //!
-//! * `&lt;file&gt;` - The path to the file to interpret.
+//! ## How to use it
 //!
-//! ## Options
+//! ```bash
+//! fortran-rs run &lt;FILE&gt;
+//! ```
 //!
-//! * `-h`, `--help` - Print the help message.
-//! * `-v`, `--verbose` - Print the verbose output.
-//! * `-V`, `--version` - Print the version.
-//! * `--werror` - Treat all warnings as errors.
+//! All the options are available with the `--help` option.
+//!
+//! ```console
+//! $ fortran-rs --help
+//! An open-source Fortran interpreter.
+//! Written in Rust.
+//!
+//! Usage: fortran-rs [OPTIONS] &lt;COMMAND&gt;
+//!
+//! Commands:
+//!   run    Run the Fortran file passed as argument
+//!   check  Check the syntax of the file passed as argument
+//!   help   Print this message or the help of the given subcommand(s)
+//!
+//! Options:
+//!   -v, --verbose  Print the comment during the execution of the program
+//!   -h, --help     Print help
+//!   -V, --version  Print version
+//! ```
 </span><span class="kw">mod </span>ast;
+<span class="kw">mod </span>fortran;
 <span class="kw">mod </span>helpers;
 <span class="kw">mod </span>lexer;
-<span class="kw">mod </span>modules;
 <span class="kw">mod </span>parser;
 <span class="kw">mod </span>program;
 <span class="kw">mod </span>tokenizer;
@@ -108,7 +149,8 @@
 
 <span class="kw">static </span>VERBOSE: bool = <span class="bool-val">true</span>;
 
-<span class="kw">fn </span>main() {
+<span class="doccomment">/// Program entry point
+</span><span class="kw">fn </span>main() {
     <span class="kw">let </span>args = cli::Cli::parse();
 
     <span class="kw">if </span>!VERBOSE {

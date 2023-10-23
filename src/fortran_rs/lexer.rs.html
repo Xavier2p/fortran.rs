@@ -57,12 +57,12 @@
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! # Lexer
+</pre></div><pre class="rust"><code><span class="doccomment">//! Lexer Implementation
 //!
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 </span><span class="kw">use crate</span>::{
+    fortran::print::print_to_stdout,
     helpers::errors::{<span class="self">self</span>, Error},
-    modules::print::print_to_stdout,
     program::Program,
     tokens::Token,
 };

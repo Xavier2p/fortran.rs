@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["ast","helpers","lexer","modules","parser","program","tokenizer","tokens","validation","variables","verbose"],"static":["VERBOSE"]};
+window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["ast","fortran","helpers","lexer","parser","program","tokenizer","tokens","validation","variables","verbose"],"static":["VERBOSE"]};
