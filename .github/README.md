@@ -1,4 +1,4 @@
-# Fortran.rs
+# `fortran.rs`
 
 ![GitHub top language](https://img.shields.io/github/languages/top/xavier2p/fortran.rs?style=for-the-badge&logo=rust&color=orange)
 
@@ -9,21 +9,24 @@ Now, it supports only the Fortran90 version, but you can help me to add more ver
 > **Warning**  
 > This project is work in progress, so it's not working today.
 
+## How to install it
+
+### From source
+
+```bash
+git clone https://github.com/xavier2p/fortran.rs.git && cd fortran.rs/
+cargo install --path .
+```
+
+Other ways are possible, please check [install.md](./docs/install.md) for more information.
+
 ## How to use it
 
-### Development
-
 ```bash
-cargo run --release -- <FILE>
+fortran-rs run <FILE>
 ```
 
-### Release
-
-```bash
-fortran-rs <FILE>
-```
-
-## Help
+All the options are available with the `--help` option.
 
 ```console
 $ fortran-rs --help

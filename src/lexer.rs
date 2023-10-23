@@ -1,9 +1,9 @@
-//! # Lexer
+//! Lexer Implementation
 //!
 //! The lexer is the first step of the compilation process. It takes the source code and converts it into tokens.
 use crate::{
+    fortran::print::print_to_stdout,
     helpers::errors::{self, Error},
-    modules::print::print_to_stdout,
     program::Program,
     tokens::Token,
 };

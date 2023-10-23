@@ -1,4 +1,4 @@
-//! # File Traitement
+//! File management
 //!
 //! This module contains the `File` struct and its methods.
 use crate::helpers::cli::Cli;

@@ -1,3 +1,4 @@
+//! CLI interface and arguments parsing
 //! This module is used to parse the arguments passed to the program.
 use clap::{Parser, Subcommand};
 use std::path::Path;

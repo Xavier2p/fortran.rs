@@ -1,4 +1,4 @@
-//! Errors Module
+//! Errors and warnings management
 //!
 //! This module contains the error handling functions.
 use crate::program::Program;

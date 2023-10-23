@@ -1,4 +1,4 @@
-//! # Program
+//! Program Object definition
 //!
 //! This module contains the `Program` struct.
 use crate::{tokens::Token, variables::Variable};

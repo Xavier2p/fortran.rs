@@ -1,3 +1,6 @@
+//! Abstract Syntax Tree
+//!
+//! This module contains the AST and the evaluation function.
 use crate::tokens::Token;
 
 #[allow(dead_code)]

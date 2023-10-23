@@ -1,4 +1,4 @@
-//! # Parser module
+//! Parser for the Fortran language
 //!
 //! This module is in charge of parsing the file.
 //! It's the first step of the interpreter.

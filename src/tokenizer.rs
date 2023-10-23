@@ -1,3 +1,6 @@
+//! Tokenizer of the language
+//!
+//! This module contains the tokenizer for the language. It takes in a string and returns a vector of tokens.
 use crate::{
     tokens::Token,
     variables::{self, Variable},

@@ -1,6 +1,12 @@
-//! # Print
+//! PRINT function
 //!
-//! This module contains the `print` function.
+//! > This module contains the builtin `PRINT` function for the Fortran language.
+//!
+//! ## Syntax
+//!
+//! ```fortran
+//! PRINT *, <string>
+//! ```
 use crate::{
     helpers::errors::{self, Error},
     program::Program,

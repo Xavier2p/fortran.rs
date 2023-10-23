@@ -1,4 +1,4 @@
-//! # Tokens
+//! Tokens definition and implementation
 //!
 //! This module contains the Token enum, which is used to represent the tokens
 

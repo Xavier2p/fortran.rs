@@ -1,4 +1,4 @@
-//! # Variables
+//! Variables definition and assignment
 //!
 //! This module contains the functions to parse and assign variables.
 use crate::tokens::Token;

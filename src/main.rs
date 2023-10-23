@@ -1,27 +1,47 @@
-//! # `fortran.rs`
+//! > Fortran interpreter, written in Rust.
 //!
-//! > `fortran.rs` is an interpreter for the Fortran language.
+//! Now, it supports only the Fortran90 version, but you can help me to add more versions !
 //!
-//! ## Usage
+//! ## How to install it
+//!
+//! ### From source
 //!
 //! ```bash
-//! $ cargo run -- <file>
+//! git clone https://github.com/xavier2p/fortran.rs.git && cd fortran.rs/
+//! cargo install --path .
 //! ```
 //!
-//! ## Arguments
+//! Other ways are possible, please check [install.md](https://github.com/xavier2p/fortran.rs/blob/main/docs/install.md) for more information.
 //!
-//! * `<file>` - The path to the file to interpret.
+//! ## How to use it
 //!
-//! ## Options
+//! ```bash
+//! fortran-rs run <FILE>
+//! ```
 //!
-//! * `-h`, `--help` - Print the help message.
-//! * `-v`, `--verbose` - Print the verbose output.
-//! * `-V`, `--version` - Print the version.
-//! * `--werror` - Treat all warnings as errors.
+//! All the options are available with the `--help` option.
+//!
+//! ```console
+//! $ fortran-rs --help
+//! An open-source Fortran interpreter.
+//! Written in Rust.
+//!
+//! Usage: fortran-rs [OPTIONS] <COMMAND>
+//!
+//! Commands:
+//!   run    Run the Fortran file passed as argument
+//!   check  Check the syntax of the file passed as argument
+//!   help   Print this message or the help of the given subcommand(s)
+//!
+//! Options:
+//!   -v, --verbose  Print the comment during the execution of the program
+//!   -h, --help     Print help
+//!   -V, --version  Print version
+//! ```
 mod ast;
+mod fortran;
 mod helpers;
 mod lexer;
-mod modules;
 mod parser;
 mod program;
 mod tokenizer;
@@ -35,6 +55,7 @@ use clap::Parser;
 
 static VERBOSE: bool = true;
 
+/// Program entry point
 fn main() {
     let args = cli::Cli::parse();
 

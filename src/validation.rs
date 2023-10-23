@@ -1,4 +1,4 @@
-//! Validation module.
+//! Syntax validation of Fortran code
 //!
 //! This module contains the functions to validate the syntax of the code.
 use crate::helpers::errors::Error;
