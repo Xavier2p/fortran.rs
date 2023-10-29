@@ -1,7 +1,7 @@
 # Alternative Installation methods
 
 > **Warning**  
-> All of this options are not available yet.
+> All of these options are not available yet.
 
 ## From crates.io
 
