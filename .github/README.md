@@ -1,6 +1,8 @@
 # `fortran.rs`
 
-![GitHub top language](https://img.shields.io/github/languages/top/xavier2p/fortran.rs?style=for-the-badge&logo=rust&color=orange)
+[![GitHub top language](https://img.shields.io/github/languages/top/xavier2p/fortran.rs?style=for-the-badge&logo=rust&color=orange)](https://rust-lang.org)
+[![GitHub Stars](https://img.shields.io/github/stars/xavier2p/fortran.rs?style=for-the-badge&logo=github&color=yellow)](https://github.com/xavier2p/fortran.rs/stargazers)
+[![GitHub License](https://img.shields.io/github/license/xavier2p/fortran.rs?style=for-the-badge&logo=github)](https://github.com/Xavier2p/fortran.rs/blob/main/LICENSE.md)
 
 This is a Fortran interpreter, written in Rust.
 
